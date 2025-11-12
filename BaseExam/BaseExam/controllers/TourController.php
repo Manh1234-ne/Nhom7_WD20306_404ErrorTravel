@@ -59,4 +59,4 @@ class TourController {
         $this->model->delete($id);
         header('Location: ?action=tours'); exit;
     }
-}
+};
