@@ -1,26 +1,21 @@
 <?php
+class BaseModel {
+    protected $db;
 
-class BaseModel
-{
-    protected $table;
-    protected $pdo;
+    public function __construct() {
+        $host = 'localhost';
+        $dbname = 'tour_du_lich';
+        $username = 'root';
+        $password = '';
+        $charset = 'utf8mb4';
 
-    // Kết nối CSDL
-    public function __construct()
-    {
-        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8', DB_HOST, DB_PORT, DB_NAME);
+        $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
 
         try {
-            $this->pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD, DB_OPTIONS);
+            $this->db = new PDO($dsn, $username, $password);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            // Xử lý lỗi kết nối
-            die("Kết nối cơ sở dữ liệu thất bại: {$e->getMessage()}. Vui lòng thử lại sau.");
+            die("Kết nối database thất bại: " . $e->getMessage());
         }
-    }
-
-    // Hủy kết nối CSDL
-    public function __destruct()
-    {
-        $this->pdo = null;
     }
 }

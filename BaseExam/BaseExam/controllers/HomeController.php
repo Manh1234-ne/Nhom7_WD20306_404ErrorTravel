@@ -7,4 +7,3 @@ class HomeController
         require_once PATH_VIEW . 'home.php';
     }
 }
-echo "hello123";
