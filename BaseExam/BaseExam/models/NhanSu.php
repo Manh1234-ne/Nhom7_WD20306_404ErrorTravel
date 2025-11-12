@@ -70,4 +70,4 @@ public function getNhanSuById($id) {
         $stmt2 = $this->db->prepare("DELETE FROM nguoi_dung WHERE id = :id");
         $stmt2->execute(['id' => $nguoi_dung_id]);
     }
-}
+};
