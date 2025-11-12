@@ -52,7 +52,7 @@
     <nav>
         <div class="logo">404 Error Travel</div>
         <ul>
-            <li><a href="?action=/">Home</a></li>
+            <li><a href="?action=/">Homee</a></li>
             <li><a href="?action=tours">Quản lý Tour</a></li>
             <li><a href="?action=nhansu">Quản lý Nhân sự</a></li>
             <li><a href="?action=dat_tour">Đặt Tour</a></li>
