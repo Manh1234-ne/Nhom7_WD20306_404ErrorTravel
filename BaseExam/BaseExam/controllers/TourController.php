@@ -14,6 +14,7 @@ class TourController {
     }
 
     public function add() {
+        $loaiTours = ['Trong nước','Nước ngoài','Mạo hiểm','Nghỉ dưỡng'];
         require PATH_VIEW.'tours/add.php';
     }
 
@@ -25,9 +26,14 @@ class TourController {
             'gia' => $_POST['gia'],
             'chinh_sach' => $_POST['chinh_sach']
         ];
-        if(!empty($_FILES['hinh_anh']['name'])) {
-            $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
+
+        // Xử lý upload hình ảnh
+        if (!empty($_FILES['hinh_anh']['name'])) {
+            $fileName = time().'_'.$_FILES['hinh_anh']['name'];
+            move_uploaded_file($_FILES['hinh_anh']['tmp_name'], 'assets/uploads/'.$fileName);
+            $data['hinh_anh'] = $fileName;
         }
+
         $this->model->insert($data);
         header('Location: ?action=tours'); exit;
     }
@@ -35,6 +41,7 @@ class TourController {
     public function edit() {
         $id = $_GET['id'] ?? null;
         $tour = $this->model->find($id);
+        $loaiTours = ['Trong nước','Nước ngoài','Mạo hiểm','Nghỉ dưỡng'];
         require PATH_VIEW.'tours/edit.php';
     }
 
@@ -47,9 +54,13 @@ class TourController {
             'gia' => $_POST['gia'],
             'chinh_sach' => $_POST['chinh_sach']
         ];
-        if(!empty($_FILES['hinh_anh']['name'])) {
-            $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
+
+        if (!empty($_FILES['hinh_anh']['name'])) {
+            $fileName = time().'_'.$_FILES['hinh_anh']['name'];
+            move_uploaded_file($_FILES['hinh_anh']['tmp_name'], 'assets/uploads/'.$fileName);
+            $data['hinh_anh'] = $fileName;
         }
+
         $this->model->update($id, $data);
         header('Location: ?action=tours'); exit;
     }

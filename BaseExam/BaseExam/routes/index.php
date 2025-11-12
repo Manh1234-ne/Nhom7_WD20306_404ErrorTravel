@@ -1,26 +1,31 @@
 <?php
 require_once __DIR__ . '/../configs/env.php';
-require_once PATH_CONTROLLER.'TourController.php';
-require_once PATH_CONTROLLER.'NhanSuController.php';
-require_once PATH_CONTROLLER.'HomeController.php';
+require_once PATH_CONTROLLER . 'HomeController.php';
+require_once PATH_CONTROLLER . 'TourController.php';
+require_once PATH_CONTROLLER . 'NhanSuController.php';
 
 $action = $_GET['action'] ?? 'home';
 
-$func = match ($action) {
-    'home' => fn() => (new HomeController)->index(),
-    'tours' => fn() => (new TourController)->index(),
-    'tour_add' => fn() => (new TourController)->add(),
-    'tour_add_post' => fn() => (new TourController)->store(),
-    'tour_edit' => fn() => (new TourController)->edit(),
-    'tour_edit_post' => fn() => (new TourController)->update(),
-    'tour_delete' => fn() => (new TourController)->delete(),
-    'nhansu' => fn() => (new NhanSuController)->index(),
-    'nhansu_add' => fn() => (new NhanSuController)->add(),
-    'nhansu_add_post' => fn() => (new NhanSuController)->store(),
-    'nhansu_edit' => fn() => (new NhanSuController)->store(),
-    'nhansu_edit_post' => fn() => (new NhanSuController)->update(),
-    'nhansu_delete' => fn() => (new NhanSuController)->delete(),
-    default => fn() => (new HomeController)->index(),
-};
+match ($action) {
+    // Trang chủ
+    'home' => (new HomeController)->index(),
 
-$func(); // gọi closure
+    // TOUR
+    'tours' => (new TourController)->index(),
+    'tour_add' => (new TourController)->add(),
+    'tour_add_post' => (new TourController)->store(),
+    'tour_edit' => (new TourController)->edit(),
+    'tour_edit_post' => (new TourController)->update(),
+    'tour_delete' => (new TourController)->delete(),
+
+    // NHÂN SỰ (HƯỚNG DẪN VIÊN)
+    'nhansu' => (new NhanSuController)->index(),
+    'nhansu_add' => (new NhanSuController)->add(),
+    'nhansu_add_post' => (new NhanSuController)->store(),
+    'nhansu_edit' => (new NhanSuController)->edit(),
+    'nhansu_edit_post' => (new NhanSuController)->update(),
+    'nhansu_delete' => (new NhanSuController)->delete(),
+
+    // Mặc định
+    default => (new HomeController)->index(),
+};
