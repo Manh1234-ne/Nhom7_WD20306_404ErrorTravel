@@ -20,4 +20,6 @@ require_once './configs/env.php';
 require_once './configs/helper.php';
 
 // Điều hướng
-require_once './routes/index.php';
+require_once __DIR__.'/routes/index.php';
+
+?>

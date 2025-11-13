@@ -1,26 +1,41 @@
 <?php
+require_once PATH_CONFIGS.'helper.php';
 
-class BaseModel
-{
+class BaseModel {
     protected $table;
-    protected $pdo;
+    protected $db;
 
-    // Kết nối CSDL
-    public function __construct()
-    {
-        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8', DB_HOST, DB_PORT, DB_NAME);
-
-        try {
-            $this->pdo = new PDO($dsn, DB_USERNAME, DB_PASSWORD, DB_OPTIONS);
-        } catch (PDOException $e) {
-            // Xử lý lỗi kết nối
-            die("Kết nối cơ sở dữ liệu thất bại: {$e->getMessage()}. Vui lòng thử lại sau.");
-        }
+    public function __construct() {
+        $this->db = db_connect();
     }
 
-    // Hủy kết nối CSDL
-    public function __destruct()
-    {
-        $this->pdo = null;
+    public function all() {
+        $stmt = $this->db->query("SELECT * FROM {$this->table}");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-}
+
+    public function find($id) {
+        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function insert($data) {
+        $keys = array_keys($data);
+        $fields = implode(',', $keys);
+        $placeholders = implode(',', array_fill(0,count($keys),'?'));
+        $stmt = $this->db->prepare("INSERT INTO {$this->table} ($fields) VALUES ($placeholders)");
+        return $stmt->execute(array_values($data));
+    }
+
+    public function update($id, $data) {
+        $set = implode(',', array_map(fn($k) => "$k = ?", array_keys($data)));
+        $stmt = $this->db->prepare("UPDATE {$this->table} SET $set WHERE id = ?");
+        return $stmt->execute([...array_values($data), $id]);
+    }
+
+    public function delete($id) {
+        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
+};

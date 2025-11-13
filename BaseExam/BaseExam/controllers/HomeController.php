@@ -1,10 +1,9 @@
 <?php
+require_once __DIR__ . '/../configs/env.php';
 
-class HomeController
-{
-    public function index() 
-    {
-        require_once PATH_VIEW . 'home.php';
+class HomeController {
+    public function index() {
+        // Nếu bạn có view home.php
+        require PATH_VIEW . 'home.php';
     }
-}
-echo "hello";
+};
