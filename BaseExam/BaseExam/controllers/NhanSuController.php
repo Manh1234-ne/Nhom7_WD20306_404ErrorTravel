@@ -62,4 +62,4 @@ public function update() {
         header('Location: ?action=nhansu');
         exit;
     }
-};
+}
