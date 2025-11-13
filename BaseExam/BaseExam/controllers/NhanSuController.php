@@ -12,7 +12,7 @@ class NhanSuController {
     public function index() {
         $nhansu = $this->model->getAllWithNguoiDung();
         if (!is_array($nhansu)) {
-            $nhansu = []; // tránh lỗi foreach null
+            $nhansu = []; 
         }
         require PATH_VIEW . 'nhansu/index.php';
     }
