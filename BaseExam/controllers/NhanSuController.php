@@ -36,6 +36,27 @@ class NhanSuController {
     exit;
 }
 
+public function edit() {
+    $id = $_GET['id'] ?? null;
+
+    if (!$id) {
+        header('Location: ?action=nhansu');
+        exit;
+    }
+
+    // Lấy dữ liệu 1 hướng dẫn viên + người dùng
+    $nhansu = $this->model->findWithNguoiDung($id);
+
+    if (!$nhansu) {
+        echo "Không tìm thấy nhân sự!";
+        return;
+    }
+
+    // Trả ra view edit
+    require PATH_VIEW . 'nhansu/edit.php';
+}
+
+
 public function update() {
     $id = $_GET['id'] ?? null;
     if (!$id) { header('Location: ?action=nhansu'); exit; }
