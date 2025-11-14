@@ -94,7 +94,7 @@
         </div>
 
         <div>
-            <button type="submit">Thêm mới</button>
+            <button type="submit">Thêm mớii</button>
         </div>
     </form>
 
