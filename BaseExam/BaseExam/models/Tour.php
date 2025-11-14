@@ -34,3 +34,4 @@ class Tour extends BaseModel {
         return $stmt->execute([$id]);
     }
 }
+ 
