@@ -122,6 +122,8 @@
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tourr</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
+        <li><a href="?action=danhmuc">Quản lý Danh mục</a></li>
+
     </div>
     <div class="content">
         <div class="top-bar">
