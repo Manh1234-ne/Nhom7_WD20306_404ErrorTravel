@@ -73,6 +73,13 @@
         <?php endif; ?>
         <label>Nhà cung cấp</label>
         <input type="text" name="nha_cung_cap" value="<?= htmlspecialchars($tour['nha_cung_cap']) ?>">
+        <label>Mùa</label>
+        <select name="mua">
+            <option value="mua_xuan" <?= $tour['mua']=='mua_xuan'?'selected':'' ?>>Mùa Xuân</option>
+            <option value="mua_ha" <?= $tour['mua']=='mua_ha'?'selected':'' ?>>Mùa Hạ</option>
+            <option value="mua_thu" <?= $tour['mua']=='mua_thu'?'selected':'' ?>>Mùa Thu</option>
+            <option value="mua_dong" <?= $tour['mua']=='trong_dong'?'selected':'' ?>>Mùa Đông</option>
+            </select>
         <button type="submit">Cập nhật Tourr</button>
         <a href="?action=tours">Quay lại</a>
     </form>
