@@ -136,7 +136,9 @@
                     <th>ID</th>
                     <th>Tên Tour</th>
                     <th>Loại Tour</th>
+                    <th>Mô tả</th>
                     <th>Giá</th>
+                    <th>Chính sách</th>
                     <th>Hình ảnh</th>
                     <th>Hành động</th>
                 </tr>
@@ -147,7 +149,9 @@
                         <td><?= $tour['id'] ?></td>
                         <td><?= htmlspecialchars($tour['ten_tour']) ?></td>
                         <td><?= $tour['loai_tour'] ?></td>
+                        <td><?= htmlspecialchars($tour['mo_ta']) ?></td>
                         <td><?= number_format($tour['gia'], 0, ',', '.') ?> VNĐ</td>
+                        <td><?= htmlspecialchars($tour['chinh_sach']) ?></td>
                         <td>
                             <?php if ($tour['hinh_anh']): ?>
                                 <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="80">
