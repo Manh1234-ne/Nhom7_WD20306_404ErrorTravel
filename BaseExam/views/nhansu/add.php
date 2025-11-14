@@ -89,6 +89,7 @@
                 <option value="huong_dan_vien" selected>Hướng dẫn viên</option>
                 <option value="admin">Admin</option>
                 <option value="khach_hang">Khách hàng</option>
+                <option value="nguoi_dung">Người dùng</option>
             </select>
         </div>
 

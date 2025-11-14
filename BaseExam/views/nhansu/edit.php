@@ -90,6 +90,7 @@
                     <option value="huong_dan_vien" <?= $nhansu['vai_tro'] == 'huong_dan_vien' ? 'selected' : '' ?>>Hướng dẫn viên</option>
                     <option value="admin" <?= $nhansu['vai_tro'] == 'admin' ? 'selected' : '' ?>>Admin</option>
                     <option value="khach_hang" <?= $nhansu['vai_tro'] == 'khach_hang' ? 'selected' : '' ?>>Khách hàng</option>
+                    <option value="nguoi_dung" <?= $nhansu['vai_tro'] == 'nguoi_dung' ? 'selected' : '' ?>>Người dùng</option>
                 </select>
             <?php else: ?>
                 <!-- Nếu không phải admin thì không đổi -->
