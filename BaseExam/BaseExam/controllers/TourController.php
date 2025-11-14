@@ -14,7 +14,6 @@ class TourController {
     }
 
     public function add() {
-        $loaiTours = ['Trong nước','Nước ngoài','Mạo hiểm','Nghỉ dưỡng'];
         require PATH_VIEW.'tours/add.php';
     }
 
@@ -27,21 +26,29 @@ class TourController {
             'chinh_sach' => $_POST['chinh_sach']
         ];
 
-        // Xử lý upload hình ảnh
-        if (!empty($_FILES['hinh_anh']['name'])) {
-            $fileName = time().'_'.$_FILES['hinh_anh']['name'];
-            move_uploaded_file($_FILES['hinh_anh']['tmp_name'], 'assets/uploads/'.$fileName);
-            $data['hinh_anh'] = $fileName;
+        if(!empty($_FILES['hinh_anh']['name'])) {
+            $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
         }
 
-        $this->model->insert($data);
+        $tour_id = $this->model->insert($data);
+
+        if(!empty($_FILES['album']['name'][0])) {
+            foreach($_FILES['album']['tmp_name'] as $key => $tmp_name) {
+                $file_name = upload_file('tour/album', [
+                    'name' => $_FILES['album']['name'][$key],
+                    'tmp_name' => $_FILES['album']['tmp_name'][$key]
+                ]);
+                $this->model->insertAlbum($tour_id, $file_name);
+            }
+        }
+
         header('Location: ?action=tours'); exit;
     }
 
     public function edit() {
         $id = $_GET['id'] ?? null;
         $tour = $this->model->find($id);
-        $loaiTours = ['Trong nước','Nước ngoài','Mạo hiểm','Nghỉ dưỡng'];
+        $album = $this->model->getAlbum($id);
         require PATH_VIEW.'tours/edit.php';
     }
 
@@ -55,13 +62,28 @@ class TourController {
             'chinh_sach' => $_POST['chinh_sach']
         ];
 
-        if (!empty($_FILES['hinh_anh']['name'])) {
-            $fileName = time().'_'.$_FILES['hinh_anh']['name'];
-            move_uploaded_file($_FILES['hinh_anh']['tmp_name'], 'assets/uploads/'.$fileName);
-            $data['hinh_anh'] = $fileName;
+        if(!empty($_FILES['hinh_anh']['name'])) {
+            $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
         }
 
         $this->model->update($id, $data);
+
+        if(!empty($_POST['delete_album'])) {
+            foreach($_POST['delete_album'] as $album_id) {
+                $this->model->deleteAlbum($album_id);
+            }
+        }
+
+        if(!empty($_FILES['album']['name'][0])) {
+            foreach($_FILES['album']['tmp_name'] as $key => $tmp_name) {
+                $file_name = upload_file('tour/album', [
+                    'name' => $_FILES['album']['name'][$key],
+                    'tmp_name' => $_FILES['album']['tmp_name'][$key]
+                ]);
+                $this->model->insertAlbum($id, $file_name);
+            }
+        }
+
         header('Location: ?action=tours'); exit;
     }
 

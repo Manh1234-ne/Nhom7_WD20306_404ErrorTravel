@@ -4,7 +4,6 @@ require_once 'BaseModel.php';
 class Tour extends BaseModel {
     protected $table = 'tour';
 
-    // Hàm format giá hiển thị
     public static function formatVND($number) {
         if ($number >= 100000000) {
             return round($number / 1000000) . ' triệu';
@@ -17,5 +16,21 @@ class Tour extends BaseModel {
         } else {
             return $number.' VNĐ';
         }
+    }
+
+    public function getAlbum($tour_id) {
+        $stmt = $this->db->prepare("SELECT * FROM album_tour WHERE tour_id = ?");
+        $stmt->execute([$tour_id]);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function insertAlbum($tour_id, $file_name) {
+        $stmt = $this->db->prepare("INSERT INTO album_tour (tour_id, file_name) VALUES (?, ?)");
+        return $stmt->execute([$tour_id, $file_name]);
+    }
+
+    public function deleteAlbum($id) {
+        $stmt = $this->db->prepare("DELETE FROM album_tour WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 }
