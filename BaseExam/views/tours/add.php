@@ -77,6 +77,9 @@
         <textarea name="chinh_sach"></textarea>
         <label>Hình ảnh</label>
         <input type="file" name="hinh_anh">
+         <hr>
+    <h3>Nhà cung cấp</h3>
+    <textarea name="nha_cung_cap"></textarea>
         <button type="submit">Thêm Tourr</button>
         <a href="?action=tours">Quay lại</a>
     </form>

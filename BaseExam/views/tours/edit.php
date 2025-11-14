@@ -71,6 +71,8 @@
         <?php if($tour['hinh_anh']): ?>
             <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="120">
         <?php endif; ?>
+        <label>Nhà cung cấp</label>
+        <input type="text" name="nha_cung_cap" value="<?= htmlspecialchars($tour['nha_cung_cap']) ?>">
         <button type="submit">Cập nhật Tourr</button>
         <a href="?action=tours">Quay lại</a>
     </form>

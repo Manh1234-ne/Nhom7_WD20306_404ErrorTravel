@@ -139,6 +139,7 @@
                     <th>Mô tả</th>
                     <th>Giá</th>
                     <th>Chính sách</th>
+                    <th>Nhà cung cấp</th>
                     <th>Hình ảnh</th>
                     <th>Hành động</th>
                 </tr>
@@ -152,6 +153,7 @@
                         <td><?= htmlspecialchars($tour['mo_ta']) ?></td>
                         <td><?= number_format($tour['gia'], 0, ',', '.') ?> VNĐ</td>
                         <td><?= htmlspecialchars($tour['chinh_sach']) ?></td>
+                        <td><?= htmlspecialchars($tour['nha_cung_cap']) ?></td>
                         <td>
                             <?php if ($tour['hinh_anh']): ?>
                                 <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="80">
