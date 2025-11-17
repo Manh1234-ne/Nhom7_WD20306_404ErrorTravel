@@ -22,59 +22,62 @@ class NhanSuController {
     }
 
     public function store() {
-    $data = [
-        'ho_ten' => $_POST['ho_ten'] ?? '',
-        'email' => $_POST['email'] ?? '',
-        'so_dien_thoai' => $_POST['so_dien_thoai'] ?? '',
-        'ngon_ngu' => $_POST['ngon_ngu'] ?? '',
-        'kinh_nghiem' => $_POST['kinh_nghiem'] ?? '',
-        'danh_gia' => $_POST['danh_gia'] ?? 0
-    ];
+        $data = [
+            'ho_ten' => $_POST['ho_ten'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            'so_dien_thoai' => $_POST['so_dien_thoai'] ?? '',
+            'ngon_ngu' => $_POST['ngon_ngu'] ?? '',
+            'kinh_nghiem' => $_POST['kinh_nghiem'] ?? '',
+            'danh_gia' => $_POST['danh_gia'] ?? 0,
+            'vai_tro' => $_POST['vai_tro'] ?? 'huong_dan_vien'
+        ];
 
-    $this->model->createNhanSu($data);
-    header('Location: ?action=nhansu');
-    exit;
-}
-
-
-public function edit() {
-    $id = $_GET['id'] ?? null;
-
-    if (!$id) {
+        $this->model->createNhanSu($data);
         header('Location: ?action=nhansu');
         exit;
     }
 
-    // Lấy dữ liệu 1 hướng dẫn viên + người dùng
-    $nhansu = $this->model->findWithNguoiDung($id);
+    public function edit() {
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header('Location: ?action=nhansu');
+            exit;
+        }
 
-    if (!$nhansu) {
-        echo "Không tìm thấy nhân sự!";
-        return;
+        $nhansu = $this->model->findWithNguoiDung($id);
+        if (!$nhansu) {
+            echo "Không tìm thấy nhân sự!";
+            return;
+        }
+
+        require PATH_VIEW . 'nhansu/edit.php';
     }
 
-    // Trả ra view edit
-    require PATH_VIEW . 'nhansu/edit.php';
-}
+    public function update() {
+        $id = $_GET['id'] ?? null;
+        if (!$id) { 
+            header('Location: ?action=nhansu'); 
+            exit; 
+        }
 
+        $data = [
+            'ho_ten' => $_POST['ho_ten'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            'so_dien_thoai' => $_POST['so_dien_thoai'] ?? '',
+            'ngon_ngu' => $_POST['ngon_ngu'] ?? '',
+            'kinh_nghiem' => $_POST['kinh_nghiem'] ?? '',
+            'danh_gia' => $_POST['danh_gia'] ?? 0
+        ];
 
-public function update() {
-    $id = $_GET['id'] ?? null;
-    if (!$id) { header('Location: ?action=nhansu'); exit; }
+        // Nếu user hiện tại là admin, mới update vai trò
+        if ($_SESSION['user']['vai_tro'] === 'admin' && isset($_POST['vai_tro'])) {
+            $data['vai_tro'] = $_POST['vai_tro'];
+        }
 
-    $data = [
-        'ho_ten' => $_POST['ho_ten'] ?? '',
-        'email' => $_POST['email'] ?? '',
-        'so_dien_thoai' => $_POST['so_dien_thoai'] ?? '',
-        'ngon_ngu' => $_POST['ngon_ngu'] ?? '',
-        'kinh_nghiem' => $_POST['kinh_nghiem'] ?? '',
-        'danh_gia' => $_POST['danh_gia'] ?? 0
-    ];
-
-    $this->model->updateNhanSu($id, $data);
-    header('Location: ?action=nhansu');
-    exit;
-}
+        $this->model->updateNhanSu($id, $data);
+        header('Location: ?action=nhansu');
+        exit;
+    }
 
     public function delete() {
         $id = $_GET['id'] ?? null;

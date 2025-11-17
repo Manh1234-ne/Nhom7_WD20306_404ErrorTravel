@@ -26,7 +26,7 @@
         }
 
         input,
-        textarea, 
+        textarea,
         select {
             width: 100%;
             padding: 8px;
@@ -60,26 +60,50 @@
 
 <body>
     <h1>Thêm Tour</h1>
+
     <form action="?action=tour_add_post" method="post" enctype="multipart/form-data">
+
         <label>Tên Tour</label>
         <input type="text" name="ten_tour" required>
+
         <label>Loại Tour</label>
         <select name="loai_tour">
             <option value="trong_nuoc">Trong nước</option>
             <option value="quoc_te">Quốc tế</option>
             <option value="yeu_cau">Yêu cầu</option>
         </select>
+
         <label>Mô tả</label>
         <textarea name="mo_ta"></textarea>
+
         <label>Giá</label>
         <input type="number" name="gia">
+
         <label>Chính sách</label>
         <textarea name="chinh_sach"></textarea>
-        <label>Hình ảnh</label>
+
+        <label>Hình ảnh đại diện</label>
         <input type="file" name="hinh_anh">
-        <button type="submit">Thêm Tourr</button>
+
+        <h3>Nhà cung cấp</h3>
+        <textarea name="nha_cung_cap"></textarea>
+
+        <label>Mùa</label>
+        <select name="mua">
+            <option value="mua_xuan">Mùa Xuân</option>
+            <option value="mua_ha">Mùa Hạ</option>
+            <option value="mua_thu">Mùa Thu</option>
+            <option value="mua_dong">Mùa Đông</option>
+        </select>
+
+        <!-- ⭐ THÊM PHẦN ALBUM — KHÔNG ĐỤNG CSS -->
+        <label>Album ảnh (có thể chọn nhiều)</label>
+        <input type="file" name="album[]" multiple>
+
+        <button type="submit">Thêm Tour</button>
         <a href="?action=tours">Quay lại</a>
     </form>
+
 </body>
 
 </html>

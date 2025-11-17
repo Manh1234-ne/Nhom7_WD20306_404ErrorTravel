@@ -7,7 +7,7 @@ class NhanSu extends BaseModel
 
     public function getAllWithNguoiDung()
     {
-        $sql = "SELECT hdv.*, nd.ho_ten, nd.email, nd.so_dien_thoai
+        $sql = "SELECT hdv.*, nd.ho_ten, nd.email, nd.so_dien_thoai, nd.vai_tro
                 FROM huong_dan_vien hdv
                 JOIN nguoi_dung nd ON hdv.nguoi_dung_id = nd.id";
         $stmt = $this->db->query($sql);
@@ -16,7 +16,7 @@ class NhanSu extends BaseModel
 
     public function findWithNguoiDung($id)
     {
-        $sql = "SELECT hdv.*, nd.ho_ten, nd.email, nd.so_dien_thoai
+        $sql = "SELECT hdv.*, nd.ho_ten, nd.email, nd.so_dien_thoai, nd.vai_tro
                 FROM huong_dan_vien hdv
                 JOIN nguoi_dung nd ON hdv.nguoi_dung_id = nd.id
                 WHERE hdv.id = :id";
@@ -28,13 +28,14 @@ class NhanSu extends BaseModel
     public function createNhanSu($data)
     {
         $stmt1 = $this->db->prepare("INSERT INTO nguoi_dung (ho_ten, email, so_dien_thoai, ten_dang_nhap, mat_khau, vai_tro) 
-                                     VALUES (:ho_ten, :email, :so_dien_thoai, :ten_dang_nhap, :mat_khau, 'huong_dan_vien')");
+                                     VALUES (:ho_ten, :email, :so_dien_thoai, :ten_dang_nhap, :mat_khau, :vai_tro)");
         $stmt1->execute([
             'ho_ten' => $data['ho_ten'],
             'email' => $data['email'],
             'so_dien_thoai' => $data['so_dien_thoai'],
             'ten_dang_nhap' => $data['email'],
-            'mat_khau' => password_hash('123456', PASSWORD_DEFAULT)
+            'mat_khau' => password_hash('123456', PASSWORD_DEFAULT),
+            'vai_tro' => $data['vai_tro']
         ]);
         $nguoi_dung_id = $this->db->lastInsertId();
 
@@ -50,25 +51,25 @@ class NhanSu extends BaseModel
 
     public function updateNhanSu($id, $data)
     {
+        $fields = "nd.ho_ten = :ho_ten,
+                   nd.email = :email,
+                   nd.so_dien_thoai = :so_dien_thoai,
+                   hdv.ngon_ngu = :ngon_ngu,
+                   hdv.kinh_nghiem = :kinh_nghiem,
+                   hdv.danh_gia = :danh_gia";
+
+        // Nếu có vai trò thì update
+        if (isset($data['vai_tro'])) {
+            $fields .= ", nd.vai_tro = :vai_tro";
+        }
+
         $sql = "UPDATE nguoi_dung nd 
                 JOIN huong_dan_vien hdv ON nd.id = hdv.nguoi_dung_id
-                SET nd.ho_ten = :ho_ten,
-                    nd.email = :email,
-                    nd.so_dien_thoai = :so_dien_thoai,
-                    hdv.ngon_ngu = :ngon_ngu,
-                    hdv.kinh_nghiem = :kinh_nghiem,
-                    hdv.danh_gia = :danh_gia
+                SET $fields
                 WHERE hdv.id = :id";
+
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            'ho_ten' => $data['ho_ten'],
-            'email' => $data['email'],
-            'so_dien_thoai' => $data['so_dien_thoai'],
-            'ngon_ngu' => $data['ngon_ngu'],
-            'kinh_nghiem' => $data['kinh_nghiem'],
-            'danh_gia' => $data['danh_gia'],
-            'id' => $id
-        ]);
+        $stmt->execute(array_merge($data, ['id' => $id]));
     }
 
     public function deleteNhanSu($id)

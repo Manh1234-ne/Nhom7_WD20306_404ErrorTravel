@@ -7,7 +7,8 @@
         body { 
             font-family: Arial; 
             background: #f5f5f5; 
-            padding: 30px; }
+            padding: 30px; 
+        }
         form { 
             background: #fff; 
             padding: 20px; 
@@ -20,7 +21,7 @@
             display: block; 
             margin-top: 15px; 
         }
-        input, textarea { 
+        input, textarea, select { 
             width: 100%; 
             padding: 8px; 
             margin-top: 5px; 
@@ -78,12 +79,29 @@
 
         <div>
             <label>Đánh giá:</label>
-            <input type="number" name="danh_gia" min="0" max="5" step="0.1" value="<?= $nhansu['danh_gia'] ?>">
+            <input type="number" name="danh_gia" min="0" max="5" step="0.1" value="<?= htmlspecialchars($nhansu['danh_gia']) ?>">
         </div>
 
         <div>
-            <button type="submit">Cập nhậtt</button>
+            <label>Vai trò:</label>
+            <?php if (isset($nhansu['vai_tro']) && $nhansu['vai_tro'] == 'admin'): ?>
+                <!-- Nếu nhân sự là admin thì cho đổi vai trò -->
+                <select name="vai_tro">
+                    <option value="huong_dan_vien" <?= $nhansu['vai_tro'] == 'huong_dan_vien' ? 'selected' : '' ?>>Hướng dẫn viên</option>
+                    <option value="admin" <?= $nhansu['vai_tro'] == 'admin' ? 'selected' : '' ?>>Admin</option>
+                    <option value="khach_hang" <?= $nhansu['vai_tro'] == 'khach_hang' ? 'selected' : '' ?>>Khách hàng</option>
+                    <option value="nguoi_dung" <?= $nhansu['vai_tro'] == 'nguoi_dung' ? 'selected' : '' ?>>Người dùng</option>
+                </select>
+            <?php else: ?>
+                <!-- Nếu không phải admin thì không đổi -->
+                <input type="text" value="<?= htmlspecialchars($nhansu['vai_tro']) ?>" disabled>
+            <?php endif; ?>
+        </div>
+
+        <div>
+            <button type="submit">Cập nhật</button>
         </div>
     </form>
+
 </body>
 </html>

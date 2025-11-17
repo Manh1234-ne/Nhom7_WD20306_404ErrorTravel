@@ -18,6 +18,8 @@ match ($action) {
     'tour_edit' => (new TourController)->edit(),
     'tour_edit_post' => (new TourController)->update(),
     'tour_delete' => (new TourController)->delete(),
+    'tour_detail' => (new TourController)->detail(),
+
 
     // NHÂN SỰ (HƯỚNG DẪN VIÊN)
     'nhansu' => (new NhanSuController)->index(),
