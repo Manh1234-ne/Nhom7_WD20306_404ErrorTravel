@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Sửa Hướng dẫn viên</title>
+    <title>Sửa Nhân sự</title>
     <style>
         body { 
             font-family: Arial; 
