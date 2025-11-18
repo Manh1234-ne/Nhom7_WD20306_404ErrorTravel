@@ -118,7 +118,7 @@
 
 <body>
     <div class="sidebar">
-        <h2>Quản lý Tour</h2>
+        <h2>404 Error Travel</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tourr</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
@@ -135,7 +135,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Tên Tour</th>
-                    <th>Loại Tour</th>
+                    <th>Danh mục</th>
                     <th>Mô tả</th>
                     <th>Giá</th>
                     <th>Chính sách</th>

@@ -66,7 +66,7 @@
         <label>Tên Tour</label>
         <input type="text" name="ten_tour" required>
 
-        <label>Loại Tour</label>
+        <label>Loại Tourz</label>
         <select name="loai_tour">
             <option value="trong_nuoc">Trong nước</option>
             <option value="quoc_te">Quốc tế</option>
