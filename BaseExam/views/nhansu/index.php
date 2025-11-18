@@ -140,6 +140,7 @@
                     <th>Ngôn ngữ</th>
                     <th>Kinh nghiệm</th>
                     <th>Đánh giá</th>
+                    <th>Vai trò</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -154,6 +155,7 @@
                             <td><?= $ns['ngon_ngu'] ?></td>
                             <td><?= $ns['kinh_nghiem'] ?></td>
                             <td><?= $ns['danh_gia'] ?></td>
+                            <td><?= htmlspecialchars($ns['vai_tro']) ?></td>
                             <td>
                                 <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-primary">Sửa</a>
                                 <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
