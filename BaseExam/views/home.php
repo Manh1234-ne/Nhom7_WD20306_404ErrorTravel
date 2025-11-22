@@ -49,15 +49,31 @@
 </head>
 <body>
 
-    <nav>
-        <div class="logo">404 Error Travel</div>
+    
+    
+    <?php
+if (session_status() == PHP_SESSION_NONE) session_start();
+$user = $_SESSION['user'] ?? null;
+?>
+<nav>
+    <a href="index.php?action=home">Home</a>
+
+    <?php if ($user): ?>
+        <span>Xin chào, <?=htmlspecialchars($user['ho_ten'] ?: $user['ten_dang_nhap'])?></span>
+        <a href="index.php?action=logout">Đăng xuất</a>
+    <?php else: ?>
+        <a href="index.php?action=loginForm">Đăng nhập</a>
+    <?php endif; ?>
+
+    <div class="logo">404 Error Travel</div>
         <ul>
             <li><a href="?action=/">Homee</a></li>
             <li><a href="?action=tours">Quản lý Tour</a></li>
             <li><a href="?action=nhansu">Quản lý Nhân sự</a></li>
             <li><a href="?action=danhmuc">Quản lý Danh mục</a></li>
         </ul>
-    </nav>
+</nav>
+
 
     
 </body>
