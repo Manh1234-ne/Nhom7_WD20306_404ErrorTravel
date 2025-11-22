@@ -60,7 +60,7 @@ $user = $_SESSION['user'] ?? null;
 
     <?php if ($user): ?>
         <span>Xin chào, <?=htmlspecialchars($user['ho_ten'] ?: $user['ten_dang_nhap'])?></span>
-        <a href="index.php?action=logout">Đăng xuất</a>
+        <a href="index.php?action=logout" onclick="return confirm('Đăng xuất tài khoản')">Đăng xuất</a>
     <?php else: ?>
         <a href="index.php?action=loginForm">Đăng nhập</a>
     <?php endif; ?>
