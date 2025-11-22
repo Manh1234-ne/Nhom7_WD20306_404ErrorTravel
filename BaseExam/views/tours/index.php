@@ -162,6 +162,9 @@
                             <?php endif; ?>
                         </td>
                         <td>
+                               <a href="?action=tour_detail&id=<?= $tour['id'] ?>" class="btn">
+                                <i class="fa fa-eye"></i> Xem
+                            </a>
                             <a href="?action=tour_edit&id=<?= $tour['id'] ?>" class="btn"><i class="fa fa-edit"></i> Sửa</a>
                             <a href="?action=tour_delete&id=<?= $tour['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i> Xóa</a>
                         </td>

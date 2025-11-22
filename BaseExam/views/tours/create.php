@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tạo booking</title>
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            background: #3b82f6;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .group-title {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Tạo booking</h2>
+
+    <form action="?action=save_booking" method="POST">
+
+        <!-- Ẩn tour_id -->
+        <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+
+        <div class="group-title">Thông tin khách hàng</div>
+
+        <input type="text" name="ten_khach" placeholder="Tên khách" required>
+        <input type="text" name="so_dien_thoai" placeholder="Số điện thoại" required>
+        <input type="email" name="email" placeholder="Email">
+
+        <div class="group-title">Chi tiết booking</div>
+
+        <!-- Hiển thị tên tour (không cho sửa) -->
+        <input type="text" value="<?= $tour['ten_tour'] ?>" disabled>
+
+        <input type="number" name="so_nguoi" placeholder="Số lượng khách" required>
+
+        <input type="date" name="ngay_khoi_hanh" required>
+
+        <select name="trang_thai">
+            <option value="Chờ xác nhận">Chờ xác nhận</option>
+            <option value="Đã duyệt">Đã duyệt</option>
+            <option value="Từ chối">Từ chối</option>
+        </select>
+
+        <textarea name="ghi_chu" placeholder="Ghi chú"></textarea>
+
+        <button type="submit">Tạo booking</button>
+    </form>
+
+</div>
+
+</body>
+</html>
