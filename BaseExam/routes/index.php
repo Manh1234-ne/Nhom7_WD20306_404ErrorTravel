@@ -4,6 +4,7 @@ require_once PATH_CONTROLLER . 'HomeController.php';
 require_once PATH_CONTROLLER . 'TourController.php';
 require_once PATH_CONTROLLER . 'NhanSuController.php';
 require_once PATH_CONTROLLER . 'DanhMucTourController.php';
+require_once PATH_CONTROLLER . 'NguoiDungController.php';
 
 $action = $_GET['action'] ?? 'home';
 
@@ -36,6 +37,13 @@ match ($action) {
     'danhmuc_edit' => (new DanhMucTourController)->edit(),
     'danhmuc_edit_post' => (new DanhMucTourController)->update(),
     'danhmuc_delete' => (new DanhMucTourController)->delete(),
+
+    // LOGIN - LOGOUT
+    // 'registerForm'=> (new NguoiDungController)->registerForm(),
+    // 'register'=> (new NguoiDungController)->register(),
+    'loginForm'=> (new NguoiDungController)->loginForm(),
+    'login'=> (new NguoiDungController)->login(),
+    'logout'=> (new NguoiDungController)->logout(),
 
     // Mặc định
     default => (new HomeController)->index(),
