@@ -148,28 +148,42 @@
         <?php if (!empty($nhansu) && is_array($nhansu)): ?>
             <?php foreach ($nhansu as $ns): ?>
                 <tr>
-                    <td><?= $ns['nguoi_dung_id'] ?></td>
-                    <td><?= htmlspecialchars($ns['ho_ten']) ?></td>
-                    <td><?= $ns['email'] ?></td>
-                    <td><?= $ns['so_dien_thoai'] ?></td>
-                    <td><?= $ns['ngon_ngu'] ?></td>
-                    <td><?= $ns['kinh_nghiem'] ?></td>
-                    <td><?= $ns['danh_gia'] ?></td>
-                    <td><?= htmlspecialchars($ns['vai_tro']) ?></td> <!-- Hiển thị vai trò -->
-                    <td>
-                        <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-primary">Sửa</a>
-                        <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
-                    </td>
+                    <th>ID</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Ngôn ngữ</th>
+                    <th>Kinh nghiệm</th>
+                    <th>Đánh giá</th>
+                    <th>Vai trò</th>
+                    <th>Hành động</th>
                 </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="9" style="text-align:center;">Không có dữ liệu</td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
-
+            </thead>
+            <tbody>
+                <?php if (!empty($nhansu) && is_array($nhansu)): ?>
+                    <?php foreach ($nhansu as $ns): ?>
+                        <tr>
+                            <td><?= $ns['nguoi_dung_id'] ?></td>
+                            <td><?= htmlspecialchars($ns['ho_ten']) ?></td>
+                            <td><?= $ns['email'] ?></td>
+                            <td><?= $ns['so_dien_thoai'] ?></td>
+                            <td><?= $ns['ngon_ngu'] ?></td>
+                            <td><?= $ns['kinh_nghiem'] ?></td>
+                            <td><?= $ns['danh_gia'] ?></td>
+                            <td><?= htmlspecialchars($ns['vai_tro']) ?></td>
+                            <td>
+                                <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-primary">Sửa</a>
+                                <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="8" style="text-align:center;">Không có dữ liệu</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
