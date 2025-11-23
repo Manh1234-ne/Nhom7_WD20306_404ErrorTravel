@@ -20,6 +20,8 @@ match ($action) {
     'tour_edit_post' => (new TourController)->update(),
     'tour_delete' => (new TourController)->delete(),
     'tour_detail' => (new TourController)->detail(),
+    'dat_tour' => (new BookingController)->create(),
+    'save_booking' => (new BookingController)->save(),
 
 
     // NHÂN SỰ (HƯỚNG DẪN VIÊN)
@@ -29,6 +31,7 @@ match ($action) {
     'nhansu_edit' => (new NhanSuController)->edit(),
     'nhansu_edit_post' => (new NhanSuController)->update(),
     'nhansu_delete' => (new NhanSuController)->delete(),
+    
 
     // DANH MỤC TOUR
     'danhmuc' => (new DanhMucTourController)->index(),

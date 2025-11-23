@@ -56,11 +56,12 @@ if (session_status() == PHP_SESSION_NONE) session_start();
 $user = $_SESSION['user'] ?? null;
 ?>
 <nav>
-    <a href="index.php?action=home">Home</a>
 
     <?php if ($user): ?>
-        <span>Xin chào, <?=htmlspecialchars($user['ho_ten'] ?: $user['ten_dang_nhap'])?></span>
-        <a href="index.php?action=logout" onclick="return confirm('Đăng xuất tài khoản')">Đăng xuất</a>
+        <span>Xin chào, <?=htmlspecialchars($user['ho_ten'] ?: $user['ten_dang_nhap'])?>
+        <a href="index.php?action=logout" onclick="return confirm('Đăng xuất tài khoản')">Đăng xuất
+        </a>
+        </span>
     <?php else: ?>
         <a href="index.php?action=loginForm">Đăng nhập</a>
     <?php endif; ?>
