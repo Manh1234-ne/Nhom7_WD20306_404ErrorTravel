@@ -86,7 +86,7 @@
         }
 
         .top-bar {
-            display: flex;
+            /* display: flex; */
             justify-content: space-between;
             margin-bottom: 20px;
         }
@@ -163,10 +163,10 @@
                         </td>
                         <td>
                                <a href="?action=tour_detail&id=<?= $tour['id'] ?>" class="btn">
-                                <i class="fa fa-eye"></i> Xem
+                                <i class="fa fa-eye"></i>
                             </a>
-                            <a href="?action=tour_edit&id=<?= $tour['id'] ?>" class="btn"><i class="fa fa-edit"></i> Sửa</a>
-                            <a href="?action=tour_delete&id=<?= $tour['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i> Xóa</a>
+                            <a href="?action=tour_edit&id=<?= $tour['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>
+                            <a href="?action=tour_delete&id=<?= $tour['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

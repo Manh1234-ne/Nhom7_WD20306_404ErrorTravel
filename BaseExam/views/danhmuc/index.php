@@ -86,7 +86,7 @@
         }
 
         .top-bar {
-            display: flex;
+            /* display: flex; */
             justify-content: space-between;
             margin-bottom: 20px;
         }
@@ -149,8 +149,8 @@
                         <td><?= htmlspecialchars($tour['ten_tour']) ?></td>
                         <td><?= htmlspecialchars($tour['mo_ta']) ?></td>
                         <td>
-                            <a href="?action=danhmuc_edit&id=<?= $tour['id'] ?>" class="btn"><i class="fa fa-edit"></i> Sửa</a>
-                            <a href="?action=danhmuc_delete&id=<?= $tour['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i> Xóa</a>
+                            <a href="?action=danhmuc_edit&id=<?= $tour['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>
+                            <a href="?action=danhmuc_delete&id=<?= $tour['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

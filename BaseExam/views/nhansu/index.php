@@ -86,7 +86,7 @@
         }
 
         .top-bar {
-            display: flex;
+            /* display: flex; */
             justify-content: space-between;
             margin-bottom: 20px;
         }
@@ -157,8 +157,8 @@
                     <td><?= $ns['danh_gia'] ?></td>
                     <td><?= htmlspecialchars($ns['vai_tro']) ?></td> <!-- Hiển thị vai trò -->
                     <td>
-                        <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-primary">Sửa</a>
-                        <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                        <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                        <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -62,7 +62,7 @@ $user = $_SESSION['user'] ?? null;
             <a href="index.php?action=logout" 
                onclick="return confirm('Đăng xuất tài khoản?')" 
                style="color: #fff; margin-left: 10px;">
-               Đăng xuất
+                Đăng xuất
             </a>
         </span>
     <?php else: ?>
