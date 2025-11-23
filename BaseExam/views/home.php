@@ -49,33 +49,58 @@
 </head>
 <body>
 
-    
-    
-    <?php
+<?php
 if (session_status() == PHP_SESSION_NONE) session_start();
 $user = $_SESSION['user'] ?? null;
 ?>
 <nav>
 
+    <!-- BÊN TRÁI: ĐĂNG NHẬP / XIN CHÀO -->
     <?php if ($user): ?>
-        <span>Xin chào, <?=htmlspecialchars($user['ho_ten'] ?: $user['ten_dang_nhap'])?>
-        <a href="index.php?action=logout" onclick="return confirm('Đăng xuất tài khoản')">Đăng xuất
-        </a>
+        <span>
+            Xin chào, <?=htmlspecialchars($user['ho_ten'] ?: $user['ten_dang_nhap'])?>
+            <a href="index.php?action=logout" 
+               onclick="return confirm('Đăng xuất tài khoản?')" 
+               style="color: #fff; margin-left: 10px;">
+               Đăng xuất
+            </a>
         </span>
     <?php else: ?>
-        <a href="index.php?action=loginForm">Đăng nhập</a>
+        <a href="index.php?action=loginForm" style="color:#fff;">Đăng nhập</a>
     <?php endif; ?>
 
+    <!-- LOGO -->
     <div class="logo">404 Error Travel</div>
-        <ul>
-            <li><a href="?action=/">Homee</a></li>
+
+    <!-- MENU CHỨC NĂNG -->
+    <ul>
+        <li><a href="?action=/">Homee</a></li>
+
+        <?php if (!$user): ?>
+            <!-- Chưa đăng nhập → show alert + quay về Home -->
+            <li>
+                <a href="?action=/" onclick="alert('Bạn chưa đăng nhập!'); return true;">
+                    Quản lý Tour
+                </a>
+            </li>
+            <li>
+                <a href="?action=/" onclick="alert('Bạn chưa đăng nhập!'); return true;">
+                    Quản lý Nhân sự
+                </a>
+            </li>
+            <li>
+                <a href="?action=/" onclick="alert('Bạn chưa đăng nhập!'); return true;">
+                    Quản lý Danh mục
+                </a>
+            </li>
+        <?php else: ?>
+            <!-- Đã đăng nhập → vào trang thật -->
             <li><a href="?action=tours">Quản lý Tour</a></li>
             <li><a href="?action=nhansu">Quản lý Nhân sự</a></li>
             <li><a href="?action=danhmuc">Quản lý Danh mục</a></li>
-        </ul>
+        <?php endif; ?>
+    </ul>
 </nav>
 
-
-    
 </body>
 </html>
