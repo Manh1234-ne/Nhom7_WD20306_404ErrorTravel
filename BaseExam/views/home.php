@@ -93,11 +93,17 @@ $user = $_SESSION['user'] ?? null;
                     Quản lý Danh mục
                 </a>
             </li>
+            <li>
+                <a href="?action=/" onclick="alert('Bạn chưa đăng nhập!'); return true;">
+                    Yêu cầu đặc biệt
+                </a>
+            </li>
         <?php else: ?>
             <!-- Đã đăng nhập → vào trang thật -->
             <li><a href="?action=tours">Quản lý Tour</a></li>
             <li><a href="?action=nhansu">Quản lý Nhân sự</a></li>
             <li><a href="?action=danhmuc">Quản lý Danh mục</a></li>
+            <li><a href="?action=yeu_cau">Yêu cầu đặc biệt</a></li>
         <?php endif; ?>
     </ul>
 </nav>
