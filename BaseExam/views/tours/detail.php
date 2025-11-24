@@ -130,6 +130,11 @@
             <?php endif; ?>
 
             <a href="?action=tours" class="btn-back">← Quay lại</a>
+            <a href="?action=dat_tour&id=<?= $tour['id'] ?>" class="btn-back"
+                style="background:#27ae60; margin-left:10px;">
+                Đặt tour →
+            </a>
+
 
         </div>
     </div>

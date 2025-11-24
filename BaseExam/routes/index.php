@@ -1,12 +1,17 @@
 <?php
 require_once __DIR__ . '/../configs/env.php';
+
+// Controller
 require_once PATH_CONTROLLER . 'HomeController.php';
 require_once PATH_CONTROLLER . 'TourController.php';
 require_once PATH_CONTROLLER . 'NhanSuController.php';
 require_once PATH_CONTROLLER . 'DanhMucTourController.php';
 require_once PATH_CONTROLLER . 'NguoiDungController.php';
+require_once PATH_CONTROLLER . 'YeuCauController.php';
+require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
 
 $action = $_GET['action'] ?? 'home';
+$id = $_GET['id'] ?? null;
 
 match ($action) {
     // Trang chủ
@@ -20,9 +25,10 @@ match ($action) {
     'tour_edit_post' => (new TourController)->update(),
     'tour_delete' => (new TourController)->delete(),
     'tour_detail' => (new TourController)->detail(),
+    'dat_tour' => (new BookingController)->create(),
+    'save_booking' => (new BookingController)->save(),
 
-
-    // NHÂN SỰ (HƯỚNG DẪN VIÊN)
+    // NHÂN SỰ
     'nhansu' => (new NhanSuController)->index(),
     'nhansu_add' => (new NhanSuController)->add(),
     'nhansu_add_post' => (new NhanSuController)->store(),
@@ -39,11 +45,18 @@ match ($action) {
     'danhmuc_delete' => (new DanhMucTourController)->delete(),
 
     // LOGIN - LOGOUT
-    // 'registerForm'=> (new NguoiDungController)->registerForm(),
-    // 'register'=> (new NguoiDungController)->register(),
-    'loginForm'=> (new NguoiDungController)->loginForm(),
-    'login'=> (new NguoiDungController)->login(),
-    'logout'=> (new NguoiDungController)->logout(),
+    'loginForm' => (new NguoiDungController)->loginForm(),
+    'login' => (new NguoiDungController)->login(),
+    'logout' => (new NguoiDungController)->logout(),
+
+    // ====================== YÊU CẦU ĐẶC BIỆT ======================
+    'yeu_cau' => (new YeuCauController)->index(),
+    'yeu_cau_create' => (new YeuCauController)->create(),
+    'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
+    'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
+    'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
+    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
+    'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
 
     // Mặc định
     default => (new HomeController)->index(),

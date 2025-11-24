@@ -182,9 +182,7 @@ if ($flash)
                 <button type="submit">Đăng nhập</button>
             </form>
 
-            <div class="message">
-                Chưa có tài khoản? <a href="index.php?action=registerForm">Đăng ký</a>
-            </div>
+            
         </div>
     </div>
 
