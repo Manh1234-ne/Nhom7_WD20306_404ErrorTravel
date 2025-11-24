@@ -78,11 +78,9 @@
 
         <input type="date" name="ngay_khoi_hanh" required>
 
-        <select name="trang_thai">
-            <option value="Chờ xác nhận">Chờ xác nhận</option>
-            <option value="Đã duyệt">Đã duyệt</option>
-            <option value="Từ chối">Từ chối</option>
-        </select>
+        <input type="text" value="Chờ xác nhận" disabled>
+        <input type="hidden" name="trang_thai" value="Chờ xác nhận">
+        
 
         <textarea name="ghi_chu" placeholder="Ghi chú"></textarea>
 

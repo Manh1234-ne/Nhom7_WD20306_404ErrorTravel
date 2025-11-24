@@ -56,6 +56,7 @@
             <li><a href="?action=tours">Quản lý Tour</a></li>
             <li><a href="?action=nhansu">Quản lý Nhân sự</a></li>
             <li><a href="?action=danhmuc">Quản lý Danh mục</a></li>
+            <li><a href="?action=qlbooking">Quản lý Booking</a></li>
         </ul>
     </nav>
 

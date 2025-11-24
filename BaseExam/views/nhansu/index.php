@@ -123,6 +123,7 @@
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tourr</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
         <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
+        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
 
     </div>
     <div class="content">

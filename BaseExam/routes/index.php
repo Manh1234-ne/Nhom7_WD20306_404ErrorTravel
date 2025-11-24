@@ -5,6 +5,7 @@ require_once PATH_CONTROLLER . 'TourController.php';
 require_once PATH_CONTROLLER . 'NhanSuController.php';
 require_once PATH_CONTROLLER . 'DanhMucTourController.php';
 require_once PATH_CONTROLLER . 'NguoiDungController.php';
+require_once PATH_CONTROLLER . 'QlBookingController.php';
 
 $action = $_GET['action'] ?? 'home';
 
@@ -47,6 +48,14 @@ match ($action) {
     'loginForm'=> (new NguoiDungController)->loginForm(),
     'login'=> (new NguoiDungController)->login(),
     'logout'=> (new NguoiDungController)->logout(),
+
+      // QLBOOKING
+    'qlbooking' => (new QlBookingController)->index(),
+    'qlbooking_add' => (new QlBookingController)->add(),
+    'qlbooking_add_post' => (new QlBookingController)->store(),
+    'qlbooking_edit' => (new QlbookingController)->edit(),
+    'qlbooking_edit_post' => (new QlBookingController)->update(),
+    'qlbooking_delete' => (new QlBookingController)->delete(),
 
     // Mặc định
     default => (new HomeController)->index(),
