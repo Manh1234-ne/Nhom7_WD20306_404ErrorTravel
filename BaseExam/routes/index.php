@@ -6,6 +6,7 @@ require_once PATH_CONTROLLER . 'NhanSuController.php';
 require_once PATH_CONTROLLER . 'DanhMucTourController.php';
 require_once PATH_CONTROLLER . 'NguoiDungController.php';
 require_once PATH_CONTROLLER . 'QlBookingController.php';
+require_once PATH_CONTROLLER . 'YeuCauController.php';
 
 $action = $_GET['action'] ?? 'home';
 
@@ -56,6 +57,14 @@ match ($action) {
     'qlbooking_edit' => (new QlbookingController)->edit(),
     'qlbooking_edit_post' => (new QlBookingController)->update(),
     'qlbooking_delete' => (new QlBookingController)->delete(),
+
+     'yeu_cau' => (new YeuCauController)->index(),
+    'yeu_cau_create' => (new YeuCauController)->create(),
+    'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
+    // 'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
+    'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
+    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
+    'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
 
     // Mặc định
     default => (new HomeController)->index(),
