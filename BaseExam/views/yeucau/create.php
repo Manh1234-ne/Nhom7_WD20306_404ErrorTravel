@@ -142,8 +142,8 @@
         </div>
 
         <form action="index.php?action=yeu_cau_store" method="POST">
-            <label>ID Booking / Tour:</label>
-            <input type="number" name="id_booking" min="1" required>
+            <!-- <label>ID Booking / Tour:</label>
+            <input type="number" name="id_booking" min="1" required> -->
 
             <label>Tên khách:</label>
             <input type="text" name="ten_khach" required>

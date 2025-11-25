@@ -130,12 +130,23 @@
                         Quản lý Danh mục
                     </a>
                 </li>
+                <li>
+                    <a href="?action=/" onclick="alert('Bạn chưa đăng nhập!'); return true;">
+                        Quản lý Booking
+                    </a>
+                </li>
+                <li>
+                    <a href="?action=/" onclick="alert('Bạn chưa đăng nhập!'); return true;">
+                        Yêu cầu đặc biệt
+                    </a>
+                </li>
             <?php else: ?>
                 <!-- Đã đăng nhập → vào trang thật -->
                 <li><a href="?action=tours">Quản lý Tour</a></li>
                 <li><a href="?action=nhansu">Quản lý Nhân sự</a></li>
                 <li><a href="?action=danhmuc">Quản lý Danh mục</a></li>
-                <li><a href="?action=yeu_cau">Quản lý Yêu Cầu</a></li>
+                <li><a href="?action=qlbooking">Quản lý Booking</a></li>
+                <li><a href="?action=yeu_cau">Yêu cầu đặc biệt</a></li>
             <?php endif; ?>
         </ul>
     </nav>

@@ -11,20 +11,15 @@ class YeuCauModel
         $this->conn = connectDB();
     }
 
-    public function getConnection() {
-        return $this->conn;
-    }
-
-    // Lấy tất cả yêu cầu
     public function getAll()
     {
-        $sql = "SELECT * FROM yeu_cau_khach_dac_biet ORDER BY created_at DESC";
+        // ID tăng dần
+        $sql = "SELECT * FROM yeu_cau_khach_dac_biet ORDER BY id ASC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Lấy 1 yêu cầu
     public function find($id)
     {
         $sql = "SELECT * FROM yeu_cau_khach_dac_biet WHERE id = ?";
@@ -33,25 +28,22 @@ class YeuCauModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Tạo yêu cầu — Trả về ID
     public function create($data)
     {
+        // Bỏ id_booking và tour_id
         $sql = "INSERT INTO yeu_cau_khach_dac_biet
-                (id_booking, ten_khach, loai_yeu_cau, mo_ta, trang_thai)
-                VALUES (:id_booking, :ten_khach, :loai_yeu_cau, :mo_ta, 'cho_xu_ly')";
-
+                (ten_khach, loai_yeu_cau, mo_ta, trang_thai)
+                VALUES (:ten_khach, :loai_yeu_cau, :mo_ta, 'cho_xu_ly')";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
-            'id_booking'   => $data['id_booking'],
-            'ten_khach'    => $data['ten_khach'],
+            'ten_khach' => $data['ten_khach'],
             'loai_yeu_cau' => $data['loai_yeu_cau'],
-            'mo_ta'        => $data['mo_ta']
+            'mo_ta' => $data['mo_ta']
         ]);
 
         return $this->conn->lastInsertId();
     }
 
-    // Update
     public function update($id, $data)
     {
         $fields = [];
@@ -70,7 +62,6 @@ class YeuCauModel
         return $stmt->execute($params);
     }
 
-    // Xóa
     public function delete($id)
     {
         $sql = "DELETE FROM yeu_cau_khach_dac_biet WHERE id = ?";

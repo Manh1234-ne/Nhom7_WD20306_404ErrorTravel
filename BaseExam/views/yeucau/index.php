@@ -53,7 +53,7 @@
         }
 
         .top-bar {
-            display: flex;
+            /* display: flex; */
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
@@ -141,6 +141,7 @@
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
         <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
+        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Yêu cầu đặc biệt</a>
     </div>
 
@@ -163,7 +164,6 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>ID Booking / Tour</th>
                     <th>Tên khách</th>
                     <th>Loại yêu cầu</th>
                     <th>Mô tả</th>
@@ -176,7 +176,6 @@
                     foreach ($danhSach as $r): ?>
                         <tr>
                             <td><?= $r['id'] ?></td>
-                            <td><?= $r['id_booking'] ?? $r['tour_id'] ?></td>
                             <td><?= htmlspecialchars($r['ten_khach']) ?></td>
                             <td><?= htmlspecialchars($r['loai_yeu_cau']) ?></td>
                             <td><?= nl2br(htmlspecialchars($r['mo_ta'])) ?></td>
@@ -184,8 +183,8 @@
                             <td>
                                 <a href="index.php?action=yeu_cau_edit&id=<?= $r['id'] ?>" class="btn"><i
                                         class="fa fa-edit"></i></a>
-                                <a href="index.php?action=yeu_cau_show&id=<?= $r['id'] ?>" class="btn"><i
-                                        class="fa fa-eye"></i></a>
+                                <!-- <a href="index.php?action=yeu_cau_show&id=<?= $r['id'] ?>" class="btn"><i
+                                        class="fa fa-eye"></i></a> -->
                                 <a href="index.php?action=yeu_cau_delete&id=<?= $r['id'] ?>" class="btn"
                                     onclick="return confirm('Xác nhận xóa?')"><i class="fa fa-trash"></i></a>
                             </td>
