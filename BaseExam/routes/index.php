@@ -32,6 +32,7 @@ match ($action) {
     'qlbooking' => (new QlBookingController)->index(),
     'qlbooking_edit' => (new QlbookingController)->edit(),
     'qlbooking_edit_post' => (new QlBookingController)->update(),
+    'qlbooking_detail' => (new QlBookingController)->detail(),
 
     // NHÂN SỰ
     'nhansu' => (new NhanSuController)->index(),

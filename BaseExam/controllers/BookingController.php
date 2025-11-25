@@ -34,7 +34,7 @@ class BookingController {
 
         $this->model->create($data);
 
-        header("Location: ?action=tours");
+        header("Location: ?action=qlbooking");
 exit();
 
     }

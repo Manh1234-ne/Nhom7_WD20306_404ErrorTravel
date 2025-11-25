@@ -100,9 +100,9 @@
 
             <label>Loại Tour</label>
             <select name="loai_tour">
-                <option value="trong_nuoc" <?= $tour['loai_tour'] == 'trong_nuoc' ? 'selected' : '' ?>>Trong nước</option>
-                <option value="quoc_te" <?= $tour['loai_tour'] == 'quoc_te' ? 'selected' : '' ?>>Quốc tế</option>
-                <option value="yeu_cau" <?= $tour['loai_tour'] == 'yeu_cau' ? 'selected' : '' ?>>Yêu cầu</option>
+                <option value="Trong nước" <?= $tour['loai_tour'] == 'trong_nuoc' ? 'selected' : '' ?>>Trong nước</option>
+                <option value="Quốc tế" <?= $tour['loai_tour'] == 'quoc_te' ? 'selected' : '' ?>>Quốc tế</option>
+                <option value="Theo yêu cầu" <?= $tour['loai_tour'] == 'yeu_cau' ? 'selected' : '' ?>>Yêu cầu</option>
             </select>
 
             <label>Mô tả</label>
@@ -127,10 +127,10 @@
 
             <label>Mùa</label>
             <select name="mua">
-                <option value="mua_xuan" <?= ($tour['mua'] ?? '') == 'mua_xuan' ? 'selected' : '' ?>>Mùa Xuân</option>
-                <option value="mua_ha" <?= ($tour['mua'] ?? '') == 'mua_ha' ? 'selected' : '' ?>>Mùa Hạ</option>
-                <option value="mua_thu" <?= ($tour['mua'] ?? '') == 'mua_thu' ? 'selected' : '' ?>>Mùa Thu</option>
-                <option value="mua_dong" <?= ($tour['mua'] ?? '') == 'mua_dong' ? 'selected' : '' ?>>Mùa Đông</option>
+                <option value="Mùa xuân" <?= ($tour['mua'] ?? '') == 'mua_xuan' ? 'selected' : '' ?>>Mùa Xuân</option>
+                <option value="Mùa hạ" <?= ($tour['mua'] ?? '') == 'mua_ha' ? 'selected' : '' ?>>Mùa Hạ</option>
+                <option value="Mùa thu" <?= ($tour['mua'] ?? '') == 'mua_thu' ? 'selected' : '' ?>>Mùa Thu</option>
+                <option value="Mùa đông" <?= ($tour['mua'] ?? '') == 'mua_dong' ? 'selected' : '' ?>>Mùa Đông</option>
             </select>
 
             <button type="submit">Cập nhật Tour</button>

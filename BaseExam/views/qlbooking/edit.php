@@ -62,10 +62,24 @@
         <textarea name="ngay_khoi_hanh"><?= $qlb['ngay_khoi_hanh'] ?></textarea>
         <label>Trạng thái</label>
         <textarea name="trang_thai"><?= $qlb['trang_thai'] ?></textarea>
+       
         <label>Tình trạng thanh toán</label>
-        <textarea name="tinh_trang_thanh_toan"><?= $qlb['tinh_trang_thanh_toan'] ?></textarea>
+            <select name="tinh_trang_thanh_toan">
+                <?php
+                $types = ['Chờ thanh toán', 'Đã thanh toán', 'Thanh toán một phần', 'Hủy bỏ'];
+                foreach ($types as $t): ?>
+                    <option value="<?= $t ?>" <?= $qlb['tinh_trang_thanh_toan']==$t?'selected':'' ?>><?= $t ?></option>
+                <?php endforeach; ?>
+            </select>
+        
         <label>Yêu cầu đặc biệt</label>
-        <textarea name="yeu_cau_dac_biet"><?= $qlb['yeu_cau_dac_biet'] ?></textarea>
+            <select name="yeu_cau_dac_biet">
+                <?php
+                $types = ['Ăn chay','Yêu cầu về dị ứng','Yêu cầu bệnh lý','Yêu cầu phòng nghỉ','Yêu cầu phương tiện di chuyển','Yêu cầu ăn uống','Khác'];
+                foreach ($types as $t): ?>
+                    <option value="<?= $t ?>" <?= $qlb['yeu_cau_dac_biet']==$t?'selected':'' ?>><?= $t ?></option>
+                <?php endforeach; ?>
+            </select>
         <button type="submit">Cập nhật booking</button>
         <a href="?action=qlbooking">Quay lại</a>
     </form>

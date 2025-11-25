@@ -97,46 +97,26 @@
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
         <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
-        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
+         <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
     </div>
 
     <div class="content">
-        <h1>Chi tiết Tour</h1>
+        <h1>Chi tiết Booking</h1>
 
         <div class="card">
 
-            <h2><?= htmlspecialchars($tour['ten_tour']) ?></h2>
+            <p><strong>Tên khách:</strong> <?= $qlb['ten_khach'] ?></p>
 
-            <p><strong>Loại tour:</strong> <?= $tour['loai_tour'] ?></p>
-            <p><strong>Mô tả:</strong> <?= nl2br($tour['mo_ta']) ?></p>
-            <p><strong>Giá:</strong> <?= number_format($tour['gia']) ?> VNĐ</p>
-            <p><strong>Chính sách:</strong> <?= nl2br($tour['chinh_sach']) ?></p>
-            <p><strong>Nhà cung cấp:</strong> <?= $tour['nha_cung_cap'] ?></p>
-            <p><strong>Mùa:</strong> <?= $tour['mua'] ?></p>
+            <p><strong>Số điện thoại:</strong> <?= $qlb['so_dien_thoai'] ?></p>
+            <p><strong>Số người:</strong> <?= ($qlb['so_nguoi']) ?></p>
+            <p><strong>Ngày khởi hành:</strong><?=($qlb['ngay_khoi_hanh']) ?></p>
+<p><strong>Trạng thái:</strong><?=($qlb['trang_thai']) ?></p>
+            <p><strong>Tình trạng thanh toán:</strong><?=($qlb['tinh_trang_thanh_toan']) ?></p>
+            <p><strong>Yêu cầu đặc biệt:</strong><?=($qlb['yeu_cau_dac_biet']) ?></p>
+            
 
-            <h3>Ảnh đại diện:</h3>
-            <?php if (!empty($tour['hinh_anh'])): ?>
-                <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="350">
-            <?php else: ?>
-                <p>Chưa có ảnh đại diện.</p>
-            <?php endif; ?>
-
-            <h3>Album ảnh:</h3>
-            <?php if (!empty($album)): ?>
-                <?php foreach ($album as $img): ?>
-                    <img class="album-img" src="assets/uploads/tour/album/<?= $img->file_name ?>" width="150">
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Chưa có ảnh album.</p>
-            <?php endif; ?>
-
-            <a href="?action=tours" class="btn-back">← Quay lại</a>
-            <a href="?action=dat_tour&id=<?= $tour['id'] ?>" 
-   class="btn-back" 
-   style="background:#27ae60; margin-left:10px;">
-    Đặt tour →
-</a>
+            <a href="?action=qlbooking" class="btn-back">← Quay lại</a>
 
 
         </div>

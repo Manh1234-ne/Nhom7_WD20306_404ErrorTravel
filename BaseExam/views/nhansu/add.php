@@ -86,10 +86,10 @@
         <div>
             <label>Vai trò:</label>
             <select name="vai_tro" required>
-                <option value="huong_dan_vien" selected>Hướng dẫn viên</option>
-                <option value="admin">Admin</option>
-                <option value="khach_hang">Khách hàng</option>
-                <option value="nguoi_dung">Người dùng</option>
+                <option value="Hướng dẫn viên" selected>Hướng dẫn viên</option>
+                <option value="Admin">Admin</option>
+                <option value="Khách hàng">Khách hàng</option>
+                <option value="Người dùng">Người dùng</option>
             </select>
         </div>
 
