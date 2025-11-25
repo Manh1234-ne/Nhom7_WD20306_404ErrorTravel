@@ -52,11 +52,9 @@ match ($action) {
 
       // QLBOOKING
     'qlbooking' => (new QlBookingController)->index(),
-    'qlbooking_add' => (new QlBookingController)->add(),
-    'qlbooking_add_post' => (new QlBookingController)->store(),
     'qlbooking_edit' => (new QlbookingController)->edit(),
     'qlbooking_edit_post' => (new QlBookingController)->update(),
-    'qlbooking_delete' => (new QlBookingController)->delete(),
+    'qlbooking_detail' => (new QlBookingController)->detail(),
 
      'yeu_cau' => (new YeuCauController)->index(),
     'yeu_cau_create' => (new YeuCauController)->create(),

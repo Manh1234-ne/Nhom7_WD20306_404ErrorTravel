@@ -128,20 +128,15 @@
 
     </div>
     <div class="content">
-        <div class="top-bar">
-            <h1>Danh sách Quản lí Booking</h1>
-            <a href="?action=qlbooking_add" class="btn"><i class="fa fa-plus"></i> Thêm Booking</a>
-        </div>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Đơn đặt Tour</th>
-                    <th>Họ tên</th>
-                    <th>Giới tính</th>
-                    <th>Năm sinh</th>
-                    <th>Số giấy tờ</th>
-                    <th>Loại phòng</th>
+                    <th>Tên khách</th>
+                    <th>Số điện thoại</th>
+                    <th>Số người</th>
+                    <th>Ngày khởi hành</th>
+                    <th>Trạng thái</th>
                     <th>Tình trạng thanh toán</th>
                     <th>Yêu cầu đặc biệt</th>
                     <th>Hành động</th>
@@ -151,19 +146,19 @@
                 <?php foreach ($qlbooking as $qlb): ?>
                     <tr>
                        <td><?= $qlb['id'] ?></td>
-                         <td><?= $qlb['dat_tour_id'] ?></td>
-                            <td><?= htmlspecialchars($qlb['ho_ten']) ?></td>
-                            <td><?= $qlb['gioi_tinh'] ?></td>
-                            <td><?= $qlb['nam_sinh'] ?></td>
-                            <td><?= $qlb['so_giay_to'] ?></td>
-                            <td><?= $qlb['loai_phong'] ?></td>
+                            <td><?= htmlspecialchars($qlb['ten_khach']) ?></td>
+                            <td><?= $qlb['so_dien_thoai'] ?></td>
+                            <td><?= $qlb['so_nguoi'] ?></td>
+                            <td><?= $qlb['ngay_khoi_hanh'] ?></td>
+                            <td><?= $qlb['trang_thai'] ?></td>
                             <td><?= $qlb['tinh_trang_thanh_toan'] ?></td>
                             <td><?= $qlb['yeu_cau_dac_biet'] ?></td>
-                            
-                           <td> 
-                            <a href="?action=qlbooking_edit&id=<?= $qlb['id'] ?>" class="btn"><i class="fa fa-edit"></i> Sửa</a>
-                            <a href="?action=qlbooking_delete&id=<?= $qlb['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i> Xóa</a>
-                        </td>
+                            <td>
+                               <a href="?action=qlbooking_detail&id=<?= $qlb['id'] ?>" class="btn">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="?action=qlbooking_edit&id=<?= $qlb['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>
+                </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -27,12 +27,14 @@ class BookingController {
             'so_nguoi'       => $_POST['so_nguoi'],
             'ngay_khoi_hanh' => $_POST['ngay_khoi_hanh'],
             'trang_thai'     => $_POST['trang_thai'],
-            'ghi_chu'        => $_POST['ghi_chu']
+            'ghi_chu'        => $_POST['ghi_chu'],
+            'tinh_trang_thanh_toan' => $_POST['tinh_trang_thanh_toan'],
+            'yeu_cau_dac_biet' => $_POST['yeu_cau_dac_biet'] ?? '',
         ];
 
         $this->model->create($data);
 
-        header("Location: ?action=tours");
+        header("Location: ?action=qlbooking");
 exit();
 
     }
