@@ -44,7 +44,6 @@ class YeuCauController
             // Chuyển về trang danh sách sau khi tạo
             header("Location: index.php?action=yeu_cau");
             exit;
-
         } catch (PDOException $e) {
             echo "<h3>LỖI SQL:</h3>";
             echo htmlspecialchars($e->getMessage());
@@ -76,15 +75,26 @@ class YeuCauController
     }
 
     public function delete($id)
-    {
-        $yeuCau = $this->modelYeuCau->find($id);
-        if (!$yeuCau) die('Yêu cầu không tồn tại.');
-
+{
+    $yeuCau = $this->modelYeuCau->find($id);
+    if (!$yeuCau) die('Yêu cầu không tồn tại.');
+    try {
+        
         $this->modelYeuCau->delete($id);
-
-        header("Location: index.php?action=yeu_cau");
+        // header("Location: index.php?action=yeu_cau");
+        
+        exit;
+        
+    } catch (PDOException $e) {
+        echo "<pre>Lỗi SQL DELETE:\n";
+        echo htmlspecialchars($e->getMessage());
+        echo "</pre>";
         exit;
     }
+    
+}
+
+
 
     public function show($id)
     {

@@ -148,16 +148,16 @@
             <label>Tên khách:</label>
             <input type="text" name="ten_khach" required>
 
-            <label>Loại yêu cầu:</label>
+            <label for="group-title">Yêu cầu đặc biệt</label>
             <select name="loai_yeu_cau" required>
                 <option value="">-- Chọn loại yêu cầu --</option>
-                <option value="an_chay">Ăn chay</option>
-                <option value="di_ung">Dị ứng</option>
-                <option value="benh_ly">Bệnh lý</option>
-                <option value="yeu_cau_phong">Phòng nghỉ</option>
-                <option value="yeu_cau_di_chuyen">Di chuyển</option>
-                <option value="yeu_cau_an_uong">Ăn uống</option>
-                <option value="khac">Khác</option>
+                <option value="">Ăn chay</option>
+                <option value="Yêu cầu về dị ứng">Dị ứng</option>
+                <option value="Yêu cầu về bệnh lý">Bệnh lý</option>
+                <option value="Yêu cầu về phòng nghỉ">Phòng nghỉ</option>
+                <option value="Yêu cầu phương tiện di chuyển">Di chuyển</option>
+                <option value="Yêu cầu về ăn uống">Ăn uống</option>
+                <option value="Khác">Khác</option>
             </select>
 
             <label>Mô tả chi tiết:</label>
