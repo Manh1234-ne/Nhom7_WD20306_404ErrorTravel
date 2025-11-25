@@ -81,9 +81,25 @@
 
             <input type="date" name="ngay_khoi_hanh" required>
 
+            <label for="group-title">Trạng thái booking</label>
             <input type="text" value="Chờ xác nhận" disabled>
             <input type="hidden" name="trang_thai" value="Chờ xác nhận">
 
+            <label for="group-title">Tình trạng thanh toán</label>
+            <input type="text" value="Chờ thanh toán" disabled>
+            <input type="hidden" name="tinh_trang_thanh_toan" value="Chờ thanh toán">
+
+            <label for="group-title">Yêu cầu đặc biệt</label>
+            <select name="yeu_cau_dac_biet" required>
+                <option value="">-- Chọn loại yêu cầu --</option>
+                <option value="">Ăn chay</option>
+                <option value="Yêu cầu về dị ứng">Dị ứng</option>
+                <option value="Yêu cầu về bệnh lý">Bệnh lý</option>
+                <option value="Yêu cầu về phòng nghỉ">Phòng nghỉ</option>
+                <option value="Yêu cầu phương tiện di chuyển">Di chuyển</option>
+                <option value="Yêu cầu về ăn uống">Ăn uống</option>
+                <option value="Khác">Khác</option>
+            </select>
 
             <textarea name="ghi_chu" placeholder="Ghi chú"></textarea>
 

@@ -28,6 +28,11 @@ match ($action) {
     'dat_tour' => (new BookingController)->create(),
     'save_booking' => (new BookingController)->save(),
 
+    // QLBOOKING
+    'qlbooking' => (new QlBookingController)->index(),
+    'qlbooking_edit' => (new QlbookingController)->edit(),
+    'qlbooking_edit_post' => (new QlBookingController)->update(),
+
     // NHÂN SỰ
     'nhansu' => (new NhanSuController)->index(),
     'nhansu_add' => (new NhanSuController)->add(),
@@ -54,9 +59,9 @@ match ($action) {
     'yeu_cau_create' => (new YeuCauController)->create(),
     'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
     // 'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
-    'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
-    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
-    'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
+    'yeu_cau_update' => fn() => (new YeuCauController)->update($_GET['id']),
+    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($_GET['id']),
+    'yeu_cau_show' => fn() => (new YeuCauController)->show($_GET['id']),
 
     // Mặc định
     default => (new HomeController)->index(),
