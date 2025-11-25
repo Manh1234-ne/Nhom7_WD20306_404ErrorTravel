@@ -14,19 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-<?php if (isset($_SESSION['user'])): ?>
-    <li class="nav-item">
-        <span class="nav-link">Xin chào, <?= $_SESSION['user']['name'] ?></span>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link text-danger" href="index.php?action=logout">Đăng xuất</a>
-    </li>
-<?php else: ?>
-    <li class="nav-item">
-        <a class="nav-link" href="index.php?action=login">Đăng nhập</a>
-    </li>
-<?php endif; ?>
 <body>
 
     <nav class="navbar navbar-expand-xxl bg-light justify-content-center">

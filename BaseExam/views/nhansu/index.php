@@ -123,8 +123,8 @@
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tourr</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
         <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
-        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
-        <a href="?action=yeu_cau"><i class="fa fa-star"></i>Yêu cầu đặc biệt</a>
+        <a href="?action=yeu_cau"><i class="nav-icon fas fa-th"></i>Yêu cầu đặc biệt</a>
+
 
     </div>
     <div class="content">
@@ -133,45 +133,44 @@
             <a href="?action=nhansu_add" class="btn"><i class="fa fa-plus"></i> Thêm nhân sự</a>
         </div>
         <table>
-            <thead>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Ngôn ngữ</th>
+            <th>Kinh nghiệm</th>
+            <th>Đánh giá</th>
+            <th>Vai trò</th> <!-- Thêm cột Vai trò -->
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($nhansu) && is_array($nhansu)): ?>
+            <?php foreach ($nhansu as $ns): ?>
                 <tr>
-                    <th>ID</th>
-                    <th>Họ tên</th>
-                    <th>Email</th>
-                    <th>Số điện thoại</th>
-                    <th>Ngôn ngữ</th>
-                    <th>Kinh nghiệm</th>
-                    <th>Đánh giá</th>
-                    <th>Vai trò</th> <!-- Thêm cột Vai trò -->
-                    <th>Hành động</th>
+                    <td><?= $ns['nguoi_dung_id'] ?></td>
+                    <td><?= htmlspecialchars($ns['ho_ten']) ?></td>
+                    <td><?= $ns['email'] ?></td>
+                    <td><?= $ns['so_dien_thoai'] ?></td>
+                    <td><?= $ns['ngon_ngu'] ?></td>
+                    <td><?= $ns['kinh_nghiem'] ?></td>
+                    <td><?= $ns['danh_gia'] ?></td>
+                    <td><?= htmlspecialchars($ns['vai_tro']) ?></td> <!-- Hiển thị vai trò -->
+                    <td>
+                        <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                        <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')"><i class="fa fa-trash"></i></a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($nhansu) && is_array($nhansu)): ?>
-                    <?php foreach ($nhansu as $ns): ?>
-                        <tr>
-                            <td><?= $ns['nguoi_dung_id'] ?></td>
-                            <td><?= htmlspecialchars($ns['ho_ten']) ?></td>
-                            <td><?= $ns['email'] ?></td>
-                            <td><?= $ns['so_dien_thoai'] ?></td>
-                            <td><?= $ns['ngon_ngu'] ?></td>
-                            <td><?= $ns['kinh_nghiem'] ?></td>
-                            <td><?= $ns['danh_gia'] ?></td>
-                            <td><?= htmlspecialchars($ns['vai_tro']) ?></td> <!-- Hiển thị vai trò -->
-                            <td>
-                                <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-primary">Sửa</a>
-                                <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" class="btn btn-danger"
-                                    onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="9" style="text-align:center;">Không có dữ liệu</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="9" style="text-align:center;">Không có dữ liệu</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
 
     </div>
 </body>

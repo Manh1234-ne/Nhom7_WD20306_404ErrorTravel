@@ -49,22 +49,15 @@ match ($action) {
     'login' => (new NguoiDungController)->login(),
     'logout' => (new NguoiDungController)->logout(),
 
-    // YÊU CẦU ĐẶC BIỆT
+    // ====================== YÊU CẦU ĐẶC BIỆT ======================
     'yeu_cau' => (new YeuCauController)->index(),
     'yeu_cau_create' => (new YeuCauController)->create(),
     'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
-    'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
+    // 'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
     'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
     'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
     'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
 
-    // QLBOOKING
-    'qlbooking' => (new QlBookingController)->index(),
-    'qlbooking_add' => (new QlBookingController)->add(),
-    'qlbooking_add_post' => (new QlBookingController)->store(),
-    'qlbooking_edit' => (new QlbookingController)->edit(),
-    'qlbooking_edit_post' => (new QlBookingController)->update(),
-    'qlbooking_delete' => (new QlBookingController)->delete(),
     // Mặc định
     default => (new HomeController)->index(),
 };

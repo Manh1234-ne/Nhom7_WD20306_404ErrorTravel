@@ -118,13 +118,12 @@
 
 <body>
     <div class="sidebar">
-        <h2>404 Error Travel</h2>
+        <h2>Quản lý Tour</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tourr</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
         <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
-        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
-        <a href="?action=yeu_cau"><i class="fa fa-star"></i>Yêu cầu đặc biệt</a>
+        <a href="?action=yeu_cau"><i class="nav-icon fas fa-th"></i>Yêu cầu đặc biệt</a>
 
     </div>
     <div class="content">
@@ -137,7 +136,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Tên Tour</th>
-                    <th>Danh mục</th>
+                    <th>Loại Tour</th>
                     <th>Mô tả</th>
                     <th>Giá</th>
                     <th>Chính sách</th>
@@ -150,31 +149,29 @@
             <tbody>
                 <?php foreach ($tours as $tour): ?>
                     <tr>
-                        <td><?= $tour['id'] ?? '' ?></td>
-                        <td><?= htmlspecialchars($tour['ten_tour'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($tour['loai_tour'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($tour['mo_ta'] ?? '') ?></td>
-                        <td><?= isset($tour['gia']) ? number_format($tour['gia'], 0, ',', '.') . ' VNĐ' : '' ?></td>
-                        <td><?= htmlspecialchars($tour['chinh_sach'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($tour['nha_cung_cap'] ?? '') ?></td>
-                        <td><?= htmlspecialchars($tour['mua'] ?? '') ?></td>
+                        <td><?= $tour['id'] ?></td>
+                        <td><?= htmlspecialchars($tour['ten_tour']) ?></td>
+                        <td><?= $tour['loai_tour'] ?></td>
+                        <td><?= htmlspecialchars($tour['mo_ta']) ?></td>
+                        <td><?= number_format($tour['gia'], 0, ',', '.') ?> VNĐ</td>
+                        <td><?= htmlspecialchars($tour['chinh_sach']) ?></td>
+                        <td><?= htmlspecialchars($tour['nha_cung_cap']) ?></td>
+                        <td><?= $tour['mua'] ?></td>
                         <td>
-                            <?php if (!empty($tour['hinh_anh'])): ?>
+                            <?php if ($tour['hinh_anh']): ?>
                                 <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="80">
                             <?php endif; ?>
                         </td>
                         <td>
-                            <a href="?action=tour_detail&id=<?= $tour['id'] ?>" class="btn">
+                               <a href="?action=tour_detail&id=<?= $tour['id'] ?>" class="btn">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a href="?action=tour_edit&id=<?= $tour['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>
-                            <a href="?action=tour_delete&id=<?= $tour['id'] ?>" class="btn"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i></a>
+                            <a href="?action=tour_delete&id=<?= $tour['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-
         </table>
     </div>
 </body>

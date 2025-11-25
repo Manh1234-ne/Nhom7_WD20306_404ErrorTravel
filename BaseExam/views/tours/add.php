@@ -66,7 +66,7 @@
         <label>Tên Tour</label>
         <input type="text" name="ten_tour" required>
 
-        <label>Loại Tourz</label>
+        <label>Loại Tour</label>
         <select name="loai_tour">
             <option value="trong_nuoc">Trong nước</option>
             <option value="quoc_te">Quốc tế</option>
@@ -96,7 +96,6 @@
             <option value="mua_dong">Mùa Đông</option>
         </select>
 
-        <!-- ⭐ THÊM PHẦN ALBUM — KHÔNG ĐỤNG CSS -->
         <label>Album ảnh (có thể chọn nhiều)</label>
         <input type="file" name="album[]" multiple>
 

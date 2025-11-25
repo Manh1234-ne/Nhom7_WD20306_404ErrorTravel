@@ -36,9 +36,9 @@ class YeuCauModel
                 VALUES (:ten_khach, :loai_yeu_cau, :mo_ta, 'cho_xu_ly')";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
-            'ten_khach' => $data['ten_khach'],
+            'ten_khach'    => $data['ten_khach'],
             'loai_yeu_cau' => $data['loai_yeu_cau'],
-            'mo_ta' => $data['mo_ta']
+            'mo_ta'        => $data['mo_ta']
         ]);
 
         return $this->conn->lastInsertId();

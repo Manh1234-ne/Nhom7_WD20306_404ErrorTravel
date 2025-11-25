@@ -12,4 +12,5 @@ class Booking extends BaseModel {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute($data);
     }
+    
 }
