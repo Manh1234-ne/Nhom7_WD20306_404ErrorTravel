@@ -66,8 +66,9 @@
         <div class="group-title">Thông tin khách hàng</div>
 
         <input type="text" name="ten_khach" placeholder="Tên khách" required>
-        <input type="text" name="so_dien_thoai" placeholder="Số điện thoại" required>
+        <input type="number" name="so_dien_thoai" placeholder="Số điện thoại" required>
         <input type="email" name="email" placeholder="Email">
+        <input type="number" name="cccd" placeholder="CCCD" required>
 
         <div class="group-title">Chi tiết booking</div>
 
@@ -77,13 +78,19 @@
         <input type="number" name="so_nguoi" placeholder="Số lượng khách" required>
 
         <input type="date" name="ngay_khoi_hanh" required>
+        <input type="number" name="gia" value="<?= $tour['gia'] ?>" placeholder="Giá" required>
+        
 
         <input type="text" value="Chờ xác nhận" disabled>
         <input type="hidden" name="trang_thai" value="Chờ xác nhận">
         <label for="group-title">Tình trạng thanh toán</label>
             <input type="text" value="Chờ thanh toán" disabled>
             <input type="hidden" name="tinh_trang_thanh_toan" value="Chờ thanh toán">
-
+             <?php if ($tour['gia'] > 500000): ?>
+    <input type="number" name="tien_coc" placeholder="Tiền cọc (bắt buộc)" required>
+<?php else: ?>
+    <input type="hidden" name="tien_coc" value="0">
+<?php endif; ?>
             <label for="group-title">Yêu cầu đặc biệt</label>
             <select name="yeu_cau_dac_biet" required>
                 <option value="">-- Chọn loại yêu cầu --</option>

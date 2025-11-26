@@ -56,10 +56,14 @@
         <textarea name="ten_khach"><?= $qlb['ten_khach'] ?></textarea>
         <label>Số điện thoại</label>
         <textarea name="so_dien_thoai"><?= $qlb['so_dien_thoai'] ?></textarea>
+         <label>CCCD</label>
+        <textarea name="cccd"><?= $qlb['cccd'] ?></textarea>
         <label>Số người</label>
         <textarea name="so_nguoi"><?= $qlb['so_nguoi'] ?></textarea>
         <label>Ngày khởi hành</label>
         <textarea name="ngay_khoi_hanh"><?= $qlb['ngay_khoi_hanh'] ?></textarea>
+         <label>Giá</label>
+        <textarea name="gia"><?= $qlb['gia'] ?></textarea>
         <label>Trạng thái</label>
         <textarea name="trang_thai"><?= $qlb['trang_thai'] ?></textarea>
        <label>Tình trạng thanh toán</label>
