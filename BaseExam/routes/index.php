@@ -9,8 +9,6 @@ require_once PATH_CONTROLLER . 'DanhMucTourController.php';
 require_once PATH_CONTROLLER . 'NguoiDungController.php';
 require_once PATH_CONTROLLER . 'YeuCauController.php';
 require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
-require_once PATH_CONTROLLER . 'AlbumController.php';
-
 
 $action = $_GET['action'] ?? 'home';
 $id = $_GET['id'] ?? null;
@@ -30,21 +28,11 @@ match ($action) {
     'dat_tour' => (new BookingController)->create(),
     'save_booking' => (new BookingController)->save(),
 
-    // ALBUM ẢNH
-    'albums' => (new AlbumController)->index(),
-    'album_add' => (new AlbumController)->add(),
-    'album_add_post' => (new AlbumController)->store(),
-    'album_edit' => (new AlbumController)->edit(),
-    'album_edit_post' => (new AlbumController)->update(),
-    'album_delete' => (new AlbumController)->delete(),
-    'album_detail' => (new AlbumController)->detail(),
-
-
     // QLBOOKING
     'qlbooking' => (new QlBookingController)->index(),
     'qlbooking_edit' => (new QlbookingController)->edit(),
     'qlbooking_edit_post' => (new QlBookingController)->update(),
-    
+    'qlbooking_detail' => (new QlBookingController)->detail(),
 
     // NHÂN SỰ
     'nhansu' => (new NhanSuController)->index(),

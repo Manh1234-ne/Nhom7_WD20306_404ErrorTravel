@@ -158,7 +158,7 @@
                             <td><?= $qlb['yeu_cau_dac_biet'] ?></td>
                             
                            <td> 
-                            <a href="?action=tour_detail&id=<?= $tour['id'] ?>" class="btn">
+                            <a href="?action=qlbooking_detail&id=<?= $qlb['id'] ?>" class="btn">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a href="?action=qlbooking_edit&id=<?= $qlb['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>

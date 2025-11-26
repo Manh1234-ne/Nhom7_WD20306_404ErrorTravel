@@ -68,9 +68,9 @@
 
         <label>Loại Tour</label>
         <select name="loai_tour">
-            <option value="trong_nuoc">Trong nước</option>
-            <option value="quoc_te">Quốc tế</option>
-            <option value="yeu_cau">Yêu cầu</option>
+            <option value="Trong nước">Trong nước</option>
+            <option value="Quốc tế">Quốc tế</option>
+            <option value="Theo yêu cầu">Yêu cầu</option>
         </select>
 
         <label>Mô tả</label>

@@ -87,10 +87,10 @@
             <?php if (isset($nhansu['vai_tro']) && $nhansu['vai_tro'] == 'admin'): ?>
                 <!-- Nếu nhân sự là admin thì cho đổi vai trò -->
                 <select name="vai_tro">
-                    <option value="huong_dan_vien" <?= $nhansu['vai_tro'] == 'huong_dan_vien' ? 'selected' : '' ?>>Hướng dẫn viên</option>
-                    <option value="admin" <?= $nhansu['vai_tro'] == 'admin' ? 'selected' : '' ?>>Admin</option>
-                    <option value="khach_hang" <?= $nhansu['vai_tro'] == 'khach_hang' ? 'selected' : '' ?>>Khách hàng</option>
-                    <option value="nguoi_dung" <?= $nhansu['vai_tro'] == 'nguoi_dung' ? 'selected' : '' ?>>Người dùng</option>
+                    <option value="Hướng dẫn viên" <?= $nhansu['vai_tro'] == 'huong_dan_vien' ? 'selected' : '' ?>>Hướng dẫn viên</option>
+                    <option value="Admin" <?= $nhansu['vai_tro'] == 'admin' ? 'selected' : '' ?>>Admin</option>
+                    <option value="Khách hàng" <?= $nhansu['vai_tro'] == 'khach_hang' ? 'selected' : '' ?>>Khách hàng</option>
+                    <option value="Người dùng" <?= $nhansu['vai_tro'] == 'nguoi_dung' ? 'selected' : '' ?>>Người dùng</option>
                 </select>
             <?php else: ?>
                 <!-- Nếu không phải admin thì không đổi -->

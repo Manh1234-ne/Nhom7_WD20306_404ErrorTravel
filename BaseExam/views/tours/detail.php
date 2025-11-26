@@ -52,11 +52,17 @@
             padding: 30px;
         }
 
-        .card {
+        .section {
             background: #fff;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            margin-bottom: 25px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2,
+        .section h3 {
+            margin-top: 0;
         }
 
         .album-img {
@@ -66,7 +72,7 @@
         }
 
         .album-img:hover {
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
         .btn-back {
@@ -83,6 +89,12 @@
             background: #2980b9;
         }
 
+        .box-highlight {
+            background: #fff5eb;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
         img {
             border-radius: 6px;
         }
@@ -92,30 +104,30 @@
 <body>
 
     <div class="sidebar">
-        <h2>Quản lý Tour</h2>
-        <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
-        <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
-        <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
-        <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
+        <h2>Start Admin</h2>
+        <a href="?action=home"><i class="fa fa-home"></i>Dashboard</a>
+        <a href="?action=danhmuc"><i class="fa fa-list"></i>Danh Mục Tour</a>
+        <a href="?action=tours"><i class="fa fa-suitcase"></i>Danh sách Tour</a>
+        <a href="?action=booking"><i class="fa fa-ticket"></i>Booking</a>
+        <a href="?action=nhansu"><i class="fa fa-user"></i>Danh sách hướng dẫn viên</a>
+        <a href="#"><i class="fa fa-info"></i>Status</a>
     </div>
 
     <div class="content">
-        <h1>Chi tiết Tour</h1>
+        <h1>Chi tiết Tour: <?= htmlspecialchars($tour["ten_tour"]) ?></h1>
 
-        <div class="card">
+        <!-- THÔNG TIN CƠ BẢN -->
+        <div class="section">
+            <h2>Thông tin cơ bản</h2>
 
-            <h2><?= htmlspecialchars($tour['ten_tour']) ?></h2>
-
-            <p><strong>Loại tour:</strong> <?= $tour['loai_tour'] ?></p>
-            <p><strong>Mô tả:</strong> <?= nl2br($tour['mo_ta']) ?></p>
-            <p><strong>Giá:</strong> <?= number_format($tour['gia']) ?> VNĐ</p>
-            <p><strong>Chính sách:</strong> <?= nl2br($tour['chinh_sach']) ?></p>
-            <p><strong>Nhà cung cấp:</strong> <?= $tour['nha_cung_cap'] ?></p>
-            <p><strong>Mùa:</strong> <?= $tour['mua'] ?></p>
+            <p><strong>Tên tour:</strong> <?= $tour["ten_tour"] ?></p>
+            <p><strong>Mô tả:</strong> <?= nl2br($tour["mo_ta"]) ?></p>
+            <p><strong>Chính sách:</strong> <?= nl2br($tour["chinh_sach"]) ?></p>
+            <p><strong>Nhà cung cấp:</strong> <?= $tour["nha_cung_cap"] ?></p>
 
             <h3>Ảnh đại diện:</h3>
-            <?php if (!empty($tour['hinh_anh'])): ?>
-                <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="350">
+            <?php if (!empty($tour["hinh_anh"])): ?>
+                <img src="assets/uploads/<?= $tour["hinh_anh"] ?>" width="350">
             <?php else: ?>
                 <p>Chưa có ảnh đại diện.</p>
             <?php endif; ?>
@@ -128,16 +140,29 @@
             <?php else: ?>
                 <p>Chưa có ảnh album.</p>
             <?php endif; ?>
-
-            <a href="?action=tours" class="btn-back">← Quay lại</a>
-            <a href="?action=dat_tour&id=<?= $tour['id'] ?>" 
-   class="btn-back" 
-   style="background:#27ae60; margin-left:10px;">
-    Đặt tour →
-</a>
-
-
         </div>
+
+        <!-- LỊCH TRÌNH -->
+        <div class="section">
+            <h2>Lịch trình</h2>
+            <p><strong>Hoạt động:</strong> <?= $tour["lich_trinh_hoat_dong"] ?? "Chưa cập nhật" ?></p>
+            <p><strong>Địa điểm:</strong> <?= $tour["dia_diem"] ?? "Chưa cập nhật" ?></p>
+            <p><strong>Mô tả chi tiết:</strong>
+                <?= isset($tour["mo_ta_lich_trinh"]) ? nl2br($tour["mo_ta_lich_trinh"]) : "Chưa cập nhật" ?>
+            </p>
+        </div>
+
+        <!-- HƯỚNG DẪN VIÊN -->
+        <div class="section">
+            <h2>Hướng dẫn viên</h2>
+            <p><strong>Tên:</strong> <?= $nhan_su["ho_ten"] ?? "Chưa có dữ liệu" ?></p>
+            <p><strong>Ngôn ngữ:</strong> <?= $nhan_su["ngon_ngu"] ?? "Chưa có dữ liệu" ?></p>
+            <p><strong>Chứng chỉ:</strong> <?= $nhan_su["chung_chi"] ?? "Chưa có dữ liệu" ?></p>
+            <p><strong>Kinh nghiệm:</strong> <?= $nhan_su["kinh_nghiem"] ?? "0" ?> năm</p>
+            <p><strong>Chuyên môn:</strong> <?= $nhan_su["chuyen_mon"] ?? "Không có" ?></p>
+        </div>
+
+        <a href="?action=tours" class="btn-back">← Quay lại danh sách</a>
     </div>
 
 </body>

@@ -43,4 +43,16 @@ class QlBookingController
         header('Location: ?action=qlbooking');
         exit;
     }
+    public function detail()
+    {
+        $id = $_GET['id'] ?? null;
+
+        if (!$id) {
+            die("Không tìm thấy ID tour");
+        }
+
+        $qlb = $this->model->find($id);
+
+        require PATH_VIEW . 'qlbooking/detail.php';
+    }
 }
