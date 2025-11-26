@@ -74,6 +74,14 @@
                     <option value="<?= $t ?>" <?= $qlb['tinh_trang_thanh_toan']==$t?'selected':'' ?>><?= $t ?></option>
                 <?php endforeach; ?>
             </select>
+             <label>Tiền cọc</label>
+            <select name="tien_coc">
+                <?php
+                $types = ['Chưa cọc', 'Đã cọc'];
+                foreach ($types as $t): ?>
+                    <option value="<?= $t ?>" <?= $qlb['tien_coc']==$t?'selected':'' ?>><?= $t ?></option>
+                <?php endforeach; ?>
+            </select>
         <label>Yêu cầu đặc biệt</label>
             <select name="yeu_cau_dac_biet">
                 <?php

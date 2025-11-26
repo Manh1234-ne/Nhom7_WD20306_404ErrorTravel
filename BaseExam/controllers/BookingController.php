@@ -55,7 +55,7 @@ class BookingController {
             'trang_thai'     => $_POST['trang_thai'],
             'ghi_chu'        => $_POST['ghi_chu'],
             'tinh_trang_thanh_toan' => $_POST['tinh_trang_thanh_toan'],
-             'tien_coc' => $_POST['tien_coc'] ?? 0,
+            'tien_coc' => $_POST['tien_coc'] ?? 0,
             'yeu_cau_dac_biet' => $_POST['yeu_cau_dac_biet'] ?? '',
         ];
 
