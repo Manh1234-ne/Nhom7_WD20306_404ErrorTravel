@@ -109,10 +109,14 @@
             <p><strong>Tên khách:</strong> <?= $qlb['ten_khach'] ?></p>
 
             <p><strong>Số điện thoại:</strong> <?= $qlb['so_dien_thoai'] ?></p>
+             <p><strong>Email:</strong> <?= $qlb['email'] ?></p>  
+            <p><strong>CCCD:</strong> <?= $qlb['cccd'] ?></p>
             <p><strong>Số người:</strong> <?= ($qlb['so_nguoi']) ?></p>
             <p><strong>Ngày khởi hành:</strong><?=($qlb['ngay_khoi_hanh']) ?></p>
-<p><strong>Trạng thái:</strong><?=($qlb['trang_thai']) ?></p>
+            <p><strong>Giá:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
+            <p><strong>Trạng thái:</strong><?=($qlb['trang_thai']) ?></p>
             <p><strong>Tình trạng thanh toán:</strong><?=($qlb['tinh_trang_thanh_toan']) ?></p>
+            <p><strong>Tiền cọc:</strong> <?= number_format($qlb['tien_coc']) ?> VNĐ</p>
             <p><strong>Yêu cầu đặc biệt:</strong><?=($qlb['yeu_cau_dac_biet']) ?></p>
             
 

@@ -1,56 +1,66 @@
 <?php
+class TourGuest
+{
+    private $conn;
 
-
-class TourGuest extends Database {
-
-    private $table = "tour_guests";
-
-    public function getByTour($tour_id) {
-        $sql = "SELECT * FROM {$this->table} WHERE tour_id = ?";
-        return $this->query($sql, [$tour_id]);
+    public function __construct()
+    {
+        $this->conn = connectDB();
     }
 
-    public function find($id) {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ?";
-        return $this->queryOne($sql, [$id]);
+    public function getByTour($tour_id)
+    {
+        $sql = "SELECT * FROM tour_guest WHERE tour_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$tour_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function add(array $data) {
+    public function add($data)
+    {
+        $sql = "INSERT INTO tour_guest (tour_id, ten_khach, sdt, cccd, phong, trang_thai)
+                VALUES (?, ?, ?, ?, ?, ?)";
 
-        // Set mặc định nếu thiếu tham số
-        $data['trang_thai'] = $data['trang_thai'] ?? 'chua_den';
-        $data['phong'] = $data['phong'] ?? '';
-
-        $sql = "INSERT INTO {$this->table} 
-            (tour_id, ho_ten, sdt, gioi_tinh, nam_sinh, yeu_cau, trang_thai, phong)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        $params = [
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
             $data['tour_id'],
-            $data['ho_ten'],
+            $data['ten_khach'],
             $data['sdt'],
-            $data['gioi_tinh'],
-            $data['nam_sinh'],
-            $data['yeu_cau'],
-            $data['trang_thai'],
-            $data['phong']
-        ];
+            $data['cccd'],
+            $data['phong'] ?? "",
+            0
+        ]);
 
-        return $this->insert($sql, $params);
+        return $this->conn->lastInsertId();
     }
 
-    public function updateCheckin($id, $status) {
-        $sql = "UPDATE {$this->table} SET trang_thai = ? WHERE id = ?";
-        return $this->update($sql, [$status, $id]);
+    public function find($id)
+    {
+        $sql = "SELECT * FROM tour_guest WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateRoom($id, $room) {
-        $sql = "UPDATE {$this->table} SET phong = ? WHERE id = ?";
-        return $this->update($sql, [$room, $id]);
+    public function updateCheckin($id, $status)
+    {
+        $sql = "UPDATE tour_guest SET trang_thai = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$status, $id]);
     }
 
-    public function export($tour_id) {
-        return $this->getByTour($tour_id);
+    public function updateRoom($id, $room)
+    {
+        $sql = "UPDATE tour_guest SET phong = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$room, $id]);
     }
 
+    public function export($tour_id)
+    {
+        $sql = "SELECT * FROM tour_guest WHERE tour_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$tour_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

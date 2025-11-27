@@ -123,14 +123,11 @@
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tourr</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
         <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
-<a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
+        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
 
     </div>
     <div class="content">
-        <div class="top-bar">
-            <h1>Danh sách Quản lí Booking</h1>
-        </div>
         <table>
             <thead>
                 <tr>
@@ -139,6 +136,7 @@
                     <th>Số điện thoại</th>
                     <th>Số người</th>
                     <th>Ngày khởi hành</th>
+                    <th>Giá</th>
                     <th>Trạng thái</th>
                     <th>Tình trạng thanh toán</th>
                     <th>Yêu cầu đặc biệt</th>
@@ -153,15 +151,16 @@
                             <td><?= $qlb['so_dien_thoai'] ?></td>
                             <td><?= $qlb['so_nguoi'] ?></td>
                             <td><?= $qlb['ngay_khoi_hanh'] ?></td>
+                            <td><?= number_format($qlb['gia'], 0, ',', '.') ?> VNĐ</td>
                             <td><?= $qlb['trang_thai'] ?></td>
                             <td><?= $qlb['tinh_trang_thanh_toan'] ?></td>
                             <td><?= $qlb['yeu_cau_dac_biet'] ?></td>
-                            
-                           <td> 
-                            <a href="?action=qlbooking_detail&id=<?= $qlb['id'] ?>" class="btn">
+                            <td>
+                               <a href="?action=qlbooking_detail&id=<?= $qlb['id'] ?>" class="btn">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a href="?action=qlbooking_edit&id=<?= $qlb['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>
+                </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -109,7 +109,7 @@
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Danh sách Tour</a>
         <a href="?action=nhansu"><i class="fa fa-user"></i>Quản lý nhân sự</a>
         <a href="?action=danhmuc"><i class="fa fa-list"></i>Danh Mục Tour</a>
-        <a href="?action=booking"><i class="fa fa-ticket"></i>Quản lý Booking</a>
+        <a href="?action=qlbooking"><i class="fa fa-ticket"></i>Quản lý Booking</a>
         <a href="?action=yeucau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
     </div>
 
