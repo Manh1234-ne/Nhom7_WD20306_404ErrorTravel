@@ -113,10 +113,18 @@
             <p><strong>CCCD:</strong> <?= $qlb['cccd'] ?></p>
             <p><strong>Số người:</strong> <?= ($qlb['so_nguoi']) ?></p>
             <p><strong>Ngày khởi hành:</strong><?=($qlb['ngay_khoi_hanh']) ?></p>
+             <h3>Album ảnh:</h3>
+            <?php if (!empty($album)): ?>
+                <?php foreach ($album as $img): ?>
+                    <img class="album-img" src="assets/uploads/tour/album/<?= $img->file_name ?>" width="150">
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Chưa có ảnh album.</p>
+            <?php endif; ?>
             <p><strong>Giá:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
+             <p><strong>Tiền cọc:</strong> <?= number_format($qlb['tien_coc']) ?> VNĐ</p>
             <p><strong>Trạng thái:</strong><?=($qlb['trang_thai']) ?></p>
             <p><strong>Tình trạng thanh toán:</strong><?=($qlb['tinh_trang_thanh_toan']) ?></p>
-            <p><strong>Tiền cọc:</strong> <?= number_format($qlb['tien_coc']) ?> VNĐ</p>
             <p><strong>Yêu cầu đặc biệt:</strong><?=($qlb['yeu_cau_dac_biet']) ?></p>
             
 

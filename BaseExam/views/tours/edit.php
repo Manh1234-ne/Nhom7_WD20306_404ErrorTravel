@@ -56,9 +56,9 @@
         <input type="text" name="ten_tour" value="<?= htmlspecialchars($tour['ten_tour']) ?>" required>
         <label>Loại Tour</label>
         <select name="loai_tour">
-            <option value="trong_nuoc" <?= $tour['loai_tour']=='trong_nuoc'?'selected':'' ?>>Trong nước</option>
-            <option value="quoc_te" <?= $tour['loai_tour']=='quoc_te'?'selected':'' ?>>Quốc tế</option>
-            <option value="yeu_cau" <?= $tour['loai_tour']=='yeu_cau'?'selected':'' ?>>Yêu cầu</option>
+            <option value="Trong nước" <?= $tour['loai_tour']=='trong_nuoc'?'selected':'' ?>>Trong nước</option>
+            <option value="Quốc tế" <?= $tour['loai_tour']=='quoc_te'?'selected':'' ?>>Quốc tế</option>
+            <option value="Yêu cầu" <?= $tour['loai_tour']=='yeu_cau'?'selected':'' ?>>Yêu cầu</option>
         </select>
         <label>Mô tả</label>
         <textarea name="mo_ta"><?= $tour['mo_ta'] ?></textarea>
@@ -75,10 +75,10 @@
         <input type="text" name="nha_cung_cap" value="<?= htmlspecialchars($tour['nha_cung_cap']) ?>">
         <label>Mùa</label>
         <select name="mua">
-            <option value="mua_xuan" <?= $tour['mua']=='mua_xuan'?'selected':'' ?>>Mùa Xuân</option>
-            <option value="mua_ha" <?= $tour['mua']=='mua_ha'?'selected':'' ?>>Mùa Hạ</option>
-            <option value="mua_thu" <?= $tour['mua']=='mua_thu'?'selected':'' ?>>Mùa Thu</option>
-            <option value="mua_dong" <?= $tour['mua']=='trong_dong'?'selected':'' ?>>Mùa Đông</option>
+            <option value="Mùa Xuân" <?= $tour['mua']=='mua_xuan'?'selected':'' ?>>Mùa Xuân</option>
+            <option value="Mùa Hạ" <?= $tour['mua']=='mua_ha'?'selected':'' ?>>Mùa Hạ</option>
+            <option value="Mùa Thu" <?= $tour['mua']=='mua_thu'?'selected':'' ?>>Mùa Thu</option>
+            <option value="Mùa Đông" <?= $tour['mua']=='trong_dong'?'selected':'' ?>>Mùa Đông</option>
             </select>
         <button type="submit">Cập nhật Tourr</button>
         <a href="?action=tours">Quay lại</a>

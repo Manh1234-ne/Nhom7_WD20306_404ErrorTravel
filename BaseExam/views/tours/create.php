@@ -86,8 +86,14 @@
         <label for="group-title">Tình trạng thanh toán</label>
             <input type="text" value="Chờ thanh toán" disabled>
             <input type="hidden" name="tinh_trang_thanh_toan" value="Chờ thanh toán">
-             <?php if ($tour['gia'] > 500000): ?>
-    <input type="number" name="tien_coc" placeholder="Tiền cọc (bắt buộc)" required>
+            <?php if ($tour['gia'] > 500000): ?>
+    <?php $tienCoc = $tour['gia'] * 0.4; ?>
+    <input 
+        type="number" 
+        name="tien_coc" 
+        value="<?= $tienCoc ?>" 
+        readonly
+    >
 <?php else: ?>
     <input type="hidden" name="tien_coc" value="0">
 <?php endif; ?>

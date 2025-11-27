@@ -19,30 +19,33 @@ class BookingController {
     }
 
     public function save() {
-         $tour = $this->tourModel->find($_POST['tour_id']);
-        $giaTour = $tour['gia'];
+      $tour = $this->tourModel->find($_POST['tour_id']);
+$giaTour = $tour['gia'];
 
-        // Lấy tiền cọc người dùng nhập
-        $tien_coc = $_POST['tien_coc'] ?? 0;
+// Lấy tiền cọc người dùng nhập
+$tien_coc = $_POST['tien_coc'] ?? 0;
 
-        // -----------------------------
-        //  KIỂM TRA LOGIC TIỀN CỌC
-        // -----------------------------
-        if ($giaTour > 500000) {
+// -----------------------------
+//  KIỂM TRA LOGIC TIỀN CỌC (40%)
+// -----------------------------
 
-            // Nếu tour giá cao mà khách không nhập cọc
-            if ($tien_coc <= 0) {
-                $error = "Tour có giá trên 500.000 VNĐ bắt buộc phải đặt cọc!";
-                $tour = $tour; // giữ lại dữ liệu
-                require PATH_VIEW . "tours/create.php";
-                return;
-            }
+if ($giaTour > 500000) {
 
-        } else {
-            // Tour giá ≤ 500.000 thì tự gán 0
-            $tien_coc = 0;
-        }
+    // Tính mức cọc bắt buộc (40%)
+    $tienCocBatBuoc = $giaTour * 0.4;
 
+    // So sánh tiền khách nhập có đúng 40% không
+    if ($tien_coc != $tienCocBatBuoc) {
+        $error = "Tiền cọc phải bằng 40% giá tour (" . number_format($tienCocBatBuoc) . " VNĐ)";
+        $tour = $tour;
+        require PATH_VIEW . "tours/create.php";
+        return;
+    }
+
+} else {
+    // Tour giá thấp thì tự gán 0
+    $tien_coc = 0;
+}
         $data = [
             'tour_id'        => $_POST['tour_id'],
             'ten_khach'      => $_POST['ten_khach'],
