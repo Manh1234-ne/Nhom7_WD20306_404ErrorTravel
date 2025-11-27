@@ -68,8 +68,4 @@ class TourGuestController {
 
         require PATH_VIEW . "tour_guest/export.php";
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 250280415b7ee3c16775e9d42957f5321c69aa17
