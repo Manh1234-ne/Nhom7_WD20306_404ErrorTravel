@@ -64,6 +64,14 @@ match ($action) {
     'yeu_cau_delete' => fn() => (new YeuCauController)->delete($_GET['id']),
     'yeu_cau_show' => fn() => (new YeuCauController)->show($_GET['id']),
 
+    // Quản lý khách theo tour
+    "tour_guest"         => (new TourGuestController)->index(),
+    "tour_guest_store"   => (new TourGuestController)->store(),
+    "guest_detail"       => (new TourGuestController)->detail(),
+    "tour_guest_checkin" => (new TourGuestController)->updateCheckin(),
+    "tour_guest_room"    => (new TourGuestController)->updateRoom(),
+    "tour_guest_export"  => (new TourGuestController)->export(),
+
     // Mặc định
     default => (new HomeController)->index(),
 };

@@ -56,14 +56,17 @@
         <textarea name="ten_khach"><?= $qlb['ten_khach'] ?></textarea>
         <label>Số điện thoại</label>
         <textarea name="so_dien_thoai"><?= $qlb['so_dien_thoai'] ?></textarea>
+         <label>CCCD</label>
+        <textarea name="cccd"><?= $qlb['cccd'] ?></textarea>
         <label>Số người</label>
         <textarea name="so_nguoi"><?= $qlb['so_nguoi'] ?></textarea>
         <label>Ngày khởi hành</label>
         <textarea name="ngay_khoi_hanh"><?= $qlb['ngay_khoi_hanh'] ?></textarea>
+         <label>Giá</label>
+        <textarea name="gia"><?= $qlb['gia'] ?></textarea>
         <label>Trạng thái</label>
         <textarea name="trang_thai"><?= $qlb['trang_thai'] ?></textarea>
-       
-        <label>Tình trạng thanh toán</label>
+       <label>Tình trạng thanh toán</label>
             <select name="tinh_trang_thanh_toan">
                 <?php
                 $types = ['Chờ thanh toán', 'Đã thanh toán', 'Thanh toán một phần', 'Hủy bỏ'];
@@ -71,11 +74,18 @@
                     <option value="<?= $t ?>" <?= $qlb['tinh_trang_thanh_toan']==$t?'selected':'' ?>><?= $t ?></option>
                 <?php endforeach; ?>
             </select>
-        
+             <label>Tiền cọc</label>
+            <select name="tien_coc">
+                <?php
+                $types = ['Chưa cọc', 'Đã cọc'];
+                foreach ($types as $t): ?>
+                    <option value="<?= $t ?>" <?= $qlb['tien_coc']==$t?'selected':'' ?>><?= $t ?></option>
+                <?php endforeach; ?>
+            </select>
         <label>Yêu cầu đặc biệt</label>
             <select name="yeu_cau_dac_biet">
                 <?php
-                $types = ['Ăn chay','Yêu cầu về dị ứng','Yêu cầu bệnh lý','Yêu cầu phòng nghỉ','Yêu cầu phương tiện di chuyển','Yêu cầu ăn uống','Khác'];
+                $types = ['Ăn chay','Yêu cầu về dị ứng','Yêu cầu về bệnh lý','Yêu cầu về phòng nghỉ','Yêu cầu phương tiện di chuyển','Yêu cầu ăn uống','Khác'];
                 foreach ($types as $t): ?>
                     <option value="<?= $t ?>" <?= $qlb['yeu_cau_dac_biet']==$t?'selected':'' ?>><?= $t ?></option>
                 <?php endforeach; ?>

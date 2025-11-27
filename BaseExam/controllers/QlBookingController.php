@@ -32,8 +32,10 @@ class QlBookingController
         $data = [
             'ten_khach' => $_POST['ten_khach'] ?? '',
             'so_dien_thoai' => $_POST['so_dien_thoai'] ?? '',
+            'cccd' => $_POST['cccd'] ?? '',
             'so_nguoi' => $_POST['so_nguoi'] ?? '',
             'ngay_khoi_hanh' => $_POST['ngay_khoi_hanh'] ?? '',
+            'gia' => $_POST['gia'] ?? 0,
             'trang_thai' => $_POST['trang_thai'] ?? '',
             'tinh_trang_thanh_toan' => $_POST['tinh_trang_thanh_toan'] ?? '',
             'yeu_cau_dac_biet' => $_POST['yeu_cau_dac_biet'] ?? '',
@@ -43,6 +45,7 @@ class QlBookingController
         header('Location: ?action=qlbooking');
         exit;
     }
+     //Chi tiết booking
     public function detail()
     {
         $id = $_GET['id'] ?? null;
@@ -55,4 +58,5 @@ class QlBookingController
 
         require PATH_VIEW . 'qlbooking/detail.php';
     }
+
 }

@@ -104,13 +104,13 @@
 <body>
 
     <div class="sidebar">
-        <h2>Start Admin</h2>
-        <a href="?action=home"><i class="fa fa-home"></i>Dashboard</a>
-        <a href="?action=danhmuc"><i class="fa fa-list"></i>Danh Mục Tour</a>
+        <h2>404 Error Travel</h2>
+        <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Danh sách Tour</a>
-        <a href="?action=booking"><i class="fa fa-ticket"></i>Booking</a>
-        <a href="?action=nhansu"><i class="fa fa-user"></i>Danh sách hướng dẫn viên</a>
-        <a href="#"><i class="fa fa-info"></i>Status</a>
+        <a href="?action=nhansu"><i class="fa fa-user"></i>Quản lý nhân sự</a>
+        <a href="?action=danhmuc"><i class="fa fa-list"></i>Danh Mục Tour</a>
+        <a href="?action=qlbooking"><i class="fa fa-ticket"></i>Quản lý Booking</a>
+        <a href="?action=yeucau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
     </div>
 
     <div class="content">
@@ -163,6 +163,11 @@
         </div>
 
         <a href="?action=tours" class="btn-back">← Quay lại danh sách</a>
+        <a href="?action=dat_tour&id=<?= $tour['id'] ?>"
+            class="btn-back"
+            style="background:#27ae60; margin-left:10px;">
+            Đặt tour →
+        </a>
     </div>
 
 </body>
