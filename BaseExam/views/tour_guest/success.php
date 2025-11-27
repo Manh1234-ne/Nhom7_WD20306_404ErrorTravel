@@ -15,4 +15,8 @@
 <a href="?action=tour_guest&tour_id=<?= $tour['id'] ?>" 
    style="padding: 10px 20px; background: #555; color: #fff; text-decoration:none;">
    Quay lại danh sách khách
+<<<<<<< HEAD
 </a>
+=======
+</a>
+>>>>>>> 250280415b7ee3c16775e9d42957f5321c69aa17

@@ -18,4 +18,8 @@
         <td><?= $g['yeu_cau'] ?></td>
     </tr>
     <?php endforeach; ?>
+<<<<<<< HEAD
 </table>
+=======
+</table>
+>>>>>>> 250280415b7ee3c16775e9d42957f5321c69aa17

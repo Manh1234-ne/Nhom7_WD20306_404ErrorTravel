@@ -1,11 +1,35 @@
 <?php
 if (session_status() == PHP_SESSION_NONE)
     session_start();
+<<<<<<< HEAD
+
+=======
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
 $errors_str = $errors_str ?? [];
 $old = $old ?? [];
 $flash = $_SESSION['flash_success'] ?? null;
 if ($flash)
     unset($_SESSION['flash_success']);
+<<<<<<< HEAD
+
+// Lấy dữ liệu từ form
+$username = $_POST['username_or_email'] ?? '';
+$password = $_POST['mat_khau'] ?? '';
+
+// Kiểm tra đăng nhập
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Tài khoản mặc định
+    if ($username === 'Viet' && $password === '12345') {
+        $_SESSION['user'] = $username;
+        header('Location: index.php?action=home');
+        exit;
+    } else {
+        $errors_str[] = "Sai tên đăng nhập hoặc mật khẩu";
+    }
+}
+=======
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -26,7 +50,10 @@ if ($flash)
             background: #f5f5f5;
         }
 
+<<<<<<< HEAD
+=======
         /* Thanh menu giống Home */
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
         nav {
             background: #3498db;
             color: #fff;
@@ -52,7 +79,10 @@ if ($flash)
             font-weight: bold;
         }
 
+<<<<<<< HEAD
+=======
         /* Form đăng nhập */
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
         .container {
             margin-top: 120px;
             display: flex;
@@ -106,6 +136,8 @@ if ($flash)
             background: #2980b9;
         }
 
+<<<<<<< HEAD
+=======
         .message {
             margin-top: 15px;
             text-align: center;
@@ -121,6 +153,7 @@ if ($flash)
             text-decoration: underline;
         }
 
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
         .error-box ul {
             margin-left: 20px;
         }
@@ -171,7 +204,11 @@ if ($flash)
                 </div>
             <?php endif; ?>
 
+<<<<<<< HEAD
+            <form method="post" action="">
+=======
             <form method="post" action="index.php?action=login">
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
                 <label>Tên đăng nhập hoặc email</label>
                 <input type="text" name="username_or_email"
                     value="<?= htmlspecialchars($old['username_or_email'] ?? '') ?>">
@@ -182,10 +219,17 @@ if ($flash)
                 <button type="submit">Đăng nhập</button>
             </form>
 
+<<<<<<< HEAD
+=======
             
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
         </div>
     </div>
 
 </body>
 
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
