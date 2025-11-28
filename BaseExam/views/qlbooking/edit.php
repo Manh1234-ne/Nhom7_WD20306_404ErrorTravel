@@ -69,17 +69,9 @@
        <label>Tình trạng thanh toán</label>
             <select name="tinh_trang_thanh_toan">
                 <?php
-                $types = ['Chờ thanh toán', 'Đã thanh toán', 'Thanh toán một phần', 'Hủy bỏ'];
+                $types = ['Đã cọc','Chưa cọc','Chưa thanh toán', 'Đã thanh toán', 'Hủy bỏ'];
                 foreach ($types as $t): ?>
                     <option value="<?= $t ?>" <?= $qlb['tinh_trang_thanh_toan']==$t?'selected':'' ?>><?= $t ?></option>
-                <?php endforeach; ?>
-            </select>
-             <label>Tiền cọc</label>
-            <select name="tien_coc">
-                <?php
-                $types = ['Chưa cọc', 'Đã cọc'];
-                foreach ($types as $t): ?>
-                    <option value="<?= $t ?>" <?= $qlb['tien_coc']==$t?'selected':'' ?>><?= $t ?></option>
                 <?php endforeach; ?>
             </select>
         <label>Yêu cầu đặc biệt</label>

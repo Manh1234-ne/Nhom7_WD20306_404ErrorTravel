@@ -171,11 +171,7 @@ if ($flash)
                 </div>
             <?php endif; ?>
 
-<<<<<<< HEAD
-            <form method="post" action="">
-=======
             <form method="post" action="index.php?action=login">
->>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
                 <label>Tên đăng nhập hoặc email</label>
                 <input type="text" name="username_or_email"
                     value="<?= htmlspecialchars($old['username_or_email'] ?? '') ?>">
@@ -186,17 +182,10 @@ if ($flash)
                 <button type="submit">Đăng nhập</button>
             </form>
 
-<<<<<<< HEAD
-=======
             
->>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
         </div>
     </div>
 
 </body>
 
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> d4da81ffadf928a5503fd8f3e4d87b0586e1186b
