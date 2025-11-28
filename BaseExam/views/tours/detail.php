@@ -153,19 +153,24 @@
         </div>
 
         <!-- HƯỚNG DẪN VIÊN -->
-        <div class="section">
-            <h2>Hướng dẫn viên</h2>
-            <p><strong>Tên:</strong> <?= $nhan_su["ho_ten"] ?? "Chưa có dữ liệu" ?></p>
-            <p><strong>Ngôn ngữ:</strong> <?= $nhan_su["ngon_ngu"] ?? "Chưa có dữ liệu" ?></p>
-            <p><strong>Chứng chỉ:</strong> <?= $nhan_su["chung_chi"] ?? "Chưa có dữ liệu" ?></p>
-            <p><strong>Kinh nghiệm:</strong> <?= $nhan_su["kinh_nghiem"] ?? "0" ?> năm</p>
-            <p><strong>Chuyên môn:</strong> <?= $nhan_su["chuyen_mon"] ?? "Không có" ?></p>
-        </div>
+        <h3>Hướng Dẫn Viên Phụ Trách</h3>
+
+        <?php if ($hdv && $hdv['id']): ?>
+            <div class="card p-3 shadow-sm">
+                <h4><?= $hdv['ho_ten'] ?></h4>
+                <p><strong>Số điện thoại:</strong> <?= $hdv['so_dien_thoai'] ?></p>
+                <p><strong>Email:</strong> <?= $hdv['email'] ?></p>
+                <p><strong>Ngôn ngữ:</strong> <?= $hdv['ngon_ngu'] ?></p>
+                <p><strong>Kinh nghiệm:</strong> <?= $hdv['kinh_nghiem'] ?></p>
+                <p><strong>Đánh giá:</strong> <?= $hdv['danh_gia'] ?>/5 ⭐</p>
+            </div>
+        <?php else: ?>
+            <p><em>Tour này chưa được phân công hướng dẫn viên.</em></p>
+        <?php endif; ?>
+
 
         <a href="?action=tours" class="btn-back">← Quay lại danh sách</a>
-        <a href="?action=dat_tour&id=<?= $tour['id'] ?>"
-            class="btn-back"
-            style="background:#27ae60; margin-left:10px;">
+        <a href="?action=dat_tour&id=<?= $tour['id'] ?>" class="btn-back" style="background:#27ae60; margin-left:10px;">
             Đặt tour →
         </a>
     </div>

@@ -30,6 +30,7 @@ class TourController
             'ten_tour' => $_POST['ten_tour'] ?? '',
             'loai_tour' => $_POST['loai_tour'] ?? '',
             'mo_ta' => $_POST['mo_ta'] ?? '',
+            'nhan_su_id' => $_POST['nhan_su_id'] ?? null,
             'gia' => $_POST['gia'] ?? 0,
             'chinh_sach' => $_POST['chinh_sach'] ?? '',
             'nha_cung_cap' => $_POST['nha_cung_cap'] ?? '',
@@ -75,6 +76,7 @@ class TourController
             'ten_tour' => $_POST['ten_tour'] ?? '',
             'loai_tour' => $_POST['loai_tour'] ?? '',
             'mo_ta' => $_POST['mo_ta'] ?? '',
+            'nhan_su_id' => $_POST['nhan_su_id'] ?? null,
             'gia' => $_POST['gia'] ?? 0,
             'chinh_sach' => $_POST['chinh_sach'] ?? '',
             'nha_cung_cap' => $_POST['nha_cung_cap'] ?? '',
@@ -127,11 +129,12 @@ class TourController
         if (!$id) {
             die("Không tìm thấy ID tour");
         }
-
         $tour = $this->model->find($id);
         $album = $this->model->getAlbum($id);
+        $hdv = $this->model->getHDVByTour($id);
 
         require PATH_VIEW . 'tours/detail.php';
     }
+
 
 }

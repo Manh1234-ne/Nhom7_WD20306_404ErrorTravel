@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>Sửa Tour</title>
@@ -21,7 +22,7 @@
             background: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .tour-form {
@@ -29,7 +30,8 @@
         }
 
         .album-form {
-            width: 500px; /* album rộng hơn */
+            width: 500px;
+            /* album rộng hơn */
         }
 
         label {
@@ -37,7 +39,9 @@
             margin-top: 15px;
         }
 
-        input, textarea, select {
+        input,
+        textarea,
+        select {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
@@ -65,7 +69,8 @@
             margin-top: 15px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: center;
@@ -87,6 +92,7 @@
         }
     </style>
 </head>
+
 <body>
     <h1 style="text-align:center;">Sửa Tour</h1>
     <div class="container">
@@ -107,6 +113,17 @@
 
             <label>Mô tả</label>
             <textarea name="mo_ta"><?= htmlspecialchars($tour['mo_ta']) ?></textarea>
+
+            <label>Hướng dẫn viên:</label>
+            <select name="nhan_su_id" class="form-control">
+                <option value="">-- Chọn HDV --</option>
+                <?php foreach ($hdvList as $h): ?>
+                    <option value="<?= $h['id'] ?>" <?= ($tour['nhan_su_id'] == $h['id']) ? 'selected' : '' ?>>
+                        <?= $h['ho_ten'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
 
             <label>Giá</label>
             <input type="number" name="gia" value="<?= $tour['gia'] ?>">
@@ -175,4 +192,5 @@
         <a href="?action=tours">Quay lại</a>
     </div>
 </body>
+
 </html>
