@@ -1,38 +1,29 @@
 <?php
 require_once PATH_MODEL . 'Tour.php';
-require_once PATH_MODEL . 'NhanSu.php';
 
 class TourController
 {
     protected $model;
-    protected $nhanSuModel;
 
     public function __construct()
     {
         $this->model = new Tour();
-        $this->nhanSuModel = new NhanSu();
     }
 
-    /** Danh sách tour */
+    // Trang danh sách tour
     public function index()
     {
         $tours = $this->model->all();
         require PATH_VIEW . 'tours/index.php';
     }
 
-    /** Form thêm tour */
+    // Trang thêm tour
     public function add()
     {
-        // Nếu có loai_tour trên URL thì lọc theo loại, nếu không thì load toàn bộ HDV
-        $loai_tour = $_GET['loai_tour'] ?? null;
-        $hdvList = $loai_tour
-            ? $this->nhanSuModel->getHDVByLoaiTour($loai_tour)
-            : $this->nhanSuModel->getAllWithNguoiDung();
-
         require PATH_VIEW . 'tours/add.php';
     }
 
-    /** Lưu tour mới */
+    // Xử lý thêm tour
     public function store()
     {
         $data = [
@@ -42,188 +33,191 @@ class TourController
             'gia' => $_POST['gia'] ?? 0,
             'chinh_sach' => $_POST['chinh_sach'] ?? '',
             'nha_cung_cap' => $_POST['nha_cung_cap'] ?? '',
-            'mua' => $_POST['mua'] ?? '',
-            'hinh_anh' => null,
-            'danh_muc' => $_POST['danh_muc'] ?? null,
-            'nhan_su_id' => $_POST['nhan_su_id'] ?? null // Ưu tiên lấy từ form
+            'mua' => $_POST['mua'] ?? ''
         ];
 
+        // Upload ảnh đại diện tour
         if (!empty($_FILES['hinh_anh']['name'])) {
             $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
         }
 
-        // Fallback: nếu form không chọn HDV thì gán theo loại tour
-        if (empty($data['nhan_su_id'])) {
-            $hdvList = $this->nhanSuModel->getHDVByLoaiTour($data['loai_tour']);
-            $data['nhan_su_id'] = !empty($hdvList) ? $hdvList[0]['id'] : null;
-        }
+        $tour_id = $this->model->insert($data);
 
-        // Tạo tour
-        $tour_id = $this->model->create($data);
-
-        // Album ảnh
-        if ($tour_id && !empty($_FILES['album']['name'][0])) {
-            foreach ($_FILES['album']['name'] as $key => $name) {
-                if (empty($_FILES['album']['tmp_name'][$key]))
-                    continue;
-                $file_arr = [
+        // Upload album nếu có
+        if (!empty($_FILES['album']['name'][0])) {
+            foreach ($_FILES['album']['tmp_name'] as $key => $tmp_name) {
+                $file_name = upload_file('tour/album', [
                     'name' => $_FILES['album']['name'][$key],
                     'tmp_name' => $_FILES['album']['tmp_name'][$key]
-                ];
-                $file_name = upload_file('tour/album', $file_arr);
+                ]);
                 $this->model->insertAlbum($tour_id, $file_name);
             }
         }
 
-        header('Location: ?action=tours');
+        header('Location: ' . BASE_URL . '?action=tours');
         exit;
     }
 
-    /** Form sửa tour */
+    // Trang sửa tour
     public function edit()
     {
         $id = $_GET['id'] ?? null;
-        if (!$id)
-            die("ID tour không tồn tại");
-
         $tour = $this->model->find($id);
         $album = $this->model->getAlbum($id);
-        // Lọc HDV theo loại tour hiện tại để hiển thị dropdown đúng ngữ cảnh
-        $hdvList = $this->nhanSuModel->getHDVByLoaiTour($tour['loai_tour']);
-
         require PATH_VIEW . 'tours/edit.php';
     }
 
-    /** Cập nhật tour */
+    // Xử lý update tour
     public function update()
     {
-        $id = $_POST['id'] ?? null;
-        if (!$id)
-            die("ID tour không tồn tại");
+        // lấy id an toàn
+        $id = isset($_POST['id']) ? (int)$_POST['id'] : (isset($_GET['id']) ? (int)$_GET['id'] : null);
+        if (!$id) {
+            header('Location: ' . BASE_URL . '?action=tours');
+            exit;
+        }
 
-        $data = [
-            'ten_tour' => $_POST['ten_tour'] ?? '',
-            'loai_tour' => $_POST['loai_tour'] ?? '',
-            'mo_ta' => $_POST['mo_ta'] ?? '',
-            'gia' => $_POST['gia'] ?? 0,
-            'chinh_sach' => $_POST['chinh_sach'] ?? '',
-            'nha_cung_cap' => $_POST['nha_cung_cap'] ?? '',
-            'mua' => $_POST['mua'] ?? '',
-            'danh_muc' => $_POST['danh_muc'] ?? null,
-            'nhan_su_id' => $_POST['nhan_su_id'] ?? null // Lấy từ dropdown edit.php
-        ];
+        // lấy record hiện tại để fallback giá trị
+        $existing = $this->model->find($id);
+        if (!$existing) {
+            header('Location: ' . BASE_URL . '?action=tours');
+            exit;
+        }
 
+        // Tạo $data bằng cách merge POST vào giá trị hiện có
+        $data = [];
+        // Nếu form có những field rõ ràng, liệt kê ở đây; nếu không, bạn có thể lấy tất cả $_POST
+        $fields = ['ten_tour', 'mo_ta', 'chinh_sach', 'nha_cung_cap', 'gia', 'thoi_gian']; // sửa theo schema của bạn
+
+        foreach ($fields as $f) {
+            if (array_key_exists($f, $_POST) && $_POST[$f] !== '') {
+                $data[$f] = trim($_POST[$f]);
+            } else {
+                // fallback về giá trị cũ để tránh ghi NULL vào cột NOT NULL
+                if (isset($existing[$f])) {
+                    $data[$f] = $existing[$f];
+                }
+            }
+        }
+
+        // Upload ảnh đại diện nếu có file mới
         if (!empty($_FILES['hinh_anh']['name'])) {
-            $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
-        }
-
-        // Fallback: nếu dropdown không chọn HDV thì gán theo loại tour mới
-        if (empty($data['nhan_su_id'])) {
-            $hdvList = $this->nhanSuModel->getHDVByLoaiTour($data['loai_tour']);
-            $data['nhan_su_id'] = !empty($hdvList) ? $hdvList[0]['id'] : null;
-        }
-
-        // Cập nhật tour
-        $this->model->update($id, $data);
-
-        // Xóa ảnh album được chọn
-        if (!empty($_POST['delete_album'])) {
-            foreach ($_POST['delete_album'] as $album_id) {
-                $this->model->deleteAlbum($album_id);
+            $file = $_FILES['hinh_anh'];
+            try {
+                $uploaded = upload_file('tour', $file); // trả về "tour/xxx.jpg"
+                if ($uploaded) {
+                    $data['hinh_anh'] = $uploaded;
+                }
+            } catch (Exception $e) {
+                // nếu muốn: lưu lỗi, nhưng không override dữ liệu hiện có
             }
         }
 
-        // Thêm ảnh album mới
-        if (!empty($_FILES['album']['name'][0])) {
-            foreach ($_FILES['album']['name'] as $key => $name) {
-                if (empty($_FILES['album']['tmp_name'][$key]))
-                    continue;
-                $file_arr = [
-                    'name' => $_FILES['album']['name'][$key],
-                    'tmp_name' => $_FILES['album']['tmp_name'][$key]
-                ];
-                $file_name = upload_file('tour/album', $file_arr);
-                $this->model->insertAlbum($id, $file_name);
+        // chỉ gọi update nếu có dữ liệu thực sự
+        try {
+            if (!empty($data)) {
+                $this->model->update($id, $data);
+            }
+        } catch (Exception $e) {
+            // log lỗi để debug
+            error_log('Update tour error: ' . $e->getMessage());
+            header('Location: ' . BASE_URL . '?action=tours');
+            exit;
+        }
+
+        // Xử lý xóa album nếu user tick
+        if (!empty($_POST['delete_album']) && is_array($_POST['delete_album'])) {
+            foreach ($_POST['delete_album'] as $albumId) {
+                $albumId = (int)$albumId;
+                if ($albumId > 0) {
+                    $this->model->deleteAlbum($albumId);
+                }
             }
         }
 
-        header('Location: ?action=tours');
+        // Xử lý upload album mới
+        if (!empty($_FILES['album']['name']) && is_array($_FILES['album']['name'])) {
+            foreach ($_FILES['album']['name'] as $k => $name) {
+                if ($_FILES['album']['error'][$k] === UPLOAD_ERR_OK) {
+                    $fileInfo = [
+                        'name' => $_FILES['album']['name'][$k],
+                        'type' => $_FILES['album']['type'][$k],
+                        'tmp_name' => $_FILES['album']['tmp_name'][$k],
+                        'error' => $_FILES['album']['error'][$k],
+                        'size' => $_FILES['album']['size'][$k],
+                    ];
+                    try {
+                        $uploadedPath = upload_file('tour/album', $fileInfo); // lưu "tour/album/xxx.jpg"
+                        if ($uploadedPath) {
+                            $this->model->insertAlbum($id, $uploadedPath);
+                        }
+                    } catch (Exception $e) {
+                        error_log('Upload album error: ' . $e->getMessage());
+                    }
+                }
+            }
+        }
+
+        // redirect về index tour
+        header('Location: ' . BASE_URL . '?action=tours');
         exit;
     }
 
-    /** Xóa tour */
+    // Xóa tour
     public function delete()
     {
         $id = $_GET['id'] ?? null;
-        if ($id)
-            $this->model->delete($id);
-        header('Location: ?action=tours');
+        if (!$id) {
+            header('Location: ' . BASE_URL . '?action=tours');
+            exit;
+        }
+
+        // xóa kèm quan hệ
+        $this->model->deleteWithRelations($id);
+
+        header('Location: ' . BASE_URL . '?action=tours');
         exit;
     }
 
-    /** Chi tiết tour */
+    //Chi tiết tour
     public function detail()
     {
         $id = $_GET['id'] ?? null;
-        if (!$id)
+
+        if (!$id) {
             die("Không tìm thấy ID tour");
+        }
 
         $tour = $this->model->find($id);
         $album = $this->model->getAlbum($id);
+        error_log('DEBUG album: ' . print_r($album, true)); // xem trong Apache/Laragon log
+        require PATH_VIEW . 'tours/detail.php';
+    }
 
-        // Lấy HDV theo nhan_su_id nếu có
-        $hdv = $this->model->getHDVByTour($id);
+    // Cập nhật ảnh đại diện từ album (AJAX)
+    public function setMainImage()
+    {
+        // đọc JSON body
+        $input = json_decode(file_get_contents('php://input'), true);
+        $id = isset($input['id']) ? (int)$input['id'] : ($_POST['id'] ?? null);
+        $filename = isset($input['filename']) ? trim($input['filename']) : ($_POST['filename'] ?? null);
 
-        // Nếu không có HDV được gán, fallback theo loại tour
-        if (!$hdv) {
-            // Chuẩn hóa key: input form dùng tiếng Việt ("Trong nước", "Quốc tế", "Theo yêu cầu")
-            // nên cần normalize để khớp với loai_hdv trong DB: trong_nuoc, quoc_te, yeu_cau
-            $loai_key = strtolower(str_replace(' ', '_', $tour['loai_tour'] ?? ''));
-            $hdv = $this->model->getDefaultHDVFromDB($loai_key);
+        header('Content-Type: application/json');
 
-            if (!$hdv) {
-                $map = [
-                    'trong_nuoc' => [
-                        'id' => -1,
-                        'ho_ten' => 'Nguyễn Văn A',
-                        'so_dien_thoai' => '0909 111 222',
-                        'email' => 'hdv-trongnuoc@travel.test',
-                        'ngon_ngu' => 'Tiếng Việt, Tiếng Anh',
-                        'kinh_nghiem' => '3 năm',
-                        'danh_gia' => '4.5'
-                    ],
-                    'quoc_te' => [
-                        'id' => -2,
-                        'ho_ten' => 'Trần Thị B',
-                        'so_dien_thoai' => '0909 222 333',
-                        'email' => 'hdv-quocte@travel.test',
-                        'ngon_ngu' => 'Tiếng Anh, Tiếng Nhật',
-                        'kinh_nghiem' => '6 năm',
-                        'danh_gia' => '4.9'
-                    ],
-                    'yeu_cau' => [
-                        'id' => -3,
-                        'ho_ten' => 'Phạm Minh C',
-                        'so_dien_thoai' => '0909 333 444',
-                        'email' => 'hdv-yeucau@travel.test',
-                        'ngon_ngu' => 'Tiếng Việt, Tiếng Trung',
-                        'kinh_nghiem' => '4 năm',
-                        'danh_gia' => '4.7'
-                    ]
-                ];
-
-                $hdv = $map[$loai_key] ?? [
-                    'id' => -99,
-                    'ho_ten' => 'Hướng dẫn viên mặc định',
-                    'so_dien_thoai' => '0999 888 777',
-                    'email' => 'default@travel.test',
-                    'ngon_ngu' => 'Tiếng Việt',
-                    'kinh_nghiem' => '2 năm',
-                    'danh_gia' => '4.0'
-                ];
-            }
+        if (!$id || !$filename) {
+            echo json_encode(['success' => false, 'message' => 'Thiếu dữ liệu']);
+            return;
         }
 
-        require PATH_VIEW . 'tours/detail.php';
+        try {
+            $updated = $this->model->update($id, ['hinh_anh' => $filename]);
+            if ($updated) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Cập nhật thất bại']);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 }

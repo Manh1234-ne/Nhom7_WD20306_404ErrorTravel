@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -128,6 +129,10 @@
 
     </div>
     <div class="content">
+        <div class="top-bar">
+            <h1>Quản lý Booking</h1>
+        </div>
+
         <table>
             <thead>
                 <tr>
@@ -135,7 +140,6 @@
                     <th>Tên khách</th>
                     <th>Số điện thoại</th>
                     <th>Số người</th>
-                    <th>Ngày khởi hành</th>
                     <th>Giá</th>
                     <th>Trạng thái</th>
                     <th>Tình trạng thanh toán</th>
@@ -150,7 +154,6 @@
                             <td><?= htmlspecialchars($qlb['ten_khach']) ?></td>
                             <td><?= $qlb['so_dien_thoai'] ?></td>
                             <td><?= $qlb['so_nguoi'] ?></td>
-                            <td><?= $qlb['ngay_khoi_hanh'] ?></td>
                             <td><?= number_format($qlb['gia'], 0, ',', '.') ?> VNĐ</td>
                             <td><?= $qlb['trang_thai'] ?></td>
                             <td><?= $qlb['tinh_trang_thanh_toan'] ?></td>

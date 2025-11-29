@@ -1,6 +1,6 @@
 <?php
 
-define('BASE_URL',          'http://localhost/duan1/Nhom7_WD20306_404ErrorTravel/BaseExam/BaseExam/');
+define('BASE_URL',          'http://localhost/duan1/Nhom7_WD20306_404ErrorTravel/BaseExam/');
 
 define('PATH_ROOT',         __DIR__ . '/../');
 

@@ -31,7 +31,6 @@
 
         .album-form {
             width: 500px;
-            /* album rộng hơn */
         }
 
         label {
@@ -96,7 +95,8 @@
 <body>
     <h1 style="text-align:center;">Sửa Tour</h1>
     <div class="container">
-        <!-- Bảng thông tin tour -->
+
+        <!-- Form Sửa Tour -->
         <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data" class="tour-form">
             <input type="hidden" name="id" value="<?= $tour['id'] ?>">
             <h2>Thông tin Tour</h2>
@@ -106,30 +106,13 @@
 
             <label>Loại Tour</label>
             <select name="loai_tour">
-                <option value="Trong nước" <?= $tour['loai_tour'] == 'trong_nuoc' ? 'selected' : '' ?>>Trong nước</option>
-                <option value="Quốc tế" <?= $tour['loai_tour'] == 'quoc_te' ? 'selected' : '' ?>>Quốc tế</option>
-                <option value="Theo yêu cầu" <?= $tour['loai_tour'] == 'yeu_cau' ? 'selected' : '' ?>>Yêu cầu</option>
+                <option value="Trong nước" <?= $tour['loai_tour'] == 'Trong nước' ? 'selected' : '' ?>>Trong nước</option>
+                <option value="Quốc tế" <?= $tour['loai_tour'] == 'Quốc tế' ? 'selected' : '' ?>>Quốc tế</option>
+                <option value="Theo yêu cầu" <?= $tour['loai_tour'] == 'Theo yêu cầu' ? 'selected' : '' ?>>Theo yêu cầu</option>
             </select>
 
             <label>Mô tả</label>
             <textarea name="mo_ta"><?= htmlspecialchars($tour['mo_ta']) ?></textarea>
-
-            <label>Chọn Hướng dẫn viên (lọc theo loại tour)</label>
-            <select name="nhan_su_id">
-                <?php
-                // Chuẩn hóa loại tour để gọi hàm lọc
-                $loai_key = strtolower(str_replace(' ', '_', $tour['loai_tour']));
-                $hdvList = $this->nhanSuModel->getHDVByLoaiTour($loai_key);
-
-                foreach ($hdvList as $item): ?>
-                    <option value="<?= $item['id'] ?>" <?= ($tour['nhan_su_id'] == $item['id']) ? 'selected' : '' ?>>
-                        <?= $item['ho_ten'] ?> (<?= $item['email'] ?>, <?= $item['so_dien_thoai'] ?>)
-                    </option>
-                <?php endforeach; ?>
-            </select>
-
-
-
 
             <label>Giá</label>
             <input type="number" name="gia" value="<?= $tour['gia'] ?>">
@@ -138,30 +121,36 @@
             <textarea name="chinh_sach"><?= htmlspecialchars($tour['chinh_sach']) ?></textarea>
 
             <label>Hình ảnh hiện tại</label>
-            <?php if ($tour['hinh_anh']): ?>
-                <img src="assets/uploads/tour/<?= $tour['hinh_anh'] ?>" width="120">
+            <?php if (!empty($tour['hinh_anh'])): ?>
+                <img src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $tour['hinh_anh']) ?>" width="120">
             <?php endif; ?>
 
             <label>Thay đổi hình ảnh</label>
             <input type="file" name="hinh_anh">
 
             <label>Nhà cung cấp</label>
-            <input type="text" name="nha_cung_cap" value="<?= htmlspecialchars($tour['nha_cung_cap'] ?? '') ?>">
+            <select name="nha_cung_cap">
+                <option value="VietTravel" <?= ($tour['nha_cung_cap'] ?? '') == 'VietTravel' ? 'selected' : '' ?>>VietTravel</option>
+                <option value="Saigontourist" <?= ($tour['nha_cung_cap'] ?? '') == 'Saigontourist' ? 'selected' : '' ?>>Saigontourist</option>
+                <option value="BestTrip" <?= ($tour['nha_cung_cap'] ?? '') == 'BestTrip' ? 'selected' : '' ?>>BestTrip</option>
+                <option value="Fiditour" <?= ($tour['nha_cung_cap'] ?? '') == 'Fiditour' ? 'selected' : '' ?>>Fiditour</option>
+                <option value="Khác" <?= ($tour['nha_cung_cap'] ?? '') == 'Khác' ? 'selected' : '' ?>>Khác</option>
+            </select>
 
             <label>Mùa</label>
             <select name="mua">
-                <option value="Mùa xuân" <?= ($tour['mua'] ?? '') == 'mua_xuan' ? 'selected' : '' ?>>Mùa Xuân</option>
-                <option value="Mùa hạ" <?= ($tour['mua'] ?? '') == 'mua_ha' ? 'selected' : '' ?>>Mùa Hạ</option>
-                <option value="Mùa thu" <?= ($tour['mua'] ?? '') == 'mua_thu' ? 'selected' : '' ?>>Mùa Thu</option>
-                <option value="Mùa đông" <?= ($tour['mua'] ?? '') == 'mua_dong' ? 'selected' : '' ?>>Mùa Đông</option>
+                <option value="Mùa Xuân" <?= ($tour['mua'] ?? '') == 'Mùa Xuân' ? 'selected' : '' ?>>Mùa Xuân</option>
+                <option value="Mùa Hạ" <?= ($tour['mua'] ?? '') == 'Mùa Hạ' ? 'selected' : '' ?>>Mùa Hạ</option>
+                <option value="Mùa Thu" <?= ($tour['mua'] ?? '') == 'Mùa Thu' ? 'selected' : '' ?>>Mùa Thu</option>
+                <option value="Mùa Đông" <?= ($tour['mua'] ?? '') == 'Mùa Đông' ? 'selected' : '' ?>>Mùa Đông</option>
             </select>
 
             <button type="submit">Cập nhật Tour</button>
         </form>
 
-        <!-- Bảng quản lý album -->
-        <form action="?action=album_edit_post" method="post" enctype="multipart/form-data" class="album-form">
-            <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+        <!-- Form Album -->
+        <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data" class="album-form">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($tour['id']) ?>">
             <h2>Album ảnh</h2>
 
             <?php if (!empty($album)): ?>
@@ -175,7 +164,9 @@
                     <tbody>
                         <?php foreach ($album as $img): ?>
                             <tr>
-                                <td><img src="assets/uploads/tour/album/<?= $img->file_name ?>" alt="Ảnh"></td>
+                                <td>
+                                    <img src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $img->file_name) ?>">
+                                </td>
                                 <td>
                                     <input type="checkbox" name="delete_album[]" value="<?= $img->id ?>"> Xóa
                                 </td>
@@ -192,6 +183,7 @@
 
             <button type="submit">Cập nhật Album</button>
         </form>
+
     </div>
 
     <div style="text-align:center; margin-top:20px;">

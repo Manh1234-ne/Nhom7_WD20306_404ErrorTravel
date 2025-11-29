@@ -13,6 +13,7 @@ if ($flash)
 <head>
     <meta charset="UTF-8">
     <title>Đăng nhập</title>
+
     <style>
         * {
             margin: 0;
@@ -142,19 +143,24 @@ if ($flash)
             color: #117a65;
         }
     </style>
+
 </head>
 
 <body>
+
     <nav>
         <a href="index.php?action=home">Homee</a>
         <div class="logo">404 Error Travel</div>
     </nav>
+
     <div class="container">
         <div class="login-box">
             <h1>Đăng nhập</h1>
+
             <?php if ($flash): ?>
                 <div class="success-box"><?= htmlspecialchars($flash) ?></div>
             <?php endif; ?>
+
             <?php if (!empty($errors_str)): ?>
                 <div class="error-box">
                     <ul>
@@ -164,16 +170,22 @@ if ($flash)
                     </ul>
                 </div>
             <?php endif; ?>
+
             <form method="post" action="index.php?action=login">
                 <label>Tên đăng nhập hoặc email</label>
                 <input type="text" name="username_or_email"
                     value="<?= htmlspecialchars($old['username_or_email'] ?? '') ?>">
+
                 <label>Mật khẩu</label>
                 <input type="password" name="mat_khau">
+
                 <button type="submit">Đăng nhập</button>
             </form>
+
+            
         </div>
     </div>
+
 </body>
 
 </html>

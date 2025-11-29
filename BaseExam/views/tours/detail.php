@@ -127,15 +127,22 @@
 
             <h3>Ảnh đại diện:</h3>
             <?php if (!empty($tour["hinh_anh"])): ?>
-                <img src="assets/uploads/<?= $tour["hinh_anh"] ?>" width="350">
+                <img id="main-image" src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $tour["hinh_anh"]) ?>" width="350" alt="Ảnh đại diện">
             <?php else: ?>
-                <p>Chưa có ảnh đại diện.</p>
+                <img id="main-image" src="" width="350" alt="Chưa có ảnh đại diện" style="display:none">
+                <p id="no-main-text">Chưa có ảnh đại diện.</p>
             <?php endif; ?>
 
             <h3>Album ảnh:</h3>
             <?php if (!empty($album)): ?>
                 <?php foreach ($album as $img): ?>
-                    <img class="album-img" src="assets/uploads/tour/album/<?= $img->file_name ?>" width="150">
+                    <?php
+                    $filename = is_object($img) ? ($img->file_name ?? '') : ($img['file_name'] ?? '');
+                    $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $filename;
+                    ?>
+                    <?php if (!empty($filename)): ?>
+                        <img class="album-img" data-filename="<?= htmlspecialchars($filename) ?>" src="<?= htmlspecialchars($src) ?>" width="150" alt="">
+                    <?php endif; ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>Chưa có ảnh album.</p>
@@ -154,27 +161,63 @@
 
         <!-- HƯỚNG DẪN VIÊN -->
         <div class="section">
-            <h3>Hướng Dẫn Viên Phụ Trách</h3>
-
-            <?php if ($hdv && $hdv['id']): ?>
-                <div class="card p-3 shadow-sm">
-                    <h4><?= $hdv['ho_ten'] ?></h4>
-                    <p><strong>Số điện thoại:</strong> <?= $hdv['so_dien_thoai'] ?></p>
-                    <p><strong>Email:</strong> <?= $hdv['email'] ?></p>
-                    <p><strong>Ngôn ngữ:</strong> <?= $hdv['ngon_ngu'] ?></p>
-                    <p><strong>Kinh nghiệm:</strong> <?= $hdv['kinh_nghiem'] ?></p>
-                    <p><strong>Đánh giá:</strong> <?= $hdv['danh_gia'] ?>/5 ⭐</p>
-                </div>
-            <?php else: ?>
-                <p><em>Tour này chưa được phân công hướng dẫn viên.</em></p>
-            <?php endif; ?>
+            <h2>Hướng dẫn viên</h2>
+            <p><strong>Tên:</strong> <?= $nhan_su["ho_ten"] ?? "Chưa có dữ liệu" ?></p>
+            <p><strong>Ngôn ngữ:</strong> <?= $nhan_su["ngon_ngu"] ?? "Chưa có dữ liệu" ?></p>
+            <p><strong>Chứng chỉ:</strong> <?= $nhan_su["chung_chi"] ?? "Chưa có dữ liệu" ?></p>
+            <p><strong>Kinh nghiệm:</strong> <?= $nhan_su["kinh_nghiem"] ?? "0" ?> năm</p>
+            <p><strong>Chuyên môn:</strong> <?= $nhan_su["chuyen_mon"] ?? "Không có" ?></p>
         </div>
 
         <a href="?action=tours" class="btn-back">← Quay lại danh sách</a>
-        <a href="?action=dat_tour&id=<?= $tour['id'] ?>" class="btn-back" style="background:#27ae60; margin-left:10px;">
+        <a href="?action=dat_tour&id=<?= $tour['id'] ?>"
+            class="btn-back"
+            style="background:#27ae60; margin-left:10px;">
             Đặt tour →
         </a>
     </div>
+
+    <!-- Script: click ảnh album -> thay ảnh đại diện và gửi AJAX cập nhật DB -->
+    <script>
+        (function() {
+            const baseUploads = '<?= addslashes(defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') ?>';
+            const tourId = <?= json_encode((int)($tour['id'] ?? 0)) ?>;
+            const mainImg = document.getElementById('main-image');
+            const noMainText = document.getElementById('no-main-text');
+
+            document.querySelectorAll('.album-img').forEach(img => {
+                img.style.cursor = 'pointer';
+                img.addEventListener('click', function() {
+                    const filename = this.getAttribute('data-filename');
+                    if (!filename) return;
+
+                    // cập nhật giao diện ngay
+                    const newSrc = baseUploads + filename;
+                    if (mainImg) {
+                        mainImg.src = newSrc;
+                        mainImg.style.display = '';
+                        if (noMainText) noMainText.style.display = 'none';
+                    }
+
+                    // gửi yêu cầu AJAX để cập nhật hinh_anh trong DB
+                    fetch('<?= htmlspecialchars(BASE_URL) ?>?action=set_main_image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: tourId,
+                            filename: filename
+                        })
+                    }).then(r => r.json()).then(json => {
+                        if (!json.success) {
+                            console.error('Lỗi cập nhật ảnh đại diện:', json.message || json);
+                        }
+                    }).catch(err => console.error('AJAX error:', err));
+                });
+            });
+        })();
+    </script>
 
 </body>
 

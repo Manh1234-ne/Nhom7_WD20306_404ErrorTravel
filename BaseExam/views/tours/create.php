@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <title>Tạo booking</title>
@@ -17,12 +16,10 @@
             background: #fff;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
         }
 
-        input,
-        select,
-        textarea {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
             margin: 8px 0 15px;
@@ -58,51 +55,42 @@
 
 <body>
 
-    <div class="container">
-        <h2>Tạo booking</h2>
+<div class="container">
+    <h2>Tạo booking</h2>
 
-        <form action="?action=save_booking" method="POST">
+    <form action="?action=save_booking" method="POST">
 
-            <!-- Ẩn tour_id -->
-            <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
+        <!-- Ẩn tour_id -->
+        <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
 
-            <div class="group-title">Thông tin khách hàng</div>
+        <div class="group-title">Thông tin khách hàng</div>
 
-            <input type="text" name="ten_khach" placeholder="Tên khách" required>
-            <input type="number" name="so_dien_thoai" placeholder="Số điện thoại" required>
-            <input type="email" name="email" placeholder="Email">
-            <input type="number" name="cccd" placeholder="CCCD" required>
+        <input type="text" name="ten_khach" placeholder="Tên khách" required>
+        <input type="number" name="so_dien_thoai" placeholder="Số điện thoại" required>
+        <input type="email" name="email" placeholder="Email">
+        <input type="number" name="cccd" placeholder="CCCD" required>
 
-            <div class="group-title">Chi tiết booking</div>
+        <div class="group-title">Chi tiết booking</div>
 
-            <!-- Hiển thị tên tour (không cho sửa) -->
-            <input type="text" value="<?= $tour['ten_tour'] ?>" disabled>
+        <!-- Hiển thị tên tour (không cho sửa) -->
+        <input type="text" value="<?= $tour['ten_tour'] ?>" disabled>
 
-            <input type="number" name="so_nguoi" placeholder="Số lượng khách" required>
+        <input type="number" name="so_nguoi" placeholder="Số lượng khách" required>
 
-            <input type="date" name="ngay_khoi_hanh" required>
-            <input type="number" name="gia" value="<?= $tour['gia'] ?>" placeholder="Giá" required>
-            <input type="text" value="Chờ xác nhận" disabled>
-            <input type="hidden" name="trang_thai" value="Chờ xác nhận">
-            <label for="group-title">Tình trạng thanh toán</label>
+        <input type="date" name="ngay_khoi_hanh" required>
+        <input type="number" name="gia" value="<?= $tour['gia'] ?>" placeholder="Giá" required>
+        
+
+        <input type="text" value="Chờ xác nhận" disabled>
+        <input type="hidden" name="trang_thai" value="Chờ xác nhận">
+        <label for="group-title">Tình trạng thanh toán</label>
             <input type="text" value="Chờ thanh toán" disabled>
             <input type="hidden" name="tinh_trang_thanh_toan" value="Chờ thanh toán">
-            <?php if ($tour['gia'] > 500000): ?>
-                <input type="number" name="tien_coc" placeholder="Tiền cọc (bắt buộc)" required>
-            <?php else: ?>
-                <input type="hidden" name="tien_coc" value="0">
-            <?php endif; ?>
-
-            <select name="huong_dan_vien_id">
-                <option value="">-- Chọn HDV --</option>
-                <?php foreach ($hdvList as $hdv): ?>
-                    <option value="<?= $hdv['id'] ?>">
-                        <?= $hdv['ho_ten'] ?> (<?= $hdv['email'] ?>)
-                    </option>
-                <?php endforeach; ?>
-            </select>
-
-
+             <?php if ($tour['gia'] > 500000): ?>
+    <input type="number" name="tien_coc" placeholder="Tiền cọc (bắt buộc)" required>
+<?php else: ?>
+    <input type="hidden" name="tien_coc" value="0">
+<?php endif; ?>
             <label for="group-title">Yêu cầu đặc biệt</label>
             <select name="yeu_cau_dac_biet" required>
                 <option value="">-- Chọn loại yêu cầu --</option>
@@ -114,15 +102,14 @@
                 <option value="Yêu cầu về ăn uống">Ăn uống</option>
                 <option value="Khác">Khác</option>
             </select>
+        
 
+        <textarea name="ghi_chu" placeholder="Ghi chú"></textarea>
 
-            <textarea name="ghi_chu" placeholder="Ghi chú"></textarea>
+        <button type="submit">Tạo booking</button>
+    </form>
 
-            <button type="submit">Tạo booking</button>
-        </form>
-
-    </div>
+</div>
 
 </body>
-
 </html>
