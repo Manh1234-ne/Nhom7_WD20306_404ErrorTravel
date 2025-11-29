@@ -93,15 +93,15 @@
                 <input type="hidden" name="tien_coc" value="0">
             <?php endif; ?>
 
-            <label>Hướng dẫn viên:</label>
-            <select name="nhan_su_id" class="form-control">
+            <select name="huong_dan_vien_id">
                 <option value="">-- Chọn HDV --</option>
-                <?php foreach ($hdvList as $h): ?>
-                    <option value="<?= $h['id'] ?>" <?= ($tour['nhan_su_id'] == $h['id']) ? 'selected' : '' ?>>
-                        <?= $h['ho_ten'] ?>
+                <?php foreach ($hdvList as $hdv): ?>
+                    <option value="<?= $hdv['id'] ?>">
+                        <?= $hdv['ho_ten'] ?> (<?= $hdv['email'] ?>)
                     </option>
                 <?php endforeach; ?>
             </select>
+
 
             <label for="group-title">Yêu cầu đặc biệt</label>
             <select name="yeu_cau_dac_biet" required>

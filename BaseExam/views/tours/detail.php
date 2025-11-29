@@ -153,21 +153,22 @@
         </div>
 
         <!-- HƯỚNG DẪN VIÊN -->
-        <h3>Hướng Dẫn Viên Phụ Trách</h3>
+        <div class="section">
+            <h3>Hướng Dẫn Viên Phụ Trách</h3>
 
-        <?php if ($hdv && $hdv['id']): ?>
-            <div class="card p-3 shadow-sm">
-                <h4><?= $hdv['ho_ten'] ?></h4>
-                <p><strong>Số điện thoại:</strong> <?= $hdv['so_dien_thoai'] ?></p>
-                <p><strong>Email:</strong> <?= $hdv['email'] ?></p>
-                <p><strong>Ngôn ngữ:</strong> <?= $hdv['ngon_ngu'] ?></p>
-                <p><strong>Kinh nghiệm:</strong> <?= $hdv['kinh_nghiem'] ?></p>
-                <p><strong>Đánh giá:</strong> <?= $hdv['danh_gia'] ?>/5 ⭐</p>
-            </div>
-        <?php else: ?>
-            <p><em>Tour này chưa được phân công hướng dẫn viên.</em></p>
-        <?php endif; ?>
-
+            <?php if ($hdv && $hdv['id']): ?>
+                <div class="card p-3 shadow-sm">
+                    <h4><?= $hdv['ho_ten'] ?></h4>
+                    <p><strong>Số điện thoại:</strong> <?= $hdv['so_dien_thoai'] ?></p>
+                    <p><strong>Email:</strong> <?= $hdv['email'] ?></p>
+                    <p><strong>Ngôn ngữ:</strong> <?= $hdv['ngon_ngu'] ?></p>
+                    <p><strong>Kinh nghiệm:</strong> <?= $hdv['kinh_nghiem'] ?></p>
+                    <p><strong>Đánh giá:</strong> <?= $hdv['danh_gia'] ?>/5 ⭐</p>
+                </div>
+            <?php else: ?>
+                <p><em>Tour này chưa được phân công hướng dẫn viên.</em></p>
+            <?php endif; ?>
+        </div>
 
         <a href="?action=tours" class="btn-back">← Quay lại danh sách</a>
         <a href="?action=dat_tour&id=<?= $tour['id'] ?>" class="btn-back" style="background:#27ae60; margin-left:10px;">

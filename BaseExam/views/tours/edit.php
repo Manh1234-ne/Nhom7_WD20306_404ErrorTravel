@@ -114,15 +114,21 @@
             <label>Mô tả</label>
             <textarea name="mo_ta"><?= htmlspecialchars($tour['mo_ta']) ?></textarea>
 
-            <label>Hướng dẫn viên:</label>
-            <select name="nhan_su_id" class="form-control">
-                <option value="">-- Chọn HDV --</option>
-                <?php foreach ($hdvList as $h): ?>
-                    <option value="<?= $h['id'] ?>" <?= ($tour['nhan_su_id'] == $h['id']) ? 'selected' : '' ?>>
-                        <?= $h['ho_ten'] ?>
+            <label>Chọn Hướng dẫn viên (lọc theo loại tour)</label>
+            <select name="nhan_su_id">
+                <?php
+                // Chuẩn hóa loại tour để gọi hàm lọc
+                $loai_key = strtolower(str_replace(' ', '_', $tour['loai_tour']));
+                $hdvList = $this->nhanSuModel->getHDVByLoaiTour($loai_key);
+
+                foreach ($hdvList as $item): ?>
+                    <option value="<?= $item['id'] ?>" <?= ($tour['nhan_su_id'] == $item['id']) ? 'selected' : '' ?>>
+                        <?= $item['ho_ten'] ?> (<?= $item['email'] ?>, <?= $item['so_dien_thoai'] ?>)
                     </option>
                 <?php endforeach; ?>
             </select>
+
+
 
 
             <label>Giá</label>

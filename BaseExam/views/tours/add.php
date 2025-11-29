@@ -76,6 +76,15 @@
         <label>Mô tả</label>
         <textarea name="mo_ta"></textarea>
 
+        <label>Hướng dẫn viên</label>
+        <select name="nhan_su_id">
+            <?php foreach ($hdvList as $hdv): ?>
+                <option value="<?= $hdv['id'] ?>">
+                    <?= $hdv['ho_ten'] ?> (<?= $hdv['email'] ?>)
+                </option>
+            <?php endforeach; ?>
+        </select>
+
         <label>Giá</label>
         <input type="number" name="gia">
 

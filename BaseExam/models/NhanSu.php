@@ -81,4 +81,75 @@ class NhanSu extends BaseModel
         $this->db->prepare("DELETE FROM huong_dan_vien WHERE id = :id")->execute(['id' => $id]);
         $this->db->prepare("DELETE FROM nguoi_dung WHERE id = :id")->execute(['id' => $nguoi_dung_id]);
     }
+
+    public function getHDVByLoaiTour($loai_tour)
+    {
+        // Chuẩn hóa key: "Trong nước" -> "trong_nuoc"
+        $loai_key = strtolower(str_replace(' ', '_', $loai_tour));
+
+        $sql = "SELECT hdv.*, nd.ho_ten, nd.email, nd.so_dien_thoai
+            FROM huong_dan_vien hdv
+            JOIN nguoi_dung nd ON hdv.nguoi_dung_id = nd.id
+            WHERE hdv.loai_hdv = :loai OR hdv.loai_hdv = 'ca_hai'";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['loai' => $loai_key]);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Nếu có HDV trong DB thì trả về
+        if (!empty($result)) {
+            return $result;
+        }
+
+        // Nếu không có, fallback sang hard-code
+        $map = [
+            'trong_nuoc' => [
+                [
+                    'id' => 0,
+                    'ho_ten' => 'Nguyễn Văn A',
+                    'so_dien_thoai' => '0909 111 222',
+                    'email' => 'hdv-trongnuoc@travel.test',
+                    'ngon_ngu' => 'Tiếng Việt, Tiếng Anh',
+                    'kinh_nghiem' => '3 năm',
+                    'danh_gia' => '4.5'
+                ]
+            ],
+            'quoc_te' => [
+                [
+                    'id' => 0,
+                    'ho_ten' => 'Trần Thị B',
+                    'so_dien_thoai' => '0909 222 333',
+                    'email' => 'hdv-quocte@travel.test',
+                    'ngon_ngu' => 'Tiếng Anh, Tiếng Nhật',
+                    'kinh_nghiem' => '6 năm',
+                    'danh_gia' => '4.9'
+                ]
+            ],
+            'yeu_cau' => [
+                [
+                    'id' => 0,
+                    'ho_ten' => 'Phạm Minh C',
+                    'so_dien_thoai' => '0909 333 444',
+                    'email' => 'hdv-yeucau@travel.test',
+                    'ngon_ngu' => 'Tiếng Việt, Tiếng Trung',
+                    'kinh_nghiem' => '4 năm',
+                    'danh_gia' => '4.7'
+                ]
+            ]
+        ];
+
+        return $map[$loai_key] ?? [
+            [
+                'id' => 0,
+                'ho_ten' => 'Hướng dẫn viên mặc định',
+                'so_dien_thoai' => '0999 888 777',
+                'email' => 'default@travel.test',
+                'ngon_ngu' => 'Tiếng Việt',
+                'kinh_nghiem' => '2 năm',
+                'danh_gia' => '4.0'
+            ]
+        ];
+    }
+
+
 }
