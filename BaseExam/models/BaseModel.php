@@ -32,7 +32,7 @@ class BaseModel
         $stmt = $this->db->prepare("INSERT INTO {$this->table} ($fields) VALUES ($placeholders)");
         $values = array_values($data);
         if ($stmt->execute($values)) {
-            return $this->db->lastInsertId(); // trả về ID mới chứ không chỉ true
+            return $this->db->lastInsertId(); 
         }
         return false;
     }
@@ -49,4 +49,4 @@ class BaseModel
         $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = ?");
         return $stmt->execute([$id]);
     }
-};
+}

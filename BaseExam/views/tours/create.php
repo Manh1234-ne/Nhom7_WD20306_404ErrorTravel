@@ -79,30 +79,39 @@
 
         <input type="date" name="ngay_khoi_hanh" required>
         <input type="number" name="gia" value="<?= $tour['gia'] ?>" placeholder="Giá" required>
-        
 
         <input type="text" value="Chờ xác nhận" disabled>
         <input type="hidden" name="trang_thai" value="Chờ xác nhận">
+
         <label for="group-title">Tình trạng thanh toán</label>
-            <input type="text" value="Chờ thanh toán" disabled>
-            <input type="hidden" name="tinh_trang_thanh_toan" value="Chờ thanh toán">
-             <?php if ($tour['gia'] > 500000): ?>
-    <input type="number" name="tien_coc" placeholder="Tiền cọc (bắt buộc)" required>
-<?php else: ?>
-    <input type="hidden" name="tien_coc" value="0">
-<?php endif; ?>
-            <label for="group-title">Yêu cầu đặc biệt</label>
-            <select name="yeu_cau_dac_biet" required>
-                <option value="">-- Chọn loại yêu cầu --</option>
-                <option value="">Ăn chay</option>
-                <option value="Yêu cầu về dị ứng">Dị ứng</option>
-                <option value="Yêu cầu về bệnh lý">Bệnh lý</option>
-                <option value="Yêu cầu về phòng nghỉ">Phòng nghỉ</option>
-                <option value="Yêu cầu phương tiện di chuyển">Di chuyển</option>
-                <option value="Yêu cầu về ăn uống">Ăn uống</option>
-                <option value="Khác">Khác</option>
-            </select>
-        
+        <input type="text" value="Chờ thanh toán" disabled>
+        <input type="hidden" name="tinh_trang_thanh_toan" value="Chờ thanh toán">
+
+        <!-- ⭐ TIỀN CỌC TỰ TÍNH 40% GIÁ TOUR -->
+        <?php if ($tour['gia'] > 500000): ?>
+            <?php $tien_coc = $tour['gia'] * 0.4; ?>
+
+            <!-- Hiển thị tiền cọc nhưng không cho sửa -->
+             <label for="">Tiền cọc</label>
+            <input type="text" value="<?= number_format($tien_coc) ?> VND (40% giá tour)" disabled>
+
+            <!-- Gửi tiền cọc vào form -->
+            <input type="hidden" name="tien_coc" value="<?= $tien_coc ?>">
+        <?php else: ?>
+            <input type="hidden" name="tien_coc" value="0">
+        <?php endif; ?>
+
+        <label for="group-title">Yêu cầu đặc biệt</label>
+        <select name="yeu_cau_dac_biet" required>
+            <option value="">-- Chọn loại yêu cầu --</option>
+            <option value="">Ăn chay</option>
+            <option value="Yêu cầu về dị ứng">Dị ứng</option>
+            <option value="Yêu cầu về bệnh lý">Bệnh lý</option>
+            <option value="Yêu cầu về phòng nghỉ">Phòng nghỉ</option>
+            <option value="Yêu cầu phương tiện di chuyển">Di chuyển</option>
+            <option value="Yêu cầu về ăn uống">Ăn uống</option>
+            <option value="Khác">Khác</option>
+        </select>
 
         <textarea name="ghi_chu" placeholder="Ghi chú"></textarea>
 

@@ -1,13 +1,16 @@
 <?php
 require_once PATH_MODEL . 'Tour.php';
+require_once PATH_MODEL . 'NhanSu.php';
 
 class TourController
 {
     protected $model;
+    protected $nhanSuModel;
 
     public function __construct()
     {
         $this->model = new Tour();
+        $this->nhanSuModel = new NhanSu();
     }
 
     // Trang danh sách tour
@@ -33,7 +36,8 @@ class TourController
             'gia' => $_POST['gia'] ?? 0,
             'chinh_sach' => $_POST['chinh_sach'] ?? '',
             'nha_cung_cap' => $_POST['nha_cung_cap'] ?? '',
-            'mua' => $_POST['mua'] ?? ''
+            'mua' => $_POST['mua'] ?? '',
+            'nhan_su_id' => $_POST['nhan_su_id'] ?? null // Ưu tiên lấy từ form
         ];
 
         // Upload ảnh đại diện tour
@@ -41,12 +45,18 @@ class TourController
             $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
         }
 
+        // Fallback: nếu form không chọn HDV thì gán theo loại tour
+        // if (empty($data['nhan_su_id'])) {
+        //     $hdvList = $this->nhanSuModel->getHDVByLoaiTour($data['loai_tour']);
+        //     $data['nhan_su_id'] = !empty($hdvList) ? $hdvList[0]['id'] : null;
+        // }
+
         $tour_id = $this->model->insert($data);
 
         // Upload album nếu có
         if (!empty($_FILES['album']['name'][0])) {
             foreach ($_FILES['album']['tmp_name'] as $key => $tmp_name) {
-                $file_name = upload_file('tour/album', [
+                $file_name = upload_file('tour/album', [    
                     'name' => $_FILES['album']['name'][$key],
                     'tmp_name' => $_FILES['album']['tmp_name'][$key]
                 ]);
@@ -192,6 +202,7 @@ class TourController
         $album = $this->model->getAlbum($id);
         error_log('DEBUG album: ' . print_r($album, true)); // xem trong Apache/Laragon log
         require PATH_VIEW . 'tours/detail.php';
+        
     }
 
     // Cập nhật ảnh đại diện từ album (AJAX)
