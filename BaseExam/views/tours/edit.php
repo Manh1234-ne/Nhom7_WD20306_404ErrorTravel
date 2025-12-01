@@ -113,6 +113,7 @@
 
             <label>Mô tả</label>
             <textarea name="mo_ta"><?= htmlspecialchars($tour['mo_ta']) ?></textarea>
+            
 
             <label>Giá</label>
             <input type="number" name="gia" value="<?= $tour['gia'] ?>">

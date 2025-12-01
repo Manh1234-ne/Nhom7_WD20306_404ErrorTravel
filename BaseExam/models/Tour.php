@@ -86,4 +86,47 @@ class Tour extends BaseModel
             throw $e;
         }
     }
+    /* ====================== LẤY HƯỚNG DẪN VIÊN CỦA TOUR ====================== */
+    public function getHDVByTour($tour_id)
+    {
+        $sql = "
+            SELECT hdv.*, nd.ho_ten, nd.so_dien_thoai, nd.email
+            FROM tour t
+            LEFT JOIN huong_dan_vien hdv ON hdv.id = t.nhan_su_id
+            LEFT JOIN nguoi_dung nd ON nd.id = hdv.nguoi_dung_id
+            WHERE t.id = ?
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tour_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row : false;
+    }
+
+    /**
+     * Thử lấy HDV mặc định theo một khóa loại (từ DB nếu trường loai_hdv tồn tại)
+     * Nếu DB không chứa kiểu này hoặc không có cấu trúc, trả về false.
+     * Caller sẽ fallback sang mapping hard-coded nếu cần.
+     */
+    public function getDefaultHDVFromDB($loai_hdv_key)
+    {
+        // Query mong muốn: huong_dan_vien.loai_hdv = :loai_hdv_key
+        // Nếu DB không có cột loai_hdv, query này không trả lỗi nhưng sẽ trả rỗng.
+        try {
+            $sql = "
+                SELECT hdv.*, nd.ho_ten, nd.so_dien_thoai, nd.email
+                FROM huong_dan_vien hdv
+                LEFT JOIN nguoi_dung nd ON nd.id = hdv.nguoi_dung_id
+                WHERE hdv.loai_hdv = :loai
+                LIMIT 1
+            ";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['loai' => $loai_hdv_key]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row ? $row : false;
+        } catch (Throwable $e) {
+            // Nếu DB không có cột loai_hdv hoặc query lỗi, trả về false để caller fallback.
+            return false;
+        }
+    }
 }
+

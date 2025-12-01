@@ -149,26 +149,7 @@
             <?php endif; ?>
         </div>
 
-        <!-- LỊCH TRÌNH -->
-        <div class="section">
-            <h2>Lịch trình</h2>
-            <p><strong>Hoạt động:</strong> <?= $tour["lich_trinh_hoat_dong"] ?? "Chưa cập nhật" ?></p>
-            <p><strong>Địa điểm:</strong> <?= $tour["dia_diem"] ?? "Chưa cập nhật" ?></p>
-            <p><strong>Mô tả chi tiết:</strong>
-                <?= isset($tour["mo_ta_lich_trinh"]) ? nl2br($tour["mo_ta_lich_trinh"]) : "Chưa cập nhật" ?>
-            </p>
-        </div>
-
-        <!-- HƯỚNG DẪN VIÊN -->
-        <div class="section">
-            <h2>Hướng dẫn viên</h2>
-            <p><strong>Tên:</strong> <?= $nhan_su["ho_ten"] ?? "Chưa có dữ liệu" ?></p>
-            <p><strong>Ngôn ngữ:</strong> <?= $nhan_su["ngon_ngu"] ?? "Chưa có dữ liệu" ?></p>
-            <p><strong>Chứng chỉ:</strong> <?= $nhan_su["chung_chi"] ?? "Chưa có dữ liệu" ?></p>
-            <p><strong>Kinh nghiệm:</strong> <?= $nhan_su["kinh_nghiem"] ?? "0" ?> năm</p>
-            <p><strong>Chuyên môn:</strong> <?= $nhan_su["chuyen_mon"] ?? "Không có" ?></p>
-        </div>
-
+        
         <a href="?action=tours" class="btn-back">← Quay lại danh sách</a>
         <a href="?action=dat_tour&id=<?= $tour['id'] ?>"
             class="btn-back"
