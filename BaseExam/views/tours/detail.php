@@ -138,6 +138,111 @@
         }
     </style>
 </head>
+<?php
+$lich_trinh = [
+    // Tour SaPa
+    "13" => [
+        [
+            "ngay" => "Ngày 1",
+            "gio" => "08:00",
+            "hoat_dong" => "Khởi hành từ Hà Nội",
+            "dia_diem" => "Bến xe Mỹ Đình",
+            "phuong_tien" => "Xe giường nằm",
+            "dich_vu" => "Nước uống, wifi",
+            "mo_ta" => "Tập trung, làm thủ tục, phát đồ ăn nhẹ."
+        ],
+        [
+            "ngay" => "Ngày 1",
+            "gio" => "13:00",
+            "hoat_dong" => "Tham quan núi Hàm Rồng",
+            "dia_diem" => "Sa Pa",
+            "phuong_tien" => "Xe trung chuyển",
+            "dich_vu" => "Vé tham quan, nước suối",
+            "mo_ta" => "Khám phá vườn hoa, tham quan sân mây, thưởng thức đặc sản vùng cao."
+        ],
+        [
+            "ngay" => "Ngày 2",
+            "gio" => "09:00",
+            "hoat_dong" => "Check-in bản Cát Cát",
+            "dia_diem" => "Bản Cát Cát",
+            "phuong_tien" => "Đi bộ",
+            "dich_vu" => "Vé vào bản, hướng dẫn chụp ảnh",
+            "mo_ta" => "Khám phá văn hóa người H’Mông, xem biểu diễn khèn, mua đồ thủ công mỹ nghệ."
+        ]
+    ],
+
+    // Tour Đà Nẵng
+    "14" => [
+        [
+            "ngay" => "Ngày 1",
+            "gio" => "09:00",
+            "hoat_dong" => "Bay từ Hà Nội đến Đà Nẵng",
+            "dia_diem" => "Sân bay Nội Bài",
+            "phuong_tien" => "Máy bay VietJet",
+            "dich_vu" => "Xe đưa đón sân bay",
+            "mo_ta" => "Làm thủ tục check-in, bay thẳng đến Đà Nẵng."
+        ],
+        [
+            "ngay" => "Ngày 1",
+            "gio" => "14:00",
+            "hoat_dong" => "Tham quan Ngũ Hành Sơn",
+            "dia_diem" => "Đà Nẵng",
+            "phuong_tien" => "Xe du lịch",
+            "dich_vu" => "Vé tham quan",
+            "mo_ta" => "Leo núi, thăm động Âm Phủ, ngắm cảnh biển."
+        ],
+        [
+            "ngay" => "Ngày 2",
+            "gio" => "09:00",
+            "hoat_dong" => "Khám phá phố cổ Hội An",
+            "dia_diem" => "Hội An",
+            "phuong_tien" => "Xe du lịch",
+            "dich_vu" => "Vé tham quan phố cổ",
+            "mo_ta" => "Thả đèn hoa đăng trên sông Hoài, dạo phố cổ."
+        ],
+        [
+            "ngay" => "Ngày 3",
+            "gio" => "10:00",
+            "hoat_dong" => "Du thuyền trên sông Hàn",
+            "dia_diem" => "Đà Nẵng",
+            "phuong_tien" => "Du thuyền",
+            "dich_vu" => "Buffet nhẹ trên tàu",
+            "mo_ta" => "Ngắm cảnh thành phố về đêm trên sông Hàn."
+        ]
+    ],
+
+    // Tour Huế
+    "15" => [
+        [
+            "ngay" => "Ngày 1",
+            "gio" => "08:30",
+            "hoat_dong" => "Tham quan Đại Nội Huế",
+            "dia_diem" => "Kinh thành Huế",
+            "phuong_tien" => "Xe du lịch",
+            "dich_vu" => "Vé tham quan",
+            "mo_ta" => "Nghe thuyết minh về triều Nguyễn, tham quan cung điện."
+        ],
+        [
+            "ngay" => "Ngày 1",
+            "gio" => "14:00",
+            "hoat_dong" => "Thăm lăng Khải Định",
+            "dia_diem" => "Huế",
+            "phuong_tien" => "Xe du lịch",
+            "dich_vu" => "Vé tham quan",
+            "mo_ta" => "Chụp ảnh kiến trúc pha trộn Đông – Tây."
+        ],
+        [
+            "ngay" => "Ngày 2",
+            "gio" => "19:00",
+            "hoat_dong" => "Nghe ca Huế trên sông Hương",
+            "dia_diem" => "Sông Hương",
+            "phuong_tien" => "Thuyền rồng",
+            "dich_vu" => "Trà sen, bánh Huế",
+            "mo_ta" => "Thưởng thức ca Huế truyền thống trên thuyền."
+        ]
+    ]
+];
+?>
 
 <body>
 
@@ -192,59 +297,41 @@
 
         <div class="section">
             <h2>Lịch trình Tour</h2>
-            <div class="timeline">
-                <!-- Ngày 1 -->
-                <div class="timeline-day"><strong>Ngày 1</strong></div>
+            <?php
+            // Giả sử bạn đã có mảng $lich_trinh như mình demo trước đó
+// Ví dụ: $tour['id'] = 13 => lấy lịch trình của tour SaPa
+            
+            $tourId = $tour['id']; // hoặc slug như "sapa", "danang", "hue"
+            
+            // Kiểm tra xem tour có lịch trình không
+            if (!empty($lich_trinh[$tourId])) {
+                echo '<div class="timeline">';
+                $currentDay = "";
+                foreach ($lich_trinh[$tourId] as $item) {
+                    // Nếu ngày thay đổi thì in ra header ngày
+                    if ($item['ngay'] !== $currentDay) {
+                        $currentDay = $item['ngay'];
+                        echo "<div class='timeline-day'>{$item['ngay']}</div>";
+                    }
 
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <h3>08:00 - Khởi hành từ Hà Nội</h3>
-                        <p><strong>Địa điểm:</strong> Bến xe Mỹ Đình</p>
-                        <p><strong>Phương tiện:</strong> Xe giường nằm cao cấp</p>
-                        <p><strong>Dịch vụ đi kèm:</strong> Nước uống miễn phí, wifi trên xe</p>
-                        <p><strong>Chi phí dự kiến:</strong> Đã bao gồm trong giá tour</p>
-                        <p><strong>Mô tả:</strong> Tập trung tại bến xe, làm thủ tục, phát đồ ăn nhẹ cho khách.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <h3>13:00 - Tham quan núi Hàm Rồng</h3>
-                        <p><strong>Địa điểm:</strong> Sa Pa</p>
-                        <p><strong>Phương tiện:</strong> Di chuyển bằng xe trung chuyển</p>
-                        <p><strong>Dịch vụ đi kèm:</strong> Vé tham quan, nước suối</p>
-                        <p><strong>Hoạt động bổ sung:</strong> Chụp ảnh toàn cảnh, tham gia trò chơi dân gian</p>
-                        <p><strong>Mô tả:</strong> Khám phá vườn hoa, tham quan sân mây, thưởng thức đặc sản vùng cao.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Ngày 2 -->
-                <div class="timeline-day"><strong>Ngày 2</strong></div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <h3>09:00 - Check-in bản Cát Cát</h3>
-                        <p><strong>Địa điểm:</strong> Bản Cát Cát</p>
-                        <p><strong>Phương tiện:</strong> Đi bộ tham quan</p>
-                        <p><strong>Dịch vụ đi kèm:</strong> Vé vào bản, hướng dẫn chụp ảnh</p>
-                        <p><strong>Trải nghiệm đặc biệt:</strong> Xem biểu diễn khèn, thử mặc trang phục dân tộc</p>
-                        <p><strong>Mô tả:</strong> Khám phá văn hóa người H’Mông, mua đồ thủ công mỹ nghệ.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <h3>14:00 - Khám phá ẩm thực địa phương</h3>
-                        <p><strong>Địa điểm:</strong> Chợ Sa Pa</p>
-                        <p><strong>Phương tiện:</strong> Tự do đi bộ</p>
-                        <p><strong>Dịch vụ đi kèm:</strong> Phiếu giảm giá món thắng cố</p>
-                        <p><strong>Hoạt động bổ sung:</strong> Thưởng thức rượu ngô, tham gia chợ đêm</p>
-                        <p><strong>Mô tả:</strong> Tự do mua sắm, trải nghiệm không khí chợ vùng cao, thưởng thức đặc
-                            sản.</p>
-                    </div>
-                </div>
+                    // Render từng hoạt động
+                    echo "
+        <div class='timeline-item'>
+            <div class='timeline-content'>
+                <h3>{$item['gio']} - {$item['hoat_dong']}</h3>
+                <p><strong>Địa điểm:</strong> {$item['dia_diem']}</p>
+                <p><strong>Phương tiện:</strong> {$item['phuong_tien']}</p>
+                <p><strong>Dịch vụ đi kèm:</strong> {$item['dich_vu']}</p>
+                <p><strong>Mô tả:</strong> {$item['mo_ta']}</p>
             </div>
+        </div>";
+                }
+                echo '</div>';
+            } else {
+                echo "<p>Chưa có lịch trình cho tour này.</p>";
+            }
+            ?>
+
 
         </div>
 
