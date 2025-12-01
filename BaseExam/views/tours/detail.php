@@ -98,6 +98,44 @@
         img {
             border-radius: 6px;
         }
+
+        .timeline {
+            position: relative;
+            margin: 30px 0;
+            padding-left: 40px;
+            border-left: 3px solid #3498db;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -11px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            background: #3498db;
+            border-radius: 50%;
+            border: 3px solid #fff;
+        }
+
+        .timeline-time {
+            padding-left: 20px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -127,7 +165,9 @@
 
             <h3>Ảnh đại diện:</h3>
             <?php if (!empty($tour["hinh_anh"])): ?>
-                <img id="main-image" src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $tour["hinh_anh"]) ?>" width="350" alt="Ảnh đại diện">
+                <img id="main-image"
+                    src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $tour["hinh_anh"]) ?>"
+                    width="350" alt="Ảnh đại diện">
             <?php else: ?>
                 <img id="main-image" src="" width="350" alt="Chưa có ảnh đại diện" style="display:none">
                 <p id="no-main-text">Chưa có ảnh đại diện.</p>
@@ -141,7 +181,8 @@
                     $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $filename;
                     ?>
                     <?php if (!empty($filename)): ?>
-                        <img class="album-img" data-filename="<?= htmlspecialchars($filename) ?>" src="<?= htmlspecialchars($src) ?>" width="150" alt="">
+                        <img class="album-img" data-filename="<?= htmlspecialchars($filename) ?>"
+                            src="<?= htmlspecialchars($src) ?>" width="150" alt="">
                     <?php endif; ?>
                 <?php endforeach; ?>
             <?php else: ?>
@@ -149,26 +190,81 @@
             <?php endif; ?>
         </div>
 
-        
+        <div class="section">
+            <h2>Lịch trình Tour</h2>
+            <div class="timeline">
+                <!-- Ngày 1 -->
+                <div class="timeline-day"><strong>Ngày 1</strong></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>08:00 - Khởi hành từ Hà Nội</h3>
+                        <p><strong>Địa điểm:</strong> Bến xe Mỹ Đình</p>
+                        <p><strong>Phương tiện:</strong> Xe giường nằm cao cấp</p>
+                        <p><strong>Dịch vụ đi kèm:</strong> Nước uống miễn phí, wifi trên xe</p>
+                        <p><strong>Chi phí dự kiến:</strong> Đã bao gồm trong giá tour</p>
+                        <p><strong>Mô tả:</strong> Tập trung tại bến xe, làm thủ tục, phát đồ ăn nhẹ cho khách.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>13:00 - Tham quan núi Hàm Rồng</h3>
+                        <p><strong>Địa điểm:</strong> Sa Pa</p>
+                        <p><strong>Phương tiện:</strong> Di chuyển bằng xe trung chuyển</p>
+                        <p><strong>Dịch vụ đi kèm:</strong> Vé tham quan, nước suối</p>
+                        <p><strong>Hoạt động bổ sung:</strong> Chụp ảnh toàn cảnh, tham gia trò chơi dân gian</p>
+                        <p><strong>Mô tả:</strong> Khám phá vườn hoa, tham quan sân mây, thưởng thức đặc sản vùng cao.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ngày 2 -->
+                <div class="timeline-day"><strong>Ngày 2</strong></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>09:00 - Check-in bản Cát Cát</h3>
+                        <p><strong>Địa điểm:</strong> Bản Cát Cát</p>
+                        <p><strong>Phương tiện:</strong> Đi bộ tham quan</p>
+                        <p><strong>Dịch vụ đi kèm:</strong> Vé vào bản, hướng dẫn chụp ảnh</p>
+                        <p><strong>Trải nghiệm đặc biệt:</strong> Xem biểu diễn khèn, thử mặc trang phục dân tộc</p>
+                        <p><strong>Mô tả:</strong> Khám phá văn hóa người H’Mông, mua đồ thủ công mỹ nghệ.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>14:00 - Khám phá ẩm thực địa phương</h3>
+                        <p><strong>Địa điểm:</strong> Chợ Sa Pa</p>
+                        <p><strong>Phương tiện:</strong> Tự do đi bộ</p>
+                        <p><strong>Dịch vụ đi kèm:</strong> Phiếu giảm giá món thắng cố</p>
+                        <p><strong>Hoạt động bổ sung:</strong> Thưởng thức rượu ngô, tham gia chợ đêm</p>
+                        <p><strong>Mô tả:</strong> Tự do mua sắm, trải nghiệm không khí chợ vùng cao, thưởng thức đặc
+                            sản.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         <a href="?action=tours" class="btn-back">← Quay lại danh sách</a>
-        <a href="?action=dat_tour&id=<?= $tour['id'] ?>"
-            class="btn-back"
-            style="background:#27ae60; margin-left:10px;">
+        <a href="?action=dat_tour&id=<?= $tour['id'] ?>" class="btn-back" style="background:#27ae60; margin-left:10px;">
             Đặt tour →
         </a>
     </div>
 
     <!-- Script: click ảnh album -> thay ảnh đại diện và gửi AJAX cập nhật DB -->
     <script>
-        (function() {
+        (function () {
             const baseUploads = '<?= addslashes(defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') ?>';
-            const tourId = <?= json_encode((int)($tour['id'] ?? 0)) ?>;
+            const tourId = <?= json_encode((int) ($tour['id'] ?? 0)) ?>;
             const mainImg = document.getElementById('main-image');
             const noMainText = document.getElementById('no-main-text');
 
             document.querySelectorAll('.album-img').forEach(img => {
                 img.style.cursor = 'pointer';
-                img.addEventListener('click', function() {
+                img.addEventListener('click', function () {
                     const filename = this.getAttribute('data-filename');
                     if (!filename) return;
 
@@ -199,6 +295,7 @@
             });
         })();
     </script>
+
 
 </body>
 
