@@ -139,6 +139,7 @@
                 height: 80px;
             }
         }
+
         .timeline {
             position: relative;
             margin: 30px 0;
@@ -370,6 +371,44 @@ $lich_trinh = [
             "dich_vu" => "Không",
             "mo_ta" => "Ngắm thiên nhiên yên bình và chụp ảnh hồ nước trên núi."
         ]
+    ],
+    "19" => [
+        [
+            "ngay" => "Ngày 1",
+            "gio" => "08:30",
+            "hoat_dong" => "Tham quan Buôn Đôn",
+            "dia_diem" => "Buôn Đôn, Đắk Lắk",
+            "phuong_tien" => "Xe du lịch",
+            "dich_vu" => "Vé tham quan",
+            "mo_ta" => "Khám phá nhà sàn cổ, cầu treo và văn hóa Ê Đê."
+        ],
+        [
+            "ngay" => "Ngày 2",
+            "gio" => "14:00",
+            "hoat_dong" => "Tham quan Thác Dray Nur",
+            "dia_diem" => "Đắk Lắk",
+            "phuong_tien" => "Xe du lịch",
+            "dich_vu" => "Vé tham quan",
+            "mo_ta" => "Ngắm dòng thác hùng vĩ giữa núi rừng Tây Nguyên."
+        ],
+        [
+            "ngay" => "Ngày 3",
+            "gio" => "19:00",
+            "hoat_dong" => "Thưởng thức cà phê Tây Nguyên",
+            "dia_diem" => "Buôn Ma Thuột",
+            "phuong_tien" => "Đi bộ",
+            "dich_vu" => "Cà phê đặc sản",
+            "mo_ta" => "Trải nghiệm hương vị cà phê nổi tiếng Việt Nam."
+        ],
+        [
+            "ngay" => "Ngày 4",
+            "gio" => "09:00",
+            "hoat_dong" => "Khám phá Biển Hồ",
+            "dia_diem" => "Pleiku, Gia Lai",
+            "phuong_tien" => "Xe du lịch",
+            "dich_vu" => "Không",
+            "mo_ta" => "Ngắm thiên nhiên yên bình và chụp ảnh hồ nước trên núi."
+        ]
     ]
 
 
@@ -405,7 +444,8 @@ $lich_trinh = [
                     <p><strong>Giá:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
                     <p><strong>Tiền cọc:</strong> <?= number_format($qlb['tien_coc']) ?> VNĐ</p>
                     <p><strong>Trạng thái:</strong> <?= htmlspecialchars($qlb['trang_thai']) ?></p>
-                    <p><strong>Tình trạng thanh toán:</strong> <?= htmlspecialchars($qlb['tinh_trang_thanh_toan']) ?></p>
+                    <p><strong>Tình trạng thanh toán:</strong> <?= htmlspecialchars($qlb['tinh_trang_thanh_toan']) ?>
+                    </p>
                     <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
 
                     <a href="?action=qlbooking" class="btn-back">← Quay lại</a>
@@ -448,9 +488,10 @@ $lich_trinh = [
 
                 <div class="album-block">
                     <h3>Ảnh Tour </h3>
-                    <?php if ($mainSrc) : ?>
-                        <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>?t=<?= time() ?>" alt="Ảnh đại diện">
-                    <?php else : ?>
+                    <?php if ($mainSrc): ?>
+                        <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>?t=<?= time() ?>"
+                            alt="Ảnh đại diện">
+                    <?php else: ?>
                         <img id="main-image" class="album-main" src="" alt="Chưa có ảnh đại diện" style="display:none;">
                         <p id="no-main-text">Chưa có ảnh đại diện.</p>
                     <?php endif; ?>
@@ -459,34 +500,32 @@ $lich_trinh = [
                 <div style="margin-top:12px;">
                     <h3>Album ảnh:</h3>
 
-                    <?php if (!empty($album)) : ?>
-                        <?php foreach ($album as $img) :
+                    <?php if (!empty($album)): ?>
+                        <?php foreach ($album as $img):
                             $filename = is_object($img) ? ($img->file_name ?? '') : ($img['file_name'] ?? '');
                             $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . ltrim($filename, '/');
                             if ($filename):
-                        ?>
+                                ?>
                                 <img class="album-img <?= $filename == $mainImgFilename ? 'selected' : '' ?>"
                                     data-filename="<?= htmlspecialchars($filename) ?>"
-                                    src="<?= htmlspecialchars($src) ?>?t=<?= time() ?>"
-                                    width="150"
-                                    alt="">
-                        <?php endif;
+                                    src="<?= htmlspecialchars($src) ?>?t=<?= time() ?>" width="150" alt="">
+                            <?php endif;
                         endforeach; ?>
-                    <?php else : ?>
+                    <?php else: ?>
                         <p>Chưa có ảnh album.</p>
                     <?php endif; ?>
                 </div>
 
             </div>
-            </div>
-          <div class="section">
+        </div>
+        <div class="section">
             <h2>Lịch trình Tour</h2>
             <?php
             // Giả sử bạn đã có mảng $lich_trinh như mình demo trước đó
             // Ví dụ: $tour['id'] = 13 => lấy lịch trình của tour SaPa
-
+            
             $tourId = $qlb['tour_id']; // hoặc slug như "sapa", "danang", "hue"
-
+            
             // Kiểm tra xem tour có lịch trình không
             if (!empty($lich_trinh[$tourId])) {
                 echo '<div class="timeline">';
@@ -518,17 +557,17 @@ $lich_trinh = [
 
 
         </div>
-        </div>
-    
+    </div>
+
 
     <!-- JS chọn ảnh -->
     <script>
-        (function() {
+        (function () {
             const baseUploads = '<?= addslashes(defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') ?>';
             const mainImg = document.getElementById('main-image');
 
             document.querySelectorAll('.album-img').forEach(img => {
-                img.addEventListener('click', function() {
+                img.addEventListener('click', function () {
 
                     const filename = this.getAttribute('data-filename');
                     if (!filename) return;
