@@ -24,7 +24,9 @@ match ($action) {
     'tour_edit' => (new TourController)->edit(),
     'tour_edit_post' => (new TourController)->update(),
     'tour_delete' => (new TourController)->delete(),
+    // Accept both 'tour_detail' and 'detail' for compatibility
     'tour_detail' => (new TourController)->detail(),
+    'detail' => (new TourController)->detail(),
     'dat_tour' => (new BookingController)->create(),
     'save_booking' => (new BookingController)->save(),
 
@@ -65,12 +67,12 @@ match ($action) {
     'yeu_cau_show' => fn() => (new YeuCauController)->show($_GET['id']),
 
     // Quản lý khách theo tour
-    "tour_guest"         => (new TourGuestController)->index(),
-    "tour_guest_store"   => (new TourGuestController)->store(),
-    "guest_detail"       => (new TourGuestController)->detail(),
+    "tour_guest" => (new TourGuestController)->index(),
+    "tour_guest_store" => (new TourGuestController)->store(),
+    "guest_detail" => (new TourGuestController)->detail(),
     "tour_guest_checkin" => (new TourGuestController)->updateCheckin(),
-    "tour_guest_room"    => (new TourGuestController)->updateRoom(),
-    "tour_guest_export"  => (new TourGuestController)->export(),
+    "tour_guest_room" => (new TourGuestController)->updateRoom(),
+    "tour_guest_export" => (new TourGuestController)->export(),
 
     // Mặc định
     default => (new HomeController)->index(),

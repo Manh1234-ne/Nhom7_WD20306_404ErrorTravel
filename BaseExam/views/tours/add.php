@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
@@ -139,7 +141,7 @@
 
 <body>
 
-    
+
     <!-- CONTENT -->
     <div class="content">
         <h1>Thêm Tour</h1>
@@ -203,6 +205,23 @@
                     <textarea name="chinh_sach"></textarea>
                 </div>
 
+                <div class="full-row">
+                    <label>Lịch trình chi tiết</label>
+                    <div id="itinerary-wrapper"
+                        style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid #e2e8f0;">
+                        <div style="margin-bottom:8px;">
+                            <button type="button" id="add-day"
+                                style="background:#06b6d4;border:none;padding:8px 12px;color:#fff;border-radius:6px;cursor:pointer;">Thêm
+                                ngày</button>
+                        </div>
+                        <div id="days-list"></div>
+                    </div>
+                    <input type="hidden" name="lich_trinh" id="lich_trinh_input">
+                    <small style="color:#6b7280;display:block;margin-top:6px;">Tạo số ngày mong muốn, mỗi ngày có thể
+                        thêm nhiều mốc (thời gian, địa điểm, mô tả, ảnh). Dữ liệu lưu dưới dạng JSON; ảnh sẽ được upload
+                        và đường dẫn lưu trong JSON.</small>
+                </div>
+
             </div>
 
             <button type="submit">Thêm Tour</button>
@@ -214,3 +233,110 @@
 </body>
 
 </html>
+
+<script>
+    (function () {
+        const daysList = document.getElementById('days-list');
+        const addDayBtn = document.getElementById('add-day');
+        const hidden = document.getElementById('lich_trinh_input');
+        const form = document.querySelector('form[action="?action=tour_add_post"]');
+
+        function createSlot(slotData) {
+            const slot = document.createElement('div');
+            slot.className = 'slot';
+            slot.style = 'border:1px dashed #e2e8f0;padding:10px;margin-bottom:8px;border-radius:6px;background:#fff;';
+            slot.innerHTML = `
+                <label>Tiêu đề mốc</label>
+                <input type="text" class="it-title" value="${slotData.title || ''}" placeholder="VD: Tham quan Văn Miếu">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+                    <div>
+                        <label>Thời gian</label>
+                        <input type="text" class="it-time" value="${slotData.time || ''}" placeholder="08:30">
+                    </div>
+                    <div>
+                        <label>Địa điểm</label>
+                        <input type="text" class="it-location" value="${slotData.location || ''}" placeholder="Hà Nội">
+                    </div>
+                </div>
+                <label style="margin-top:8px;">Mô tả</label>
+                <textarea class="it-desc" placeholder="Mô tả chi tiết">${slotData.desc || ''}</textarea>
+                <label style="margin-top:8px;">Ảnh (tùy chọn)</label>
+                <input type="file" class="it-image">
+                <div style="text-align:right;margin-top:6px;"><button type="button" class="remove-slot" style="background:#ef4444;border:none;color:#fff;padding:6px 10px;border-radius:6px;cursor:pointer;">Xóa mốc</button></div>
+            `;
+
+            slot.querySelector('.remove-slot').addEventListener('click', () => slot.remove());
+            return slot;
+        }
+
+        function createDay(dayData) {
+            const day = document.createElement('div');
+            day.className = 'day';
+            day.style = 'border:1px solid #e6edf0;padding:10px;margin-bottom:10px;border-radius:6px;background:#fff;';
+
+            day.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div style="flex:1;">
+                        <label>Tiêu đề ngày</label>
+                        <input type="text" class="day-title" value="${dayData.title || ''}" placeholder="VD: Ngày 1 - Hà Nội">
+                    </div>
+                    <div style="margin-left:12px;">
+                        <button type="button" class="add-slot" style="background:#10b981;border:none;padding:8px 10px;color:#fff;border-radius:6px;cursor:pointer;">Thêm mốc</button>
+                        <button type="button" class="remove-day" style="background:#ef4444;border:none;padding:8px 10px;color:#fff;border-radius:6px;cursor:pointer;margin-left:8px;">Xóa ngày</button>
+                    </div>
+                </div>
+                <div class="slots" style="margin-top:10px;"></div>
+            `;
+
+            const slotsContainer = day.querySelector('.slots');
+            day.querySelector('.add-slot').addEventListener('click', () => {
+                const slot = createSlot({});
+                slotsContainer.appendChild(slot);
+            });
+
+            day.querySelector('.remove-day').addEventListener('click', () => day.remove());
+
+            // preload slots if any
+            if (Array.isArray(dayData.slots)) {
+                dayData.slots.forEach(s => slotsContainer.appendChild(createSlot(s)));
+            }
+
+            return day;
+        }
+
+        addDayBtn.addEventListener('click', () => {
+            daysList.appendChild(createDay({}));
+        });
+
+        // init one day
+        daysList.appendChild(createDay({ title: 'Ngày 1', slots: [] }));
+
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                // ensure file input names reflect day/slot indices
+                document.querySelectorAll('#days-list .day').forEach((dayEl, dIdx) => {
+                    dayEl.querySelectorAll('.slot').forEach((slotEl, sIdx) => {
+                        const fileInput = slotEl.querySelector('.it-image');
+                        if (fileInput) fileInput.name = `it_images[${dIdx}][${sIdx}]`;
+                    });
+                });
+
+                const days = [];
+                document.querySelectorAll('#days-list .day').forEach((dayEl) => {
+                    const dayTitle = dayEl.querySelector('.day-title').value.trim();
+                    const slots = [];
+                    dayEl.querySelectorAll('.slot').forEach(slotEl => {
+                        const title = slotEl.querySelector('.it-title').value.trim();
+                        const time = slotEl.querySelector('.it-time') ? slotEl.querySelector('.it-time').value.trim() : '';
+                        const location = slotEl.querySelector('.it-location') ? slotEl.querySelector('.it-location').value.trim() : '';
+                        const desc = slotEl.querySelector('.it-desc').value.trim();
+                        slots.push({ title, time, location, desc });
+                    });
+                    days.push({ title: dayTitle, slots });
+                });
+
+                hidden.value = JSON.stringify(days);
+            });
+        }
+    })();
+</script>
