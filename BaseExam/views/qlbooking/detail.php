@@ -134,6 +134,33 @@ if ($con_lai < 0) $con_lai = 0;
 <p><strong>Đã thanh toán:</strong> <?= number_format($da_tra) ?> VNĐ</p>
 
 <p><strong>Còn lại phải đóng:</strong> <?= number_format($con_lai) ?> VNĐ</p>
+<h3>Lịch sử thanh toán</h3>
+
+<?php if (empty($lich_su)): ?>
+    <p>Chưa có lịch sử thanh toán.</p>
+<?php else: ?>
+
+<table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+    <tr style="background: #eee;">
+        <th>Số tiền</th>
+        <th>Ngày thanh toán</th>
+    </tr>
+
+    <?php foreach ($lich_su as $ls): ?>
+    <tr>
+        <td><?= number_format($ls['so_tien']) ?> VNĐ</td>
+        <td><?= $ls['ngay_thanh_toan'] ?></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+
+<?php endif; ?>
+
+<br>
+
+<a href="?action=qlbooking_pay&id=<?= $qlb['id'] ?>" 
+   class="btn-back" 
+   style="background:#27ae60;">+ Thanh toán thêm</a>
             
 
             <p><strong>Trạng thái:</strong><?=($qlb['trang_thai']) ?></p>

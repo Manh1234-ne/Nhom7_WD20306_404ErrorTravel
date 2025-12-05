@@ -109,11 +109,35 @@
 </div>
 
 <div class="content">
-    <h1>Thanh toán tiền </h1>
+    <h1>Thanh toán tiền cọc </h1>
 
     <div class="card">
 
         <h3>Thông tin booking</h3>
+        <?php 
+$history = new PaymentHistory();
+$list = $history->getByBooking($qlb['id']);
+?>
+
+<h3>Lịch sử thanh toán</h3>
+
+<?php if (count($list) === 0): ?>
+    <p>Chưa có lần thanh toán nào.</p>
+<?php else: ?>
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse;">
+        <tr>
+            <th>Số tiền</th>
+            <th>Ngày thanh toán</th>
+        </tr>
+
+        <?php foreach ($list as $h): ?>
+        <tr>
+            <td><?= number_format($h['so_tien']) ?> VNĐ</td>
+            <td><?= $h['ngay_thanh_toan'] ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endif; ?>
         <p><strong>Khách hàng:</strong> <?= $qlb['ten_khach'] ?></p>
         <p><strong>Số điện thoại:</strong> <?= $qlb['so_dien_thoai'] ?></p>
         <p><strong>Giá tour:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>

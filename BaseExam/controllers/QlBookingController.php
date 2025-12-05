@@ -1,5 +1,6 @@
 <?php
 require_once PATH_MODEL . 'QlBookingModel.php';
+require_once PATH_MODEL . "PaymentHistory.php";
 
 class QlBookingController
 {
@@ -55,6 +56,10 @@ class QlBookingController
         }
 
         $qlb = $this->model->find($id);
+        require_once PATH_MODEL . "PaymentHistory.php";
+    $historyModel = new PaymentHistory();
+    $lich_su = $historyModel->getByBooking($id);
+
 
         require PATH_VIEW . 'qlbooking/detail.php';
     }
@@ -83,7 +88,7 @@ public function paySubmit()
     $tien_coc_40 = $gia_tour * 0.4;
 
     // Nếu đã đóng >= 40% thì không cho đóng nữa
-    $da_tra = $qlbS['tien_coc_da_tra'] ?? 0;
+    $da_tra = $qlb['tien_coc_da_tra'] ?? 0;
 
     if ($da_tra >= $tien_coc_40) {
         echo "<script>
@@ -111,11 +116,16 @@ public function paySubmit()
     // Tính còn lại
     $con_lai = $tien_coc_40 - $tien_da_tra_moi;
 
+    $history = new PaymentHistory();
+    $history->create($id, $so_tien);
+
+
     echo "<script>
         alert('Thanh toán thành công! Khách còn phải đóng: " . number_format($con_lai) . " VNĐ (đủ 40%)');
         window.location='?action=qlbooking_detail&id=$id';
     </script>";
     exit;
 }
+
 
 }
