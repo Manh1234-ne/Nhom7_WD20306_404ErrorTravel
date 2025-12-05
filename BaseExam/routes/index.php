@@ -55,6 +55,9 @@ match ($action) {
     'qlbooking_edit' => (new QlbookingController)->edit(),
     'qlbooking_edit_post' => (new QlBookingController)->update(),
     'qlbooking_detail' => (new QlBookingController)->detail(),
+    'qlbooking_pay' => (new QlBookingController)->pay(),
+    'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
+
 
      'yeu_cau' => (new YeuCauController)->index(),
     'yeu_cau_create' => (new YeuCauController)->create(),

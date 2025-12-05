@@ -58,5 +58,64 @@ class QlBookingController
 
         require PATH_VIEW . 'qlbooking/detail.php';
     }
+   public function pay()
+{
+    $id = $_GET['id'] ?? null;
+    if (!$id) die("Không tìm thấy booking");
+
+    $qlb = $this->model->find($id);
+    require PATH_VIEW . 'qlbooking/pay.php';
+}
+
+public function paySubmit()
+{
+    $id = $_POST['id'];
+    $so_tien = (int)$_POST['so_tien'];
+
+    // Lấy booking
+    $qlb = $this->model->find($id);
+
+    if (!$qlb) die("Không tìm thấy booking");
+
+    $gia_tour = $qlb['gia'];
+
+    // ----------- TIỀN CỌC MẶC ĐỊNH 40% -------------
+    $tien_coc_40 = $gia_tour * 0.4;
+
+    // Nếu đã đóng >= 40% thì không cho đóng nữa
+    $da_tra = $qlbS['tien_coc_da_tra'] ?? 0;
+
+    if ($da_tra >= $tien_coc_40) {
+        echo "<script>
+            alert('Khách đã đóng đủ tiền cọc 40%. Không thể đóng thêm!');
+            window.location='?action=qlbooking_detail&id=$id';
+        </script>";
+        exit;
+    }
+
+    // Giới hạn số tiền nhập không vượt quá số cần đóng
+    $so_tien_can_dong = $tien_coc_40 - $da_tra;
+
+    if ($so_tien > $so_tien_can_dong) {
+        $so_tien = $so_tien_can_dong; // tự động điều chỉnh
+    }
+
+    // Cộng tiền cọc
+    $tien_da_tra_moi = $da_tra + $so_tien;
+
+    // Lưu vào DB
+    $this->model->update($id, [
+        'tien_coc_da_tra' => $tien_da_tra_moi
+    ]);
+
+    // Tính còn lại
+    $con_lai = $tien_coc_40 - $tien_da_tra_moi;
+
+    echo "<script>
+        alert('Thanh toán thành công! Khách còn phải đóng: " . number_format($con_lai) . " VNĐ (đủ 40%)');
+        window.location='?action=qlbooking_detail&id=$id';
+    </script>";
+    exit;
+}
 
 }

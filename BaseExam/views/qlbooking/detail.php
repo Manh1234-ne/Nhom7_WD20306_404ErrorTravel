@@ -122,9 +122,23 @@
                 <p>Chưa có ảnh album.</p>
             <?php endif; ?>
             <p><strong>Giá:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
-             <p><strong>Tiền cọc:</strong> <?= number_format($qlb['tien_coc']) ?> VNĐ</p>
+            <?php
+$gia = $qlb['gia'];
+$tien_coc_mac_dinh = $gia * 0.4; // 40%
+$da_tra = $qlb['tien_coc_da_tra'] ?? 0;
+$con_lai = $tien_coc_mac_dinh - $da_tra;
+if ($con_lai < 0) $con_lai = 0;
+?>
+<p><strong>Tiền cọc phải đóng:</strong> <?= number_format($tien_coc_mac_dinh) ?> VNĐ</p>
+
+<p><strong>Đã thanh toán:</strong> <?= number_format($da_tra) ?> VNĐ</p>
+
+<p><strong>Còn lại phải đóng:</strong> <?= number_format($con_lai) ?> VNĐ</p>
+            
+
             <p><strong>Trạng thái:</strong><?=($qlb['trang_thai']) ?></p>
             <p><strong>Tình trạng thanh toán:</strong><?=($qlb['tinh_trang_thanh_toan']) ?></p>
+            
             <p><strong>Yêu cầu đặc biệt:</strong><?=($qlb['yeu_cau_dac_biet']) ?></p>
             
 

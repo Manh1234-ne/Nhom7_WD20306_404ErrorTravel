@@ -160,6 +160,8 @@
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a href="?action=qlbooking_edit&id=<?= $qlb['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>
+                            <a href="?action=qlbooking_pay&id=<?= $qlb['id'] ?>" class="btn btn-success btn-sm">
+</a>
                 </td>
                     </tr>
                 <?php endforeach; ?>
