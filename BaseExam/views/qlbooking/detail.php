@@ -43,10 +43,6 @@
             background: #34495e;
         }
 
-        .sidebar i {
-            margin-right: 10px;
-        }
-
         .content {
             margin-left: 220px;
             padding: 30px;
@@ -54,54 +50,24 @@
 
         .card {
             background: #fff;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 12px;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
             display: flex;
-            gap: 20px;
-            align-items: flex-start;
+            gap: 30px;
         }
 
-        /* left = album column, right = info column */
-        .card .left {
-            flex: 0 0 40%;
-            max-width: 40%;
+        /* LEFT: Thông tin */
+        .left {
+            flex: 1;
         }
 
-        .card .right {
-            flex: 1 1 60%;
-        }
-
-        .album-main {
-            width: 100%;
-            border-radius: 8px;
-            display: block;
-            margin-bottom: 12px;
-        }
-
-        .thumbs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .album-img {
-            border-radius: 8px;
-            margin: 0;
-            cursor: pointer;
-            transition: 0.15s;
-            width: 90px;
-            height: 70px;
-            object-fit: cover;
-        }
-
-        .album-img:hover {
-            transform: scale(1.05);
-        }
-
-        .album-img.selected {
-            /* outline: 3px solid #3498db; */
-            transform: scale(1.05);
+        .info p {
+            margin: 8px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
         }
 
         .btn-back {
@@ -114,29 +80,43 @@
             border-radius: 5px;
         }
 
-        .btn-back:hover {
-            background: #2980b9;
+        /* RIGHT: Album */
+        .right {
+            flex: 1;
         }
 
-        img {
+        .album-main {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .thumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .album-img {
+            width: 110px;
+            height: 85px;
+            object-fit: cover;
             border-radius: 6px;
+            cursor: pointer;
+            transition: 0.15s;
         }
 
-        /* responsive: stack on small screens */
-        @media (max-width: 880px) {
+        .album-img:hover {
+            transform: scale(1.05);
+        }
+
+        .album-img.selected {
+            border: 3px solid #3498db;
+        }
+
+        @media (max-width: 900px) {
             .card {
                 flex-direction: column;
-            }
-
-            .card .left,
-            .card .right {
-                flex: 1 1 100%;
-                max-width: 100%;
-            }
-
-            .album-img {
-                width: 110px;
-                height: 80px;
             }
         }
     </style>
@@ -159,8 +139,8 @@
 
         <div class="card">
 
-            <!-- RIGHT: booking info -->
-            <div class="right">
+            <!-- LEFT: THÔNG TIN -->
+            <div class="left">
                 <div class="info">
                     <p><strong>Tên khách:</strong> <?= htmlspecialchars($qlb['ten_khach']) ?></p>
                     <p><strong>Số điện thoại:</strong> <?= htmlspecialchars($qlb['so_dien_thoai']) ?></p>
@@ -171,19 +151,17 @@
                     <p><strong>Giá:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
                     <p><strong>Tiền cọc:</strong> <?= number_format($qlb['tien_coc']) ?> VNĐ</p>
                     <p><strong>Trạng thái:</strong> <?= htmlspecialchars($qlb['trang_thai']) ?></p>
-                    <p><strong>Tình trạng thanh toán:</strong> <?= htmlspecialchars($qlb['tinh_trang_thanh_toan']) ?></p>
+                    <p><strong>Thanh toán:</strong> <?= htmlspecialchars($qlb['tinh_trang_thanh_toan']) ?></p>
                     <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
-
-                    <a href="?action=qlbooking" class="btn-back">← Quay lại</a>
                 </div>
+
+                <a href="?action=qlbooking" class="btn-back">← Quay lại</a>
             </div>
 
-
-            <!-- LEFT: album -->
-            <div class="left">
+            <!-- RIGHT: ALBUM -->
+            <div class="right">
 
                 <?php
-                // ----- LOAD ALBUM NẾU CONTROLLER KHÔNG TRUYỀN -----
                 if (empty($album)) {
                     if (defined('PATH_MODEL') && file_exists(PATH_MODEL . 'Tour.php')) {
                         require_once PATH_MODEL . 'Tour.php';
@@ -199,7 +177,6 @@
                     }
                 }
 
-                // ----- XỬ LÝ ẢNH ĐẠI DIỆN -----
                 $mainImgFilename = $mainImgFilename ?? "";
 
                 if (empty($mainImgFilename) && !empty($album)) {
@@ -212,67 +189,55 @@
                     : "";
                 ?>
 
-                <div class="album-block">
-                    <h3>Ảnh Tour </h3>
-                    <?php if ($mainSrc) : ?>
-                        <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>?t=<?= time() ?>" alt="Ảnh đại diện">
-                    <?php else : ?>
-                        <img id="main-image" class="album-main" src="" alt="Chưa có ảnh đại diện" style="display:none;">
-                        <p id="no-main-text">Chưa có ảnh đại diện.</p>
-                    <?php endif; ?>
-                </div>
+                <h3>Ảnh Tour</h3>
 
-                <div style="margin-top:12px;">
-                    <h3>Album ảnh:</h3>
+                <?php if ($mainSrc): ?>
+                    <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>?t=<?= time() ?>">
+                <?php else: ?>
+                    <p>Chưa có ảnh đại diện.</p>
+                <?php endif; ?>
 
-                    <?php if (!empty($album)) : ?>
-                        <?php foreach ($album as $img) :
+                <h3>Album ảnh</h3>
+                <div class="thumbs">
+
+                    <?php if (!empty($album)): ?>
+                        <?php foreach ($album as $img):
                             $filename = is_object($img) ? ($img->file_name ?? '') : ($img['file_name'] ?? '');
                             $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . ltrim($filename, '/');
-                            if ($filename):
                         ?>
-                                <img class="album-img <?= $filename == $mainImgFilename ? 'selected' : '' ?>"
-                                     data-filename="<?= htmlspecialchars($filename) ?>"
-                                     src="<?= htmlspecialchars($src) ?>?t=<?= time() ?>"
-                                     width="150"
-                                     alt="">
-                            <?php endif;
-                        endforeach; ?>
-                    <?php else : ?>
-                        <p>Chưa có ảnh album.</p>
+                            <img class="album-img <?= $filename == $mainImgFilename ? 'selected' : '' ?>"
+                                data-filename="<?= htmlspecialchars($filename) ?>"
+                                src="<?= htmlspecialchars($src) ?>?t=<?= time() ?>">
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>Không có ảnh album.</p>
                     <?php endif; ?>
+
                 </div>
 
             </div>
         </div>
     </div>
 
-    <!-- JS chọn ảnh -->
+    <!-- JS đổi ảnh -->
     <script>
-        (function() {
+        (function () {
             const baseUploads = '<?= addslashes(defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') ?>';
             const mainImg = document.getElementById('main-image');
 
             document.querySelectorAll('.album-img').forEach(img => {
-                img.addEventListener('click', function() {
-
-                    const filename = this.getAttribute('data-filename');
+                img.addEventListener('click', function () {
+                    const filename = this.dataset.filename;
                     if (!filename) return;
 
-                    const src = baseUploads + filename;
-
-                    // cập nhật ảnh đại diện
-                    mainImg.src = src + "?t=" + Date.now();
-                    mainImg.style.display = "block";
+                    mainImg.src = baseUploads + filename + "?t=" + Date.now();
 
                     document.querySelectorAll(".album-img").forEach(i => i.classList.remove("selected"));
                     this.classList.add("selected");
-
                 });
             });
         })();
     </script>
 
 </body>
-
 </html>
