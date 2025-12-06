@@ -63,69 +63,99 @@ class QlBookingController
 
         require PATH_VIEW . 'qlbooking/detail.php';
     }
-   public function pay()
-{
-    $id = $_GET['id'] ?? null;
-    if (!$id) die("Không tìm thấy booking");
-
-    $qlb = $this->model->find($id);
-    require PATH_VIEW . 'qlbooking/pay.php';
-}
-
-public function paySubmit()
+    public function pay() { $id = $_GET['id'] ?? null; if (!$id) die("Không tìm thấy booking"); $qlb = $this->model->find($id); require PATH_VIEW . 'qlbooking/pay.php'; }
+  public function paySubmit()
 {
     $id = $_POST['id'];
     $so_tien = (int)$_POST['so_tien'];
+    $type = $_POST['type'] ?? 'coc'; // coc | full
 
     // Lấy booking
     $qlb = $this->model->find($id);
-
     if (!$qlb) die("Không tìm thấy booking");
 
     $gia_tour = $qlb['gia'];
+    $da_tra_coc = $qlb['tien_coc_da_tra'] ?? 0;
+    $da_tra_full = $qlb['tien_full_da_tra'] ?? 0;
 
-    // ----------- TIỀN CỌC MẶC ĐỊNH 40% -------------
-    $tien_coc_40 = $gia_tour * 0.4;
+    // ================================================
+    // 1) THANH TOÁN CỌC 40%
+    // ================================================
+    if ($type == "coc") {
 
-    // Nếu đã đóng >= 40% thì không cho đóng nữa
-    $da_tra = $qlb['tien_coc_da_tra'] ?? 0;
+        $tien_coc_40 = $gia_tour * 0.4;
 
-    if ($da_tra >= $tien_coc_40) {
+        if ($da_tra_coc >= $tien_coc_40) {
+            echo "<script>
+                alert('Khách đã đóng đủ tiền cọc 40%.');
+                window.location='?action=qlbooking_detail&id=$id';
+            </script>";
+            exit;
+        }
+
+        $so_tien_can_dong = $tien_coc_40 - $da_tra_coc;
+        if ($so_tien > $so_tien_can_dong) $so_tien = $so_tien_can_dong;
+
+        $tien_da_tra_moi = $da_tra_coc + $so_tien;
+
+        // Lưu DB
+        $this->model->update($id, [
+            'tien_coc_da_tra' => $tien_da_tra_moi
+        ]);
+
+        // Lưu lịch sử
+        $history = new PaymentHistory();
+        $history->create($id, $so_tien);
+
+        $con_lai = $tien_coc_40 - $tien_da_tra_moi;
+
         echo "<script>
-            alert('Khách đã đóng đủ tiền cọc 40%. Không thể đóng thêm!');
+            alert('Thanh toán cọc thành công! Còn lại: " . number_format($con_lai) . " VNĐ');
             window.location='?action=qlbooking_detail&id=$id';
         </script>";
         exit;
     }
 
-    // Giới hạn số tiền nhập không vượt quá số cần đóng
-    $so_tien_can_dong = $tien_coc_40 - $da_tra;
+    // ================================================
+    // 2) THANH TOÁN TOÀN BỘ TOUR
+    // ================================================
+    if ($type == "full") {
 
-    if ($so_tien > $so_tien_can_dong) {
-        $so_tien = $so_tien_can_dong; // tự động điều chỉnh
+        // Số đã thanh toán (cọc + full)
+        $da_tra_tong = $da_tra_coc + $da_tra_full;
+
+        if ($da_tra_tong >= $gia_tour) {
+            echo "<script>
+                alert('Khách đã thanh toán đủ toàn bộ tour.');
+                window.location='?action=qlbooking_detail&id=$id';
+            </script>";
+            exit;
+        }
+
+        $so_tien_can_dong = $gia_tour - $da_tra_tong;
+        if ($so_tien > $so_tien_can_dong) $so_tien = $so_tien_can_dong;
+
+        $tien_full_moi = $da_tra_full + $so_tien;
+
+        // Lưu DB
+        $this->model->update($id, [
+            'tien_full_da_tra' => $tien_full_moi
+        ]);
+
+        // Lưu lịch sử
+        $history = new PaymentHistory();
+        $history->create($id, $so_tien);
+
+        $con_lai = $gia_tour - ($da_tra_coc + $tien_full_moi);
+
+        echo "<script>
+            alert('Thanh toán FULL thành công! Khách còn phải đóng: " . number_format($con_lai) . " VNĐ');
+            window.location='?action=qlbooking_detail&id=$id';
+        </script>";
+        exit;
     }
-
-    // Cộng tiền cọc
-    $tien_da_tra_moi = $da_tra + $so_tien;
-
-    // Lưu vào DB
-    $this->model->update($id, [
-        'tien_coc_da_tra' => $tien_da_tra_moi
-    ]);
-
-    // Tính còn lại
-    $con_lai = $tien_coc_40 - $tien_da_tra_moi;
-
-    $history = new PaymentHistory();
-    $history->create($id, $so_tien);
-
-
-    echo "<script>
-        alert('Thanh toán thành công! Khách còn phải đóng: " . number_format($con_lai) . " VNĐ (đủ 40%)');
-        window.location='?action=qlbooking_detail&id=$id';
-    </script>";
-    exit;
 }
+
 
 
 }
