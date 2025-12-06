@@ -19,6 +19,7 @@ class BookingController {
     }
 
     public function save() {
+<<<<<<< HEAD
          $tour = $this->tourModel->find($_POST['tour_id']);
         $giaTour = $tour['gia'];
 
@@ -43,6 +44,35 @@ class BookingController {
             $tien_coc = 0;
         }
 
+=======
+      $tour = $this->tourModel->find($_POST['tour_id']);
+$giaTour = $tour['gia'];
+
+// Lấy tiền cọc người dùng nhập
+$tien_coc = $_POST['tien_coc'] ?? 0;
+
+// -----------------------------
+//  KIỂM TRA LOGIC TIỀN CỌC (40%)
+// -----------------------------
+
+if ($giaTour > 500000) {
+
+    // Tính mức cọc bắt buộc (40%)
+    $tienCocBatBuoc = $giaTour * 0.4;
+
+    // So sánh tiền khách nhập có đúng 40% không
+    if ($tien_coc != $tienCocBatBuoc) {
+        $error = "Tiền cọc phải bằng 40% giá tour (" . number_format($tienCocBatBuoc) . " VNĐ)";
+        $tour = $tour;
+        require PATH_VIEW . "tours/create.php";
+        return;
+    }
+
+} else {
+    // Tour giá thấp thì tự gán 0
+    $tien_coc = 0;
+}
+>>>>>>> lebang271206-ui
         $data = [
             'tour_id'        => $_POST['tour_id'],
             'ten_khach'      => $_POST['ten_khach'],

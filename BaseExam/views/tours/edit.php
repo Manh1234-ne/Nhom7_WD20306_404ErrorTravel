@@ -172,6 +172,7 @@
 </head>
 
 <body>
+<<<<<<< HEAD
     <!-- =========== CONTENT =========== -->
     <div class="content">
         <h1>Sửa Tour</h1>
@@ -272,6 +273,42 @@
             <a href="?action=tours" class="back-link"><i class="fa fa-arrow-left"></i> Quay lại</a>
         </div>
     </div>
+=======
+    <h1>Sửa Tour</h1>
+    <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?= $tour['id'] ?>">
+        <label>Tên Tour</label>
+        <input type="text" name="ten_tour" value="<?= htmlspecialchars($tour['ten_tour']) ?>" required>
+        <label>Loại Tour</label>
+        <select name="loai_tour">
+            <option value="Trong nước" <?= $tour['loai_tour']=='trong_nuoc'?'selected':'' ?>>Trong nước</option>
+            <option value="Quốc tế" <?= $tour['loai_tour']=='quoc_te'?'selected':'' ?>>Quốc tế</option>
+            <option value="Yêu cầu" <?= $tour['loai_tour']=='yeu_cau'?'selected':'' ?>>Yêu cầu</option>
+        </select>
+        <label>Mô tả</label>
+        <textarea name="mo_ta"><?= $tour['mo_ta'] ?></textarea>
+        <label>Giá</label>
+        <input type="number" name="gia" value="<?= $tour['gia'] ?>">
+        <label>Chính sách</label>
+        <textarea name="chinh_sach"><?= $tour['chinh_sach'] ?></textarea>
+        <label>Hình ảnh</label>
+        <input type="file" name="hinh_anh">
+        <?php if($tour['hinh_anh']): ?>
+            <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="120">
+        <?php endif; ?>
+        <label>Nhà cung cấp</label>
+        <input type="text" name="nha_cung_cap" value="<?= htmlspecialchars($tour['nha_cung_cap']) ?>">
+        <label>Mùa</label>
+        <select name="mua">
+            <option value="Mùa Xuân" <?= $tour['mua']=='mua_xuan'?'selected':'' ?>>Mùa Xuân</option>
+            <option value="Mùa Hạ" <?= $tour['mua']=='mua_ha'?'selected':'' ?>>Mùa Hạ</option>
+            <option value="Mùa Thu" <?= $tour['mua']=='mua_thu'?'selected':'' ?>>Mùa Thu</option>
+            <option value="Mùa Đông" <?= $tour['mua']=='trong_dong'?'selected':'' ?>>Mùa Đông</option>
+            </select>
+        <button type="submit">Cập nhật Tourr</button>
+        <a href="?action=tours">Quay lại</a>
+    </form>
+>>>>>>> lebang271206-ui
 </body>
 
 </html>

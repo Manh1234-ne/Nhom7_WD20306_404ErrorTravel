@@ -1,6 +1,9 @@
 <?php
 require_once PATH_MODEL . 'Tour.php';
+<<<<<<< HEAD
 require_once PATH_MODEL . 'NhanSu.php';
+=======
+>>>>>>> lebang271206-ui
 
 class TourController
 {
@@ -29,10 +32,13 @@ class TourController
     // Xử lý thêm tour
     public function store()
     {
+<<<<<<< HEAD
         // DEBUG: ghi log dữ liệu POST
         error_log('DEBUG store() - POST lich_trinh: ' . ($_POST['lich_trinh'] ?? 'NOT_SET'));
         error_log('DEBUG store() - hasColumn(lich_trinh): ' . ($this->model->hasColumn('lich_trinh') ? 'YES' : 'NO'));
 
+=======
+>>>>>>> lebang271206-ui
         $data = [
             'ten_tour' => $_POST['ten_tour'] ?? '',
             'loai_tour' => $_POST['loai_tour'] ?? '',
@@ -40,6 +46,7 @@ class TourController
             'gia' => $_POST['gia'] ?? 0,
             'chinh_sach' => $_POST['chinh_sach'] ?? '',
             'nha_cung_cap' => $_POST['nha_cung_cap'] ?? '',
+<<<<<<< HEAD
             'mua' => $_POST['mua'] ?? '',
             'nhan_su_id' => $_POST['nhan_su_id'] ?? null, // Ưu tiên lấy từ form
             'hinh_anh' => null // Luôn gán giá trị mặc định (tránh lỗi NOT NULL)
@@ -53,17 +60,25 @@ class TourController
             error_log('DEBUG store() - Skipping lich_trinh (column does not exist)');
         }
 
+=======
+            'mua' => $_POST['mua'] ?? ''
+        ];
+
+>>>>>>> lebang271206-ui
         // Upload ảnh đại diện tour
         if (!empty($_FILES['hinh_anh']['name'])) {
             $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
         }
 
+<<<<<<< HEAD
         // Fallback: nếu form không chọn HDV thì gán theo loại tour
         // if (empty($data['nhan_su_id'])) {
         //     $hdvList = $this->nhanSuModel->getHDVByLoaiTour($data['loai_tour']);
         //     $data['nhan_su_id'] = !empty($hdvList) ? $hdvList[0]['id'] : null;
         // }
 
+=======
+>>>>>>> lebang271206-ui
         $tour_id = $this->model->insert($data);
 
         // Upload album nếu có
@@ -77,6 +92,7 @@ class TourController
             }
         }
 
+<<<<<<< HEAD
         // Xử lý upload ảnh cho từng mục lịch trình (nếu có)
         // Form gửi `lich_trinh` là mảng các ngày, mỗi ngày có `slots` (mảng các mốc).
         // File inputs được gán tên theo dạng it_images[DAY_INDEX][SLOT_INDEX]
@@ -128,6 +144,9 @@ class TourController
         }
 
         header('Location: ' . BASE_URL . '?action=tours');
+=======
+        header('Location: ?action=tours');
+>>>>>>> lebang271206-ui
         exit;
     }
 
@@ -143,6 +162,7 @@ class TourController
     // Xử lý update tour
     public function update()
     {
+<<<<<<< HEAD
         // lấy id an toàn
         $id = isset($_POST['id']) ? (int) $_POST['id'] : (isset($_GET['id']) ? (int) $_GET['id'] : null);
         if (!$id) {
@@ -289,12 +309,52 @@ class TourController
 
         // redirect về index tour
         header('Location: ' . BASE_URL . '?action=tours');
+=======
+        $id = $_POST['id'];
+        $data = [
+            'ten_tour' => $_POST['ten_tour'] ?? '',
+            'loai_tour' => $_POST['loai_tour'] ?? '',
+            'mo_ta' => $_POST['mo_ta'] ?? '',
+            'gia' => $_POST['gia'] ?? 0,
+            'chinh_sach' => $_POST['chinh_sach'] ?? '',
+            'nha_cung_cap' => $_POST['nha_cung_cap'] ?? '',
+            'mua' => $_POST['mua'] ?? ''
+        ];
+
+        // Upload ảnh đại diện mới nếu có
+        if (!empty($_FILES['hinh_anh']['name'])) {
+            $data['hinh_anh'] = upload_file('tour', $_FILES['hinh_anh']);
+        }
+
+        $this->model->update($id, $data);
+
+        // Xóa album đã chọn
+        if (!empty($_POST['delete_album'])) {
+            foreach ($_POST['delete_album'] as $album_id) {
+                $this->model->deleteAlbum($album_id);
+            }
+        }
+
+        // Thêm album mới
+        if (!empty($_FILES['album']['name'][0])) {
+            foreach ($_FILES['album']['tmp_name'] as $key => $tmp_name) {
+                $file_name = upload_file('tour/album', [
+                    'name' => $_FILES['album']['name'][$key],
+                    'tmp_name' => $_FILES['album']['tmp_name'][$key]
+                ]);
+                $this->model->insertAlbum($id, $file_name);
+            }
+        }
+
+        header('Location: ?action=tours');
+>>>>>>> lebang271206-ui
         exit;
     }
 
     // Xóa tour
     public function delete()
     {
+<<<<<<< HEAD
         $id = $_GET['id'] ?? null;
         if (!$id) {
             header('Location: ' . BASE_URL . '?action=tours');
@@ -305,6 +365,11 @@ class TourController
         $this->model->deleteWithRelations($id);
 
         header('Location: ' . BASE_URL . '?action=tours');
+=======
+        $id = $_GET['id'];
+        $this->model->delete($id);
+        header('Location: ?action=tours');
+>>>>>>> lebang271206-ui
         exit;
     }
 
@@ -319,6 +384,7 @@ class TourController
 
         $tour = $this->model->find($id);
         $album = $this->model->getAlbum($id);
+<<<<<<< HEAD
         error_log('DEBUG album: ' . print_r($album, true)); // xem trong Apache/Laragon log
         require PATH_VIEW . 'tours/detail.php';
     }
@@ -350,3 +416,10 @@ class TourController
         }
     }
 }
+=======
+
+        require PATH_VIEW . 'tours/detail.php';
+    }
+
+}
+>>>>>>> lebang271206-ui

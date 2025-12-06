@@ -44,6 +44,10 @@ class YeuCauController
             // Chuyển về trang danh sách sau khi tạo
             header("Location: index.php?action=yeu_cau");
             exit;
+<<<<<<< HEAD
+=======
+
+>>>>>>> lebang271206-ui
         } catch (PDOException $e) {
             echo "<h3>LỖI SQL:</h3>";
             echo htmlspecialchars($e->getMessage());
@@ -75,6 +79,7 @@ class YeuCauController
     }
 
     public function delete($id)
+<<<<<<< HEAD
 {
     $yeuCau = $this->modelYeuCau->find($id);
     if (!$yeuCau) die('Yêu cầu không tồn tại.');
@@ -95,10 +100,25 @@ class YeuCauController
 }
 
 
+=======
+    {
+        $yeuCau = $this->modelYeuCau->find($id);
+        if (!$yeuCau) die('Yêu cầu không tồn tại.');
+
+        $this->modelYeuCau->delete($id);
+
+        header("Location: index.php?action=yeu_cau");
+        exit;
+    }
+>>>>>>> lebang271206-ui
 
     public function show($id)
     {
         $yeuCau = $this->modelYeuCau->find($id);
         include __DIR__ . '/../views/yeucau/show.php';
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> lebang271206-ui

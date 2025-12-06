@@ -4,7 +4,11 @@
 
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>Chi tiết yêu cầu</title>
+=======
+    <title>Chi tiết Ghi chú</title>
+>>>>>>> lebang271206-ui
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
@@ -128,18 +132,30 @@
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
+<<<<<<< HEAD
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Yêu cầu đặc biệt</a>
+=======
+        <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
+>>>>>>> lebang271206-ui
     </div>
 
     <div class="content">
         <div class="top-bar">
+<<<<<<< HEAD
             <h1>Chi tiết yêu cầu</h1>
+=======
+            <h1>Chi tiết Ghi chú</h1>
+>>>>>>> lebang271206-ui
             <a href="index.php?action=yeu_cau" class="btn"><i class="fa fa-arrow-left"></i> Quay về</a>
         </div>
 
         <div class="details">
             <p><b>Tên khách:</b> <?= htmlspecialchars($yeuCau['ten_khach']) ?></p>
+<<<<<<< HEAD
             <p><b>Loại yêu cầu:</b> <?= htmlspecialchars($yeuCau['loai_yeu_cau']) ?></p>
+=======
+            <p><b>Loại Ghi chú:</b> <?= htmlspecialchars($yeuCau['loai_yeu_cau']) ?></p>
+>>>>>>> lebang271206-ui
             <p><b>Mô tả:</b> <?= nl2br(htmlspecialchars($yeuCau['mo_ta'])) ?></p>
             <p><b>Trạng thái:</b> <?= htmlspecialchars($yeuCau['trang_thai']) ?></p>
 

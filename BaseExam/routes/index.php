@@ -7,8 +7,13 @@ require_once PATH_CONTROLLER . 'TourController.php';
 require_once PATH_CONTROLLER . 'NhanSuController.php';
 require_once PATH_CONTROLLER . 'DanhMucTourController.php';
 require_once PATH_CONTROLLER . 'NguoiDungController.php';
+<<<<<<< HEAD
 require_once PATH_CONTROLLER . 'YeuCauController.php';
 require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
+=======
+require_once PATH_CONTROLLER . 'QlBookingController.php';
+require_once PATH_CONTROLLER . 'YeuCauController.php';
+>>>>>>> lebang271206-ui
 
 $action = $_GET['action'] ?? 'home';
 $id = $_GET['id'] ?? null;
@@ -24,11 +29,18 @@ match ($action) {
     'tour_edit' => (new TourController)->edit(),
     'tour_edit_post' => (new TourController)->update(),
     'tour_delete' => (new TourController)->delete(),
+<<<<<<< HEAD
     // Accept both 'tour_detail' and 'detail' for compatibility
     'tour_detail' => (new TourController)->detail(),
     'detail' => (new TourController)->detail(),
     'dat_tour' => (new BookingController)->create(),
     'save_booking' => (new BookingController)->save(),
+=======
+    'tour_detail' => (new TourController)->detail(),
+    'dat_tour' => (new BookingController)->create(),
+    'save_booking' => (new BookingController)->save(),
+
+>>>>>>> lebang271206-ui
 
     // QLBOOKING
     'qlbooking' => (new QlBookingController)->index(),
@@ -43,6 +55,7 @@ match ($action) {
     'nhansu_edit' => (new NhanSuController)->edit(),
     'nhansu_edit_post' => (new NhanSuController)->update(),
     'nhansu_delete' => (new NhanSuController)->delete(),
+    
 
     // DANH MỤC TOUR
     'danhmuc' => (new DanhMucTourController)->index(),
@@ -53,6 +66,7 @@ match ($action) {
     'danhmuc_delete' => (new DanhMucTourController)->delete(),
 
     // LOGIN - LOGOUT
+<<<<<<< HEAD
     'loginForm' => (new NguoiDungController)->loginForm(),
     'login' => (new NguoiDungController)->login(),
     'logout' => (new NguoiDungController)->logout(),
@@ -73,6 +87,30 @@ match ($action) {
     "tour_guest_checkin" => (new TourGuestController)->updateCheckin(),
     "tour_guest_room" => (new TourGuestController)->updateRoom(),
     "tour_guest_export" => (new TourGuestController)->export(),
+=======
+    // 'registerForm'=> (new NguoiDungController)->registerForm(),
+    // 'register'=> (new NguoiDungController)->register(),
+    'loginForm'=> (new NguoiDungController)->loginForm(),
+    'login'=> (new NguoiDungController)->login(),
+    'logout'=> (new NguoiDungController)->logout(),
+
+      // QLBOOKING
+    'qlbooking' => (new QlBookingController)->index(),
+    'qlbooking_edit' => (new QlbookingController)->edit(),
+    'qlbooking_edit_post' => (new QlBookingController)->update(),
+    'qlbooking_detail' => (new QlBookingController)->detail(),
+    'qlbooking_pay' => (new QlBookingController)->pay(),
+    'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
+
+
+     'yeu_cau' => (new YeuCauController)->index(),
+    'yeu_cau_create' => (new YeuCauController)->create(),
+    'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
+    // 'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
+    'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
+    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
+    'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
+>>>>>>> lebang271206-ui
 
     // Mặc định
     default => (new HomeController)->index(),

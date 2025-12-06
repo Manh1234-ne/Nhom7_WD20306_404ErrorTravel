@@ -173,8 +173,13 @@
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
+<<<<<<< HEAD
         <a href="?action=danhmuc"><i class="fa fa-th"></i>Quản lý danh mục</a>
         <a href="?action=qlbooking"><i class="fa fa-ticket"></i>Quản lý booking</a>
+=======
+        <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
+        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
+>>>>>>> lebang271206-ui
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
     </div>
 
