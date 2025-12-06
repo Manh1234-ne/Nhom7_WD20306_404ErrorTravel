@@ -1,25 +1,85 @@
-<?php 
+<?php
 
-session_start();
+// Nạp ENV (đường dẫn đúng)
+require_once __DIR__ . '/configs/env.php';
 
-spl_autoload_register(function ($class) {    
-    $fileName = "$class.php";
+// Nạp controller
+require_once PATH_CONTROLLER . 'HomeController.php';
+require_once PATH_CONTROLLER . 'TourController.php';
+require_once PATH_CONTROLLER . 'NhanSuController.php';
+require_once PATH_CONTROLLER . 'DanhMucTourController.php';
+require_once PATH_CONTROLLER . 'NguoiDungController.php';
+require_once PATH_CONTROLLER . 'YeuCauController.php';
+require_once PATH_CONTROLLER . 'BookingController.php';
+require_once PATH_CONTROLLER . 'QlBookingController.php';
+require_once PATH_CONTROLLER . 'TourGuestController.php';
 
-    $fileModel              = PATH_MODEL . $fileName;
-    $fileController         = PATH_CONTROLLER . $fileName;
+// Nhận action & id
+$action = $_GET['action'] ?? 'home';
+$id     = $_GET['id'] ?? null;
 
-    if (is_readable($fileModel)) {
-        require_once $fileModel;
-    } 
-    else if (is_readable($fileController)) {
-        require_once $fileController;
-    }
-});
+// Router điều hướng
+match ($action) {
 
-require_once './configs/env.php';
-require_once './configs/helper.php';
+    // ================= HOME =================
+    'home' => (new HomeController)->index(),
 
-// Điều hướng
-require_once __DIR__.'/routes/index.php';
+    // ================= TOUR =================
+    'tours'           => (new TourController)->index(),
+    'tour_add'        => (new TourController)->add(),
+    'tour_add_post'   => (new TourController)->store(),
+    'tour_edit'       => (new TourController)->edit(),
+    'tour_edit_post'  => (new TourController)->update(),
+    'tour_delete'     => (new TourController)->delete(),
+    'tour_detail'     => (new TourController)->detail(),
 
-?>
+    // ================= BOOKING =================
+    'dat_tour'    => (new BookingController)->create(),
+    'save_booking'=> (new BookingController)->save(),
+
+    // ================= QL BOOKING =================
+    'qlbooking'            => (new QlBookingController)->index(),
+    'qlbooking_edit'       => (new QlBookingController)->edit(),
+    'qlbooking_edit_post'  => (new QlBookingController)->update(),
+    'qlbooking_detail'     => (new QlBookingController)->detail(),
+
+    // ================= NHÂN SỰ =================
+    'nhansu'           => (new NhanSuController)->index(),
+    'nhansu_add'       => (new NhanSuController)->add(),
+    'nhansu_add_post'  => (new NhanSuController)->store(),
+    'nhansu_edit'      => (new NhanSuController)->edit(),
+    'nhansu_edit_post' => (new NhanSuController)->update(),
+    'nhansu_delete'    => (new NhanSuController)->delete(),
+
+    // ================= DANH MỤC TOUR =================
+    'danhmuc'          => (new DanhMucTourController)->index(),
+    'danhmuc_add'      => (new DanhMucTourController)->add(),
+    'danhmuc_add_post' => (new DanhMucTourController)->store(),
+    'danhmuc_edit'     => (new DanhMucTourController)->edit(),
+    'danhmuc_edit_post'=> (new DanhMucTourController)->update(),
+    'danhmuc_delete'   => (new DanhMucTourController)->delete(),
+
+    // ================= LOGIN / LOGOUT =================
+    'loginForm' => (new NguoiDungController)->loginForm(),
+    'login'     => (new NguoiDungController)->login(),
+    'logout'    => (new NguoiDungController)->logout(),
+
+    // ================= YÊU CẦU ĐẶC BIỆT =================
+    'yeu_cau'         => (new YeuCauController)->index(),
+    'yeu_cau_create'  => (new YeuCauController)->create(),
+    'yeu_cau_store'   => (new YeuCauController)->store(),
+    'yeu_cau_update'  => fn() => (new YeuCauController)->update($id),
+    'yeu_cau_delete'  => fn() => (new YeuCauController)->delete($id),
+    'yeu_cau_show'    => fn() => (new YeuCauController)->show($id),
+
+    // ================= KHÁCH THEO TOUR =================
+    'tour_guest'         => (new TourGuestController)->index(),
+    'tour_guest_store'   => (new TourGuestController)->store(),
+    'guest_detail'       => (new TourGuestController)->detail(),
+    'tour_guest_checkin' => (new TourGuestController)->updateCheckin(),
+    'tour_guest_room'    => (new TourGuestController)->updateRoom(),
+    'tour_guest_export'  => (new TourGuestController)->export(),
+
+    // ================= DEFAULT =================
+    default => (new HomeController)->index(),
+};

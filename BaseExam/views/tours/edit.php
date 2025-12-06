@@ -3,176 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <title>Sửa Tour</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial;
-            background: #f5f5f5;
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef2f7;
+        }
+
+        /* ===========================
+           SIDEBAR CỐ ĐỊNH BÊN TRÁI
+        ============================ */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #1e293b;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            z-index: 999;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #38bdf8;
+        }
+
+        .sidebar a {
+            padding: 14px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #334155;
+            color: #fff;
+        }
+
+
+        /* ===========================
+            NỘI DUNG – KHÔNG BAO GIỜ
+            ẢNH HƯỞNG LÊN SIDEBAR
+        ============================ */
+        .content {
+            margin-left: 220px;
             padding: 30px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #1e293b;
+            text-align: center;
+            margin-top: 10px;
         }
 
         .container {
             display: flex;
             gap: 20px;
-            justify-content: center;
             flex-wrap: wrap;
+            margin-top: 25px;
         }
 
         form {
             background: #fff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .tour-form {
-            width: 350px;
+            width: 380px;
         }
 
         .album-form {
-            width: 500px; /* album rộng hơn */
+            width: 650px;
         }
 
         label {
+            margin-top: 12px;
             display: block;
-            margin-top: 15px;
+            font-weight: 600;
+            color: #1e293b;
         }
 
         input, textarea, select {
             width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
         }
 
         button {
-            margin-top: 20px;
-            padding: 10px 20px;
+            margin-top: 18px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 4px;
-            background: #3498db;
+            border-radius: 6px;
+            background: #3b82f6;
             color: #fff;
+            font-size: 15px;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         button:hover {
-            background: #2980b9;
+            background: #2563eb;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
             margin-top: 15px;
+            border-collapse: collapse;
         }
 
-        th, td {
-            border: 1px solid #ccc;
+        th,
+        td {
+            border: 1px solid #e5e7eb;
             padding: 10px;
             text-align: center;
         }
 
+        th {
+            background: #3b82f6;
+            color: #fff;
+        }
+
         img {
             max-width: 120px;
+            border-radius: 6px;
         }
 
-        h2 {
-            margin-top: 0;
-        }
-
-        a {
+        a.back-link {
             display: inline-block;
-            margin-top: 10px;
-            color: #3498db;
+            padding: 10px 16px;
+            background: #64748b;
+            color: #fff;
+            border-radius: 6px;
+            margin-top: 25px;
             text-decoration: none;
+        }
+
+        a.back-link:hover {
+            background: #475569;
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;">Sửa Tour</h1>
-    <div class="container">
-        <!-- Bảng thông tin tour -->
-        <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data" class="tour-form">
-            <input type="hidden" name="id" value="<?= $tour['id'] ?>">
-            <h2>Thông tin Tour</h2>
 
-            <label>Tên Tour</label>
-            <input type="text" name="ten_tour" value="<?= htmlspecialchars($tour['ten_tour']) ?>" required>
+    
 
-            <label>Loại Tour</label>
-            <select name="loai_tour">
-                <option value="trong_nuoc" <?= $tour['loai_tour'] == 'trong_nuoc' ? 'selected' : '' ?>>Trong nước</option>
-                <option value="quoc_te" <?= $tour['loai_tour'] == 'quoc_te' ? 'selected' : '' ?>>Quốc tế</option>
-                <option value="yeu_cau" <?= $tour['loai_tour'] == 'yeu_cau' ? 'selected' : '' ?>>Yêu cầu</option>
-            </select>
 
-            <label>Mô tả</label>
-            <textarea name="mo_ta"><?= htmlspecialchars($tour['mo_ta']) ?></textarea>
+    <!-- =========== CONTENT =========== -->
+    <div class="content">
 
-            <label>Giá</label>
-            <input type="number" name="gia" value="<?= $tour['gia'] ?>">
+        <h1>Sửa Tour</h1>
 
-            <label>Chính sách</label>
-            <textarea name="chinh_sach"><?= htmlspecialchars($tour['chinh_sach']) ?></textarea>
+        <div class="container">
 
-            <label>Hình ảnh hiện tại</label>
-            <?php if ($tour['hinh_anh']): ?>
-                <img src="assets/uploads/tour/<?= $tour['hinh_anh'] ?>" width="120">
-            <?php endif; ?>
+            <!-- FORM SỬA TOUR -->
+            <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data" class="tour-form">
+                <input type="hidden" name="id" value="<?= $tour['id'] ?>">
 
-            <label>Thay đổi hình ảnh</label>
-            <input type="file" name="hinh_anh">
+                <h2>Thông tin Tour</h2>
 
-            <label>Nhà cung cấp</label>
-            <input type="text" name="nha_cung_cap" value="<?= htmlspecialchars($tour['nha_cung_cap'] ?? '') ?>">
+                <label>Tên Tour</label>
+                <input type="text" name="ten_tour" value="<?= htmlspecialchars($tour['ten_tour']) ?>" required>
 
-            <label>Mùa</label>
-            <select name="mua">
-                <option value="mua_xuan" <?= ($tour['mua'] ?? '') == 'mua_xuan' ? 'selected' : '' ?>>Mùa Xuân</option>
-                <option value="mua_ha" <?= ($tour['mua'] ?? '') == 'mua_ha' ? 'selected' : '' ?>>Mùa Hạ</option>
-                <option value="mua_thu" <?= ($tour['mua'] ?? '') == 'mua_thu' ? 'selected' : '' ?>>Mùa Thu</option>
-                <option value="mua_dong" <?= ($tour['mua'] ?? '') == 'mua_dong' ? 'selected' : '' ?>>Mùa Đông</option>
-            </select>
+                <label>Loại Tour</label>
+                <select name="loai_tour">
+                    <option value="Trong nước" <?= $tour['loai_tour'] == 'Trong nước' ? 'selected' : '' ?>>Trong nước</option>
+                    <option value="Quốc tế" <?= $tour['loai_tour'] == 'Quốc tế' ? 'selected' : '' ?>>Quốc tế</option>
+                    <option value="Theo yêu cầu" <?= $tour['loai_tour'] == 'Theo yêu cầu' ? 'selected' : '' ?>>Theo yêu cầu</option>
+                </select>
 
-            <button type="submit">Cập nhật Tour</button>
-        </form>
+                <label>Mô tả</label>
+                <textarea name="mo_ta"><?= htmlspecialchars($tour['mo_ta']) ?></textarea>
 
-        <!-- Bảng quản lý album -->
-        <form action="?action=album_edit_post" method="post" enctype="multipart/form-data" class="album-form">
-            <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
-            <h2>Album ảnh</h2>
+                <label>Giá</label>
+                <input type="number" name="gia" value="<?= $tour['gia'] ?>">
 
-            <?php if (!empty($album)): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ảnh</th>
-                            <th>Xóa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($album as $img): ?>
+                <label>Chính sách</label>
+                <textarea name="chinh_sach"><?= htmlspecialchars($tour['chinh_sach']) ?></textarea>
+
+                <label>Hình ảnh hiện tại</label>
+                <?php if (!empty($tour['hinh_anh'])): ?>
+                    <img src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $tour['hinh_anh']) ?>">
+                <?php endif; ?>
+
+                <label>Thay đổi hình ảnh</label>
+                <input type="file" name="hinh_anh">
+
+                <label>Nhà cung cấp</label>
+                <select name="nha_cung_cap">
+                    <option value="VietTravel" <?= ($tour['nha_cung_cap'] ?? '') == 'VietTravel' ? 'selected' : '' ?>>VietTravel</option>
+                    <option value="Saigontourist" <?= ($tour['nha_cung_cap'] ?? '') == 'Saigontourist' ? 'selected' : '' ?>>Saigontourist</option>
+                    <option value="BestTrip" <?= ($tour['nha_cung_cap'] ?? '') == 'BestTrip' ? 'selected' : '' ?>>BestTrip</option>
+                    <option value="Fiditour" <?= ($tour['nha_cung_cap'] ?? '') == 'Fiditour' ? 'selected' : '' ?>>Fiditour</option>
+                    <option value="Khác" <?= ($tour['nha_cung_cap'] ?? '') == 'Khác' ? 'selected' : '' ?>>Khác</option>
+                </select>
+
+                <label>Mùa</label>
+                <select name="mua">
+                    <option value="Mùa Xuân" <?= ($tour['mua'] ?? '') == 'Mùa Xuân' ? 'selected' : '' ?>>Mùa Xuân</option>
+                    <option value="Mùa Hạ" <?= ($tour['mua'] ?? '') == 'Mùa Hạ' ? 'selected' : '' ?>>Mùa Hạ</option>
+                    <option value="Mùa Thu" <?= ($tour['mua'] ?? '') == 'Mùa Thu' ? 'selected' : '' ?>>Mùa Thu</option>
+                    <option value="Mùa Đông" <?= ($tour['mua'] ?? '') == 'Mùa Đông' ? 'selected' : '' ?>>Mùa Đông</option>
+                </select>
+
+                <button type="submit"><i class="fa fa-save"></i> Cập nhật Tour</button>
+            </form>
+
+
+            <!-- FORM ALBUM -->
+            <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data" class="album-form">
+                <input type="hidden" name="id" value="<?= $tour['id'] ?>">
+
+                <h2>Album ảnh</h2>
+
+                <?php if (!empty($album)): ?>
+                    <table>
+                        <thead>
                             <tr>
-                                <td><img src="assets/uploads/tour/album/<?= $img->file_name ?>" alt="Ảnh"></td>
-                                <td>
-                                    <input type="checkbox" name="delete_album[]" value="<?= $img->id ?>"> Xóa
-                                </td>
+                                <th>Ảnh</th>
+                                <th>Xóa</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p>Chưa có ảnh trong album.</p>
-            <?php endif; ?>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($album as $img): ?>
+                                <tr>
+                                    <td>
+                                        <img src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $img->file_name) ?>">
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="delete_album[]" value="<?= $img->id ?>"> Xóa
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>Chưa có ảnh trong album.</p>
+                <?php endif; ?>
 
-            <label>Thêm ảnh mới vào album</label>
-            <input type="file" name="album[]" multiple>
+                <label>Thêm ảnh mới vào album</label>
+                <input type="file" name="album[]" multiple>
 
-            <button type="submit">Cập nhật Album</button>
-        </form>
+                <button type="submit"><i class="fa fa-save"></i> Cập nhật Album</button>
+            </form>
+
+        </div>
+
+        <div style="text-align:center;">
+            <a href="?action=tours" class="back-link"><i class="fa fa-arrow-left"></i> Quay lại</a>
+        </div>
     </div>
 
-    <div style="text-align:center; margin-top:20px;">
-        <a href="?action=tours">Quay lại</a>
-    </div>
 </body>
+
 </html>

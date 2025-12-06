@@ -3,11 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách Nhân sự</title>
+    <title>Quản lý Booking</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
@@ -15,7 +16,6 @@
             background: #eef2f7;
         }
 
-        /* SIDEBAR */
         .sidebar {
             width: 250px;
             background: #1e293b;
@@ -25,7 +25,7 @@
             left: 0;
             color: #fff;
             padding-top: 20px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar h2 {
@@ -51,22 +51,23 @@
             color: #fff;
         }
 
-        .sidebar i { margin-right: 12px; }
+        .sidebar i {
+            margin-right: 12px;
+            font-size: 17px;
+        }
 
-        /* CONTENT */
         .content {
             margin-left: 250px;
             padding: 40px 35px;
         }
 
         h1 {
-            font-size: 28px;
             margin: 0;
+            font-size: 28px;
             font-weight: 600;
             color: #1e293b;
         }
 
-        /* TOP BAR */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -87,56 +88,113 @@
             transition: 0.2s;
         }
 
-        .btn-add:hover { background: #2563eb; }
+        .btn-add:hover {
+            background: #2563eb;
+        }
 
-        /* TABLE */
         table {
             width: 100%;
             border-collapse: collapse;
             background: #fff;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         th {
             background: #3b82f6;
             color: #fff;
             padding: 14px;
+            text-align: left;
             font-weight: 600;
+            font-size: 15px;
         }
 
         td {
             padding: 14px;
             border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
         }
 
-        tr:hover td { background: #f1f5f9; }
+        tr:hover td {
+            background: #f1f5f9;
+        }
 
-        /* BUTTONS */
-        .btn {
-            padding: 7px 10px;
-            border-radius: 5px;
+        /* Nút chung */
+        a.btn {
+            padding: 10px 16px;
+            /* giống quản lý Tour */
+            border-radius: 6px;
+            /* bo góc mềm */
             color: #fff;
             text-decoration: none;
-            margin-right: 5px;
+            margin-right: 6px;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+            /* khoảng cách icon-text */
+            font-size: 15px;
+            /* kích thước chữ như Tour */
             transition: 0.2s;
         }
 
-        .btn-view { background: #0ea5e9; }
-        .btn-edit { background: #f59e0b; }
-        .btn-delete { background: #ef4444; }
+        /* Nút Thêm */
+        .btn-add {
+            background: #3b82f6;
+            /* xanh dương */
+        }
 
-        .btn:hover { opacity: 0.85; }
+        .btn-add:hover {
+            background: #2563eb;
+        }
+
+        /* Nút Xem */
+        .btn-view {
+            background: #0ea5e9;
+            /* xanh da trời */
+        }
+
+        .btn-view:hover {
+            background: #0284c7;
+        }
+
+        /* Nút Sửa */
+        .btn-edit {
+            background: #f59e0b;
+            /* cam */
+        }
+
+        .btn-edit:hover {
+            background: #d97706;
+        }
+
+        /* Nút Xóa */
+        .btn-delete {
+            background: #ef4444;
+            /* đỏ */
+        }
+
+        .btn-delete:hover {
+            background: #b91c1c;
+        }
+
+
+        @media(max-width:768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h2>404 Error Travel</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
@@ -149,64 +207,51 @@
 
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
         <div class="top-bar">
-            <h1>Danh sách Nhân sự</h1>
-            <a href="?action=nhansu_add" class="btn-add">
-                <i class="fa fa-plus"></i> Thêm Nhân sự
-            </a>
+            <h1>Quản lý Booking</h1>
         </div>
 
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Họ tên</th>
-                    <th>Email</th>
-                    <th>Số điện thoại</th>
-                    <th>Ngôn ngữ</th>
-                    <th>Kinh nghiệm</th>
-                    <th>Đánh giá</th>
-                    <th>Vai trò</th>
+                    <th>Tên khách</th>
+                    <th>SĐT</th>
+                    <th>Số người</th>
+                    <th>Giá</th>
+                    <th>Trạng thái</th>
+                    <th>Tình trạng thanh toán</th>
+                    <th>Yêu cầu đặc biệt</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
-
             <tbody>
-                <?php if (!empty($nhansu)): ?>
-                    <?php foreach ($nhansu as $ns): ?>
+                <?php if (!empty($qlbooking)): ?>
+                    <?php foreach ($qlbooking as $b): ?>
                         <tr>
-                            <td><?= $ns['nguoi_dung_id'] ?></td>
-                            <td><?= htmlspecialchars($ns['ho_ten']) ?></td>
-                            <td><?= $ns['email'] ?></td>
-                            <td><?= $ns['so_dien_thoai'] ?></td>
-                            <td><?= $ns['ngon_ngu'] ?></td>
-                            <td><?= $ns['kinh_nghiem'] ?></td>
-                            <td><?= $ns['danh_gia'] ?></td>
-                            <td><?= htmlspecialchars($ns['vai_tro']) ?></td>
-
+                            <td><?= $b['id'] ?></td>
+                            <td><?= htmlspecialchars($b['ten_khach']) ?></td>
+                            <td><?= $b['so_dien_thoai'] ?></td>
+                            <td><?= $b['so_nguoi'] ?></td>
+                            <td><?= number_format($b['gia'], 0, ',', '.') ?> VNĐ</td>
+                            <td><?= $b['trang_thai'] ?></td>
+                            <td><?= $b['tinh_trang_thanh_toan'] ?></td>
+                            <td><?= htmlspecialchars($b['yeu_cau_dac_biet']) ?></td>
                             <td>
-                                <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-edit">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-
-                                <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" 
-                                   class="btn btn-delete"
-                                   onclick="return confirm('Bạn có chắc muốn xóa?')">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                <a href="?action=qlbooking_detail&id=<?= $b['id'] ?>" class="btn btn-view"><i class="fa fa-eye"></i></a>
+                                <a href="?action=qlbooking_edit&id=<?= $b['id'] ?>" class="btn btn-edit"><i class="fa fa-edit"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr><td colspan="9" style="text-align:center;">Không có dữ liệu</td></tr>
+                    <tr>
+                        <td colspan="9" style="text-align:center; padding:20px;">Chưa có booking nào.</td>
+                    </tr>
                 <?php endif; ?>
             </tbody>
-
         </table>
-
     </div>
-
 </body>
+
 </html>

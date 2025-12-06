@@ -1,58 +1,52 @@
 <?php
-class BaseModel {
-    protected $db;
+require_once PATH_CONFIGS . 'helper.php';
+
+class BaseModel
+{
     protected $table;
+    protected $db;
 
-    public function __construct() {
-        $host = 'localhost';
-        $dbname = 'tour_du_lich';
-        $username = 'root';
-        $password = '';
-        $charset = 'utf8mb4';
-
-        $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
-
-        try {
-            $this->db = new PDO($dsn, $username, $password);
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die("Kết nối database thất bại: " . $e->getMessage());
-        }
+    public function __construct()
+    {
+        $this->db = db_connect();
     }
 
-    public function all() {
+    public function all()
+    {
         $stmt = $this->db->query("SELECT * FROM {$this->table}");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function find($id) {
+    public function find($id)
+    {
         $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function insert($data) {
-        $fields = array_keys($data);
-        $placeholders = array_fill(0, count($fields), '?');
-        $sql = "INSERT INTO {$this->table} (" . implode(',', $fields) . ") VALUES (" . implode(',', $placeholders) . ")";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(array_values($data));
-        return $this->db->lastInsertId();
-    }
-
-    public function update($id, $data) {
-        $fields = array_map(fn($f) => "$f = ?", array_keys($data));
-        $sql = "UPDATE {$this->table} SET " . implode(',', $fields) . " WHERE id = ?";
-        $stmt = $this->db->prepare($sql);
+    public function insert($data)
+    {
+        $keys = array_keys($data);
+        $fields = implode(',', $keys);
+        $placeholders = implode(',', array_fill(0, count($keys), '?'));
+        $stmt = $this->db->prepare("INSERT INTO {$this->table} ($fields) VALUES ($placeholders)");
         $values = array_values($data);
-        $values[] = $id;
-        return $stmt->execute($values);
+        if ($stmt->execute($values)) {
+            return $this->db->lastInsertId(); 
+        }
+        return false;
     }
 
-    public function delete($id) {
+    public function update($id, $data)
+    {
+        $set = implode(',', array_map(fn($k) => "$k = ?", array_keys($data)));
+        $stmt = $this->db->prepare("UPDATE {$this->table} SET $set WHERE id = ?");
+        return $stmt->execute([...array_values($data), $id]);
+    }
+
+    public function delete($id)
+    {
         $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = ?");
         return $stmt->execute([$id]);
     }
 }
-
-

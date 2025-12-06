@@ -3,83 +3,113 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sửa danh mục tour</title>
+    <title>Sửa Danh mục Tour</title>
+
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f0f2f5;
+            background: #eef2f7;
+            padding: 50px 0;
         }
 
         .container {
-            width: 50%;
-            margin: 50px auto;
+            width: 1100px; /* GIỐNG FORM TOUR */
+            margin: auto;
             background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 40px 60px;
+            border-radius: 14px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
-            color: #333;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
+            color: #1f3f80;
+            margin-bottom: 35px;
+            font-size: 30px;
         }
 
         label {
-            margin: 10px 0 5px;
+            font-weight: bold;
+            display: block;
+            margin: 18px 0 6px;
+            font-size: 15px;
         }
 
         input,
-        select,
         textarea {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cfd6e1;
+            border-radius: 8px;
+            background: white;
+            font-size: 15px;
+            box-sizing: border-box;
         }
 
-        button {
-            margin-top: 15px;
-            padding: 10px;
-            background: #3498db;
-            color: #fff;
+        textarea {
+            resize: vertical;
+            height: 180px;
+        }
+
+        .btn {
+            margin-top: 30px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
             border: none;
-            border-radius: 4px;
+            background: #1a73e8;
+            font-size: 17px;
+            color: #fff;
             cursor: pointer;
+            font-weight: bold;
         }
 
-        a {
-            margin-top: 10px;
+        .btn:hover {
+            background: #1664c4;
+        }
+
+        .back {
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .back a {
+            color: #1a73e8;
             text-decoration: none;
-            color: #3498db;
+            font-size: 15px;
         }
 
-        img {
-            margin-top: 10px;
-            border-radius: 4px;
+        .back a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
+
     <div class="container">
-        <h1>Sửa danh mục Tour</h1>
-        <form action="?action=danhmuc_edit_post" method="post" enctype="multipart/form-data">
+
+        <h1>Sửa Danh mục Tour</h1>
+
+        <form action="?action=danhmuc_edit_post" method="post">
             <input type="hidden" name="id" value="<?= $danhmuc['id'] ?>">
 
             <label>Tên danh mục Tour</label>
             <input type="text" name="ten_tour" value="<?= htmlspecialchars($danhmuc['ten_tour']) ?>" required>
 
             <label>Mô tả</label>
-            <textarea name="mo_ta" rows="3"><?= htmlspecialchars($danhmuc['mo_ta']) ?></textarea>
+            <textarea name="mo_ta"><?= htmlspecialchars($danhmuc['mo_ta']) ?></textarea>
 
-            <button type="submit">Cập nhật Tour</button>
+            <button class="btn" type="submit">Cập nhật Danh mục</button>
         </form>
-        <a href="?action=danhmuc">Quay lại</a>
+
+        <div class="back">
+            <a href="?action=danhmuc">← Quay lại danh sách</a>
+        </div>
+
     </div>
+
 </body>
 
 </html>
