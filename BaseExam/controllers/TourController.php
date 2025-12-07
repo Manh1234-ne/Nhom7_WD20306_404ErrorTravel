@@ -64,6 +64,56 @@ class TourController
             }
         }
 
+        // Xử lý upload ảnh cho từng mục lịch trình (nếu có)
+        // Form gửi `lich_trinh` là mảng các ngày, mỗi ngày có `slots` (mảng các mốc).
+        // File inputs được gán tên theo dạng it_images[DAY_INDEX][SLOT_INDEX]
+        if (!empty($_POST['lich_trinh'])) {
+            $items = json_decode($_POST['lich_trinh'], true) ?: [];
+        } else {
+            $items = [];
+        }
+
+        if (!empty($_FILES['it_images']) && !empty($_FILES['it_images']['name'])) {
+            foreach ($_FILES['it_images']['name'] as $dayIdx => $slots) {
+                if (!is_array($slots))
+                    continue;
+                foreach ($slots as $slotIdx => $filename) {
+                    if (!isset($_FILES['it_images']['error'][$dayIdx][$slotIdx]))
+                        continue;
+                    if ($_FILES['it_images']['error'][$dayIdx][$slotIdx] === UPLOAD_ERR_OK) {
+                        $fileInfo = [
+                            'name' => $_FILES['it_images']['name'][$dayIdx][$slotIdx],
+                            'type' => $_FILES['it_images']['type'][$dayIdx][$slotIdx],
+                            'tmp_name' => $_FILES['it_images']['tmp_name'][$dayIdx][$slotIdx],
+                            'error' => $_FILES['it_images']['error'][$dayIdx][$slotIdx],
+                            'size' => $_FILES['it_images']['size'][$dayIdx][$slotIdx],
+                        ];
+                        try {
+                            $uploadedPath = upload_file('tour/itinerary', $fileInfo);
+                            if ($uploadedPath) {
+                                if (!isset($items[$dayIdx]))
+                                    $items[$dayIdx] = ['title' => '', 'slots' => []];
+                                if (!isset($items[$dayIdx]['slots'][$slotIdx]))
+                                    $items[$dayIdx]['slots'][$slotIdx] = [];
+                                $items[$dayIdx]['slots'][$slotIdx]['image'] = $uploadedPath;
+                            }
+                        } catch (Exception $e) {
+                            error_log('Upload itinerary image error: ' . $e->getMessage());
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($items) && $this->model->hasColumn('lich_trinh')) {
+            // cập nhật lại trường lich_trinh để lưu đường dẫn ảnh vào JSON
+            try {
+                $this->model->update($tour_id, ['lich_trinh' => json_encode($items)]);
+            } catch (Exception $e) {
+                error_log('Update itinerary after upload error: ' . $e->getMessage());
+            }
+        }
+
         header('Location: ' . BASE_URL . '?action=tours');
         exit;
     }
@@ -98,6 +148,13 @@ class TourController
         $data = [];
         // Nếu form có những field rõ ràng, liệt kê ở đây; nếu không, bạn có thể lấy tất cả $_POST
         $fields = ['ten_tour', 'mo_ta', 'chinh_sach', 'nha_cung_cap', 'gia', 'thoi_gian']; // sửa theo schema của bạn
+
+        // Nếu DB không có cột lich_trinh, loại bỏ khỏi danh sách trường để tránh lỗi SQL
+        if (!$this->model->hasColumn('lich_trinh')) {
+            $fields = array_filter($fields, function ($f) {
+                return $f !== 'lich_trinh';
+            });
+        }
 
         foreach ($fields as $f) {
             if (array_key_exists($f, $_POST) && $_POST[$f] !== '') {
@@ -167,6 +224,56 @@ class TourController
                 }
             }
         }
+
+        // Xử lý upload ảnh lịch trình (nếu có) tương tự như ở store: nếu form gửi lên lich_trinh và files it_images[]
+        if (!empty($_POST['lich_trinh'])) {
+            $items = json_decode($_POST['lich_trinh'], true) ?: [];
+        } else {
+            // fallback: giữ giá trị cũ
+            $items = json_decode($existing['lich_trinh'] ?? '[]', true) ?: [];
+        }
+
+        if (!empty($_FILES['it_images']) && !empty($_FILES['it_images']['name'])) {
+            foreach ($_FILES['it_images']['name'] as $dayIdx => $slots) {
+                if (!is_array($slots))
+                    continue;
+                foreach ($slots as $slotIdx => $filename) {
+                    if (!isset($_FILES['it_images']['error'][$dayIdx][$slotIdx]))
+                        continue;
+                    if ($_FILES['it_images']['error'][$dayIdx][$slotIdx] === UPLOAD_ERR_OK) {
+                        $fileInfo = [
+                            'name' => $_FILES['it_images']['name'][$dayIdx][$slotIdx],
+                            'type' => $_FILES['it_images']['type'][$dayIdx][$slotIdx],
+                            'tmp_name' => $_FILES['it_images']['tmp_name'][$dayIdx][$slotIdx],
+                            'error' => $_FILES['it_images']['error'][$dayIdx][$slotIdx],
+                            'size' => $_FILES['it_images']['size'][$dayIdx][$slotIdx],
+                        ];
+                        try {
+                            $uploadedPath = upload_file('tour/itinerary', $fileInfo);
+                            if ($uploadedPath) {
+                                if (!isset($items[$dayIdx]))
+                                    $items[$dayIdx] = ['title' => '', 'slots' => []];
+                                if (!isset($items[$dayIdx]['slots'][$slotIdx]))
+                                    $items[$dayIdx]['slots'][$slotIdx] = [];
+                                $items[$dayIdx]['slots'][$slotIdx]['image'] = $uploadedPath;
+                            }
+                        } catch (Exception $e) {
+                            error_log('Upload itinerary image error: ' . $e->getMessage());
+                        }
+                    }
+                }
+            }
+        }
+
+        // Lưu lại lich_trinh đã có cập nhật ảnh (nếu cột tồn tại)
+        if ($this->model->hasColumn('lich_trinh')) {
+            try {
+                $this->model->update($id, ['lich_trinh' => json_encode($items)]);
+            } catch (Exception $e) {
+                error_log('Update itinerary after edit error: ' . $e->getMessage());
+            }
+        }
+
 
         // redirect về index tour
         header('Location: ' . BASE_URL . '?action=tours');

@@ -145,7 +145,6 @@
                             <option value="Hướng dẫn viên">Hướng dẫn viên</option>
                             <option value="Admin">Admin</option>
                             <option value="Khách hàng">Khách hàng</option>
-                            <option value="Người dùng">Người dùng</option>
                         </select>
                     </div>
                 </div>

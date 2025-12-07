@@ -32,7 +32,7 @@ class BaseModel
         $stmt = $this->db->prepare("INSERT INTO {$this->table} ($fields) VALUES ($placeholders)");
         $values = array_values($data);
         if ($stmt->execute($values)) {
-            return $this->db->lastInsertId(); 
+            return $this->db->lastInsertId();
         }
         return false;
     }
@@ -48,5 +48,15 @@ class BaseModel
     {
         $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = ?");
         return $stmt->execute([$id]);
+    }
+
+    // Kiểm tra xem bảng hiện tại có cột nào không
+    public function hasColumn($columnName)
+    {
+        $sql = "SELECT COUNT(*) as c FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$this->table, $columnName]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return isset($row['c']) && (int) $row['c'] > 0;
     }
 }

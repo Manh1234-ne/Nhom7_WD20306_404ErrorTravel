@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Tour Du Lịch</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         body { box-sizing: border-box; }
@@ -147,7 +148,6 @@ $user = $_SESSION['user'] ?? null;
         <?php endif; ?>
     </div>
 
-    <div class="logo">404 Error Travel</div>
 
     <ul class="nav-menu">
         <li><a href="?action=home">Home</a></li>
@@ -159,14 +159,17 @@ $user = $_SESSION['user'] ?? null;
             <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">Danh mục</a></li>
             <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">Booking</a></li>
             <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">Ghi chú</a></li>
-
-        <?php else: ?>
+            <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">DS Khách hàng</a></li> <?php else: ?>
 
             <li><a href="?action=tours">Quản lý Tour</a></li>
             <li><a href="?action=nhansu">Nhân sự</a></li>
             <li><a href="?action=danhmuc">Danh mục</a></li>
             <li><a href="?action=qlbooking">Booking</a></li>
             <li><a href="?action=yeu_cau">Ghi chú</a></li>
+            
+            <li><a href="?action=guest_list_management" style="color: #e67e22; font-weight: 700;">
+                <i class="fa fa-users" style="margin-right: 5px;"></i> DS Khách hàng
+            </a></li>
 
         <?php endif; ?>
     </ul>
@@ -176,7 +179,7 @@ $user = $_SESSION['user'] ?? null;
     <h1>Hệ Thống Quản Lý Tour Du Lịch</h1>
 
     <div class="welcome-card">
-        <h2>🌏 Chào mừng đến với 404 Error Travel</h2>
+        <h2>🌏 Chào mừng đến với Travel</h2>
         <p>Hệ thống quản lý tour du lịch chuyên nghiệp giúp bạn quản lý dễ dàng và hiệu quả.</p>
     </div>
 
@@ -203,6 +206,12 @@ $user = $_SESSION['user'] ?? null;
             <div class="feature-icon">📅</div>
             <h3>Booking</h3>
             <p>Xử lý đặt chỗ, kiểm tra trạng thái, quản lý khách hàng.</p>
+        </a>
+        
+        <a href="?action=guest_list_management" class="feature-card">
+            <div class="feature-icon" style="color: #2ecc71;">👨‍👩‍👧‍👦</div>
+            <h3>Danh sách Khách hàng</h3>
+            <p>Quản lý tập trung các file Excel và import danh sách khách.</p>
         </a>
 
         <a href="?action=yeu_cau" class="feature-card">

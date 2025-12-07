@@ -156,7 +156,6 @@
                             <option value="Hướng dẫn viên" <?= $nhansu['vai_tro']=='Hướng dẫn viên'?'selected':'' ?>>Hướng dẫn viên</option>
                             <option value="Admin" <?= $nhansu['vai_tro']=='Admin'?'selected':'' ?>>Admin</option>
                             <option value="Khách hàng" <?= $nhansu['vai_tro']=='Khách hàng'?'selected':'' ?>>Khách hàng</option>
-                            <option value="Người dùng" <?= $nhansu['vai_tro']=='Người dùng'?'selected':'' ?>>Người dùng</option>
                         </select>
                     <?php else: ?>
                         <!-- Không phải admin thì khóa -->

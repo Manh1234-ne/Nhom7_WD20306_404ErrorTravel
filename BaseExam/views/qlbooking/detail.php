@@ -57,10 +57,8 @@
             gap: 30px;
         }
 
-        /* LEFT: Thông tin */
-        .left {
-            flex: 1;
-        }
+        .left { flex: 1; }
+        .right { flex: 1; }
 
         .info p {
             margin: 8px 0;
@@ -78,11 +76,6 @@
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
-        }
-
-        /* RIGHT: Album */
-        .right {
-            flex: 1;
         }
 
         .album-main {
@@ -113,12 +106,6 @@
         .album-img.selected {
             border: 3px solid #3498db;
         }
-
-        @media (max-width: 900px) {
-            .card {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 
@@ -139,7 +126,7 @@
 
         <div class="card">
 
-            <!-- LEFT: THÔNG TIN -->
+            <!-- LEFT -->
             <div class="left">
                 <div class="info">
                     <p><strong>Tên khách:</strong> <?= htmlspecialchars($qlb['ten_khach']) ?></p>
@@ -148,13 +135,50 @@
                     <p><strong>CCCD:</strong> <?= htmlspecialchars($qlb['cccd']) ?></p>
                     <p><strong>Số người:</strong> <?= htmlspecialchars($qlb['so_nguoi']) ?></p>
                     <p><strong>Ngày khởi hành:</strong> <?= htmlspecialchars($qlb['ngay_khoi_hanh']) ?></p>
-                    <p><strong>Giá:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
-                    <p><strong>Tiền cọc:</strong> <?= number_format($qlb['tien_coc']) ?> VNĐ</p>
-                    <p><strong>Trạng thái:</strong> <?= htmlspecialchars($qlb['trang_thai']) ?></p>
-                    <p><strong>Thanh toán:</strong> <?= htmlspecialchars($qlb['tinh_trang_thanh_toan']) ?></p>
+                    <p><strong>Giá tour:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
+
+                    <?php
+                        $gia = $qlb['gia'];
+                        $tien_coc_mac_dinh = $gia * 0.4;
+                        $da_tra = $qlb['tien_coc_da_tra'] ?? 0;
+                        $con_lai = max(0, $tien_coc_mac_dinh - $da_tra);
+                    ?>
+
+                    <p><strong>Tiền cọc (40%):</strong> <?= number_format($tien_coc_mac_dinh) ?> VNĐ</p>
+                    <p><strong>Đã thanh toán:</strong> <?= number_format($da_tra) ?> VNĐ</p>
+                    <p><strong>Còn lại phải thanh toán:</strong> <b><?= number_format($con_lai) ?> VNĐ</b></p>
+
+                    <p><strong>Trạng thái booking:</strong> <?= htmlspecialchars($qlb['trang_thai']) ?></p>
+                    <p><strong>Tình trạng thanh toán:</strong> <?= htmlspecialchars($qlb['tinh_trang_thanh_toan']) ?></p>
                     <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
                 </div>
 
+                <h3>Lịch sử thanh toán</h3>
+
+                <?php if (empty($lich_su)): ?>
+                    <p>Chưa có lịch sử thanh toán.</p>
+                <?php else: ?>
+                    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                        <tr style="background:#eee;">
+                            <th>Số tiền</th>
+                            <th>Ngày thanh toán</th>
+                        </tr>
+
+                        <?php foreach ($lich_su as $ls): ?>
+                            <tr>
+                                <td><?= number_format($ls['so_tien']) ?> VNĐ</td>
+                                <td><?= $ls['ngay_thanh_toan'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                <?php endif; ?>
+
+                <a href="?action=qlbooking_pay&id=<?= $qlb['id'] ?>"
+                    class="btn-back" style="background:#27ae60;margin-top:15px;">
+                    + Thanh toán thêm
+                </a>
+
+                <br>
                 <a href="?action=qlbooking" class="btn-back">← Quay lại</a>
             </div>
 
@@ -172,8 +196,6 @@
                         } catch (Throwable $e) {
                             $album = [];
                         }
-                    } else {
-                        $album = [];
                     }
                 }
 
@@ -185,7 +207,8 @@
                 }
 
                 $mainSrc = $mainImgFilename
-                    ? (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . ltrim($mainImgFilename, '/')
+                    ? (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/')
+                        . ltrim($mainImgFilename, '/')
                     : "";
                 ?>
 
@@ -203,7 +226,8 @@
                     <?php if (!empty($album)): ?>
                         <?php foreach ($album as $img):
                             $filename = is_object($img) ? ($img->file_name ?? '') : ($img['file_name'] ?? '');
-                            $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . ltrim($filename, '/');
+                            $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/')
+                                . ltrim($filename, '/');
                         ?>
                             <img class="album-img <?= $filename == $mainImgFilename ? 'selected' : '' ?>"
                                 data-filename="<?= htmlspecialchars($filename) ?>"
@@ -212,26 +236,21 @@
                     <?php else: ?>
                         <p>Không có ảnh album.</p>
                     <?php endif; ?>
-
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- JS đổi ảnh -->
     <script>
         (function () {
-            const baseUploads = '<?= addslashes(defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') ?>';
+            const baseUploads = '<?= addslashes(defined("BASE_ASSETS_UPLOADS") ? BASE_ASSETS_UPLOADS : "assets/uploads/") ?>';
             const mainImg = document.getElementById('main-image');
 
             document.querySelectorAll('.album-img').forEach(img => {
                 img.addEventListener('click', function () {
                     const filename = this.dataset.filename;
                     if (!filename) return;
-
                     mainImg.src = baseUploads + filename + "?t=" + Date.now();
-
                     document.querySelectorAll(".album-img").forEach(i => i.classList.remove("selected"));
                     this.classList.add("selected");
                 });

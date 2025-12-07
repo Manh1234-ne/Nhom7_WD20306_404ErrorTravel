@@ -9,6 +9,9 @@ require_once PATH_CONTROLLER . 'DanhMucTourController.php';
 require_once PATH_CONTROLLER . 'NguoiDungController.php';
 require_once PATH_CONTROLLER . 'YeuCauController.php';
 require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
+require_once PATH_CONTROLLER . 'QlBookingController.php'; // nếu có
+require_once PATH_CONTROLLER . 'GuestListController.php'; // <-- THÊM CONTROLLER M
+
 
 $action = $_GET['action'] ?? 'home';
 $id = $_GET['id'] ?? null;
@@ -25,6 +28,7 @@ match ($action) {
     'tour_edit_post' => (new TourController)->update(),
     'tour_delete' => (new TourController)->delete(),
     'tour_detail' => (new TourController)->detail(),
+    'detail' => (new TourController)->detail(),
     'dat_tour' => (new BookingController)->create(),
     'save_booking' => (new BookingController)->save(),
 
@@ -33,6 +37,15 @@ match ($action) {
     'qlbooking_edit' => (new QlbookingController)->edit(),
     'qlbooking_edit_post' => (new QlBookingController)->update(),
     'qlbooking_detail' => (new QlBookingController)->detail(),
+    'qlbooking_pay' => (new QlBookingController)->pay(),
+    'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
+
+
+
+    //  QUẢN LÝ DANH SÁCH KHÁCH HÀNG TẬP TRUNG (Mục Sidebar mới)
+    // 'guest_list_management' => (new GuestListController)->index(), // <-- THÊM ACTION NÀY
+    // 'guest_list_import' => (new GuestListController)->import(), // <-- THÊM ACTION NÀY
+
 
     // NHÂN SỰ
     'nhansu' => (new NhanSuController)->index(),
@@ -64,13 +77,7 @@ match ($action) {
     'yeu_cau_delete' => fn() => (new YeuCauController)->delete($_GET['id']),
     'yeu_cau_show' => fn() => (new YeuCauController)->show($_GET['id']),
 
-    // Quản lý khách theo tour
-    "tour_guest"         => (new TourGuestController)->index(),
-    "tour_guest_store"   => (new TourGuestController)->store(),
-    "guest_detail"       => (new TourGuestController)->detail(),
-    "tour_guest_checkin" => (new TourGuestController)->updateCheckin(),
-    "tour_guest_room"    => (new TourGuestController)->updateRoom(),
-    "tour_guest_export"  => (new TourGuestController)->export(),
+
 
     // Mặc định
     default => (new HomeController)->index(),

@@ -15,7 +15,6 @@
             background: #eef2f7;
         }
 
-        /* SIDEBAR */
         .sidebar {
             width: 250px;
             background: #1e293b;
@@ -55,7 +54,6 @@
             margin-right: 12px;
         }
 
-        /* CONTENT */
         .content {
             margin-left: 250px;
             padding: 40px 35px;
@@ -132,12 +130,20 @@
             font-weight: 600;
             text-decoration: none;
         }
+
+        .error-box {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h2>404 Error Travel</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
@@ -148,17 +154,21 @@
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
         <h1>Tạo Booking</h1>
 
-        <form action="?action=save_booking" method="POST">
+        <?php if (!empty($error)): ?>
+            <div class="error-box">
+                ⚠ <?= $error ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="?action=save_booking" method="POST" enctype="multipart/form-data">
 
             <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
 
             <div class="grid-2">
 
-                <!-- Cột trái -->
                 <div>
                     <label>Tên khách</label>
                     <input type="text" name="ten_khach" required>
@@ -173,7 +183,6 @@
                     <input type="number" name="cccd" required>
                 </div>
 
-                <!-- Cột phải -->
                 <div>
                     <label>Tên tour</label>
                     <input type="text" value="<?= $tour['ten_tour'] ?>" disabled>
@@ -188,7 +197,6 @@
                     <input type="number" name="gia" value="<?= $tour['gia'] ?>" required>
                 </div>
 
-                <!-- Full row -->
                 <div class="full-row">
                     <label>Trạng thái</label>
                     <input type="text" value="Chờ xác nhận" disabled>
@@ -206,8 +214,8 @@
                     <?php $tien_coc = $tour['gia'] * 0.4; ?>
 
                     <div class="full-row">
-                        <label>Tiền cọc</label>
-                        <input type="text" value="<?= number_format($tien_coc) ?> VND (40% giá tour)" disabled>
+                        <label>Tiền cọc (40%)</label>
+                        <input type="text" value="<?= number_format($tien_coc) ?> VND" disabled>
                         <input type="hidden" name="tien_coc" value="<?= $tien_coc ?>">
                     </div>
                 <?php else: ?>
@@ -233,10 +241,16 @@
                     <textarea name="ghi_chu"></textarea>
                 </div>
 
+                <!-- UPLOAD DANH SÁCH KHÁCH -->
+                <div class="full-row">
+                    <label>Danh sách khách (Excel, PDF, ảnh)</label>
+                    <input type="file" name="danh_sach" accept=".xlsx,.xls,.pdf,.jpg,.jpeg,.png">
+                </div>
+
             </div>
 
             <button type="submit">Tạo booking</button>
-            <a class="back" href="?action=qlbooking">← Quay lại</a>
+            <a class="back" href="?action=tours">← Quay lại</a>
 
         </form>
     </div>
