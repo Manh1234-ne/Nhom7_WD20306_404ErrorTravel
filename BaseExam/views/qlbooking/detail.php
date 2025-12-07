@@ -1,3 +1,54 @@
+<?php
+// --- PHẦN THÊM MỚI: TÍNH TOÁN THANH TOÁN ---
+$gia = $qlb['gia'];
+
+// Tính các khoản thanh toán
+$tien_coc = $gia * 0.4;
+$da_coc = $qlb['tien_coc_da_tra'] ?? 0;
+$da_full = $qlb['tien_full_da_tra'] ?? 0;
+
+$tong_da_tra = $da_coc + $da_full;
+
+// số tiền còn phải thanh toán tổng
+$con_thieu_full = $gia - $tong_da_tra;
+if ($con_thieu_full < 0) $con_thieu_full = 0;
+
+// Xác định trạng thái thanh toán
+if ($tong_da_tra == 0) {
+    $txt_trang_thai = '<span style="color:red; font-weight:bold;">Chưa đóng đồng nào</span>';
+} elseif ($tong_da_tra < $gia) {
+    $txt_trang_thai = '<span style="color:#f1c40f; font-weight:bold;">Đã thanh toán một phần</span>';
+} else {
+    $txt_trang_thai = '<span style="color:green; font-weight:bold;">Đã thanh toán đầy đủ</span>';
+}
+
+// --- PHẦN THÊM MỚI: LẤY ALBUM TOUR ---
+if (empty($album)) {
+    if (defined('PATH_MODEL') && file_exists(PATH_MODEL . 'Tour.php')) {
+        require_once PATH_MODEL . 'Tour.php';
+        try {
+            $tourModel = new Tour();
+            $tourId = $qlb['tour_id'] ?? null;
+            $album = $tourId ? $tourModel->getAlbum($tourId) : [];
+        } catch (Throwable $e) {
+            $album = [];
+        }
+    }
+}
+
+$mainImgFilename = $mainImgFilename ?? "";
+
+if (empty($mainImgFilename) && !empty($album)) {
+    $first = is_object($album[0]) ? ($album[0]->file_name ?? "") : ($album[0]["file_name"] ?? "");
+    $mainImgFilename = $first;
+}
+
+$mainSrc = $mainImgFilename
+    ? (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/')
+    . ltrim($mainImgFilename, '/')
+    : "";
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -57,8 +108,13 @@
             gap: 30px;
         }
 
-        .left { flex: 1; }
-        .right { flex: 1; }
+        .left {
+            flex: 1;
+        }
+
+        .right {
+            flex: 1;
+        }
 
         .info p {
             margin: 8px 0;
@@ -110,7 +166,6 @@
 </head>
 
 <body>
-
     <div class="sidebar">
         <h2>Quản lý Tour</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
@@ -125,8 +180,6 @@
         <h1>Chi tiết Booking</h1>
 
         <div class="card">
-
-            <!-- LEFT -->
             <div class="left">
                 <div class="info">
                     <p><strong>Tên khách:</strong> <?= htmlspecialchars($qlb['ten_khach']) ?></p>
@@ -135,35 +188,25 @@
                     <p><strong>CCCD:</strong> <?= htmlspecialchars($qlb['cccd']) ?></p>
                     <p><strong>Số người:</strong> <?= htmlspecialchars($qlb['so_nguoi']) ?></p>
                     <p><strong>Ngày khởi hành:</strong> <?= htmlspecialchars($qlb['ngay_khoi_hanh']) ?></p>
-                    <p><strong>Giá tour:</strong> <?= number_format($qlb['gia']) ?> VNĐ</p>
-
-                    <?php
-                        $gia = $qlb['gia'];
-                        $tien_coc_mac_dinh = $gia * 0.4;
-                        $da_tra = $qlb['tien_coc_da_tra'] ?? 0;
-                        $con_lai = max(0, $tien_coc_mac_dinh - $da_tra);
-                    ?>
-
-                    <p><strong>Tiền cọc (40%):</strong> <?= number_format($tien_coc_mac_dinh) ?> VNĐ</p>
-                    <p><strong>Đã thanh toán:</strong> <?= number_format($da_tra) ?> VNĐ</p>
-                    <p><strong>Còn lại phải thanh toán:</strong> <b><?= number_format($con_lai) ?> VNĐ</b></p>
-
-                    <p><strong>Trạng thái booking:</strong> <?= htmlspecialchars($qlb['trang_thai']) ?></p>
-                    <p><strong>Tình trạng thanh toán:</strong> <?= htmlspecialchars($qlb['tinh_trang_thanh_toan']) ?></p>
+                    <p><strong>Giá tour:</strong> <?= number_format($gia) ?> VNĐ</p>
+                    <p><strong>Cọc 40%:</strong> <?= number_format($tien_coc) ?> VNĐ</p>
+                    <p><strong>Đã cọc:</strong> <?= number_format($da_coc) ?> VNĐ</p>
+                    <p><strong>Đã thanh toán FULL:</strong> <?= number_format($da_full) ?> VNĐ</p>
+                    <p><strong>Tổng đã thanh toán:</strong> <?= number_format($tong_da_tra) ?> VNĐ</p>
+                    <p><strong>Còn phải thanh toán:</strong> <?= number_format($con_thieu_full) ?> VNĐ</p>
+                    <p><strong>Tình trạng thanh toán:</strong> <?= $txt_trang_thai ?></p>
                     <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
                 </div>
 
                 <h3>Lịch sử thanh toán</h3>
-
                 <?php if (empty($lich_su)): ?>
                     <p>Chưa có lịch sử thanh toán.</p>
                 <?php else: ?>
-                    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width:100%;">
                         <tr style="background:#eee;">
                             <th>Số tiền</th>
                             <th>Ngày thanh toán</th>
                         </tr>
-
                         <?php foreach ($lich_su as $ls): ?>
                             <tr>
                                 <td><?= number_format($ls['so_tien']) ?> VNĐ</td>
@@ -173,47 +216,13 @@
                     </table>
                 <?php endif; ?>
 
-                <a href="?action=qlbooking_pay&id=<?= $qlb['id'] ?>"
-                    class="btn-back" style="background:#27ae60;margin-top:15px;">
-                    + Thanh toán thêm
-                </a>
+                
 
-                <br>
-                <a href="?action=qlbooking" class="btn-back">← Quay lại</a>
+                <br><a href="?action=qlbooking" class="btn-back">← Quay lại</a>
             </div>
 
-            <!-- RIGHT: ALBUM -->
             <div class="right">
-
-                <?php
-                if (empty($album)) {
-                    if (defined('PATH_MODEL') && file_exists(PATH_MODEL . 'Tour.php')) {
-                        require_once PATH_MODEL . 'Tour.php';
-                        try {
-                            $tourModel = new Tour();
-                            $tourId = $qlb['tour_id'] ?? null;
-                            $album = $tourId ? $tourModel->getAlbum($tourId) : [];
-                        } catch (Throwable $e) {
-                            $album = [];
-                        }
-                    }
-                }
-
-                $mainImgFilename = $mainImgFilename ?? "";
-
-                if (empty($mainImgFilename) && !empty($album)) {
-                    $first = is_object($album[0]) ? ($album[0]->file_name ?? "") : ($album[0]["file_name"] ?? "");
-                    $mainImgFilename = $first;
-                }
-
-                $mainSrc = $mainImgFilename
-                    ? (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/')
-                        . ltrim($mainImgFilename, '/')
-                    : "";
-                ?>
-
                 <h3>Ảnh Tour</h3>
-
                 <?php if ($mainSrc): ?>
                     <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>?t=<?= time() ?>">
                 <?php else: ?>
@@ -222,12 +231,10 @@
 
                 <h3>Album ảnh</h3>
                 <div class="thumbs">
-
                     <?php if (!empty($album)): ?>
                         <?php foreach ($album as $img):
                             $filename = is_object($img) ? ($img->file_name ?? '') : ($img['file_name'] ?? '');
-                            $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/')
-                                . ltrim($filename, '/');
+                            $src = (defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . ltrim($filename, '/');
                         ?>
                             <img class="album-img <?= $filename == $mainImgFilename ? 'selected' : '' ?>"
                                 data-filename="<?= htmlspecialchars($filename) ?>"
@@ -242,12 +249,11 @@
     </div>
 
     <script>
-        (function () {
+        (function() {
             const baseUploads = '<?= addslashes(defined("BASE_ASSETS_UPLOADS") ? BASE_ASSETS_UPLOADS : "assets/uploads/") ?>';
             const mainImg = document.getElementById('main-image');
-
             document.querySelectorAll('.album-img').forEach(img => {
-                img.addEventListener('click', function () {
+                img.addEventListener('click', function() {
                     const filename = this.dataset.filename;
                     if (!filename) return;
                     mainImg.src = baseUploads + filename + "?t=" + Date.now();
@@ -257,6 +263,6 @@
             });
         })();
     </script>
-
 </body>
+
 </html>

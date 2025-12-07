@@ -120,64 +120,42 @@
             background: #f1f5f9;
         }
 
-        /* Nút chung */
         a.btn {
             padding: 10px 16px;
-            /* giống quản lý Tour */
             border-radius: 6px;
-            /* bo góc mềm */
             color: #fff;
             text-decoration: none;
             margin-right: 6px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            /* khoảng cách icon-text */
             font-size: 15px;
-            /* kích thước chữ như Tour */
             transition: 0.2s;
         }
 
-        /* Nút Thêm */
-        .btn-add {
-            background: #3b82f6;
-            /* xanh dương */
-        }
-
-        .btn-add:hover {
-            background: #2563eb;
-        }
-
-        /* Nút Xem */
         .btn-view {
             background: #0ea5e9;
-            /* xanh da trời */
         }
 
         .btn-view:hover {
             background: #0284c7;
         }
 
-        /* Nút Sửa */
         .btn-edit {
             background: #f59e0b;
-            /* cam */
         }
 
         .btn-edit:hover {
             background: #d97706;
         }
 
-        /* Nút Xóa */
         .btn-delete {
             background: #ef4444;
-            /* đỏ */
         }
 
         .btn-delete:hover {
             background: #b91c1c;
         }
-
 
         @media(max-width:768px) {
             .sidebar {
@@ -190,6 +168,109 @@
                 margin-left: 0;
                 padding: 20px;
             }
+        }
+
+        /* CSS thêm cho album ảnh và thanh toán */
+        .album-main {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .thumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .album-img {
+            width: 110px;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .album-img:hover {
+            transform: scale(1.05);
+        }
+
+        .album-img.selected {
+            border: 3px solid #3b82f6;
+        }
+
+        .payment-info p {
+            margin: 8px 0;
+            padding: 8px 10px;
+            background: #f3f4f6;
+            border-left: 4px solid #3b82f6;
+            border-radius: 4px;
+        }
+
+        /* CSS form sửa booking */
+        .form-container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input,
+        textarea,
+        select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 42px;
+        }
+
+        .full {
+            grid-column: span 2;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #3498db;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -210,6 +291,7 @@
             <h1>Quản lý Booking</h1>
         </div>
 
+        <!-- Bảng quản lý booking -->
         <table>
             <thead>
                 <tr>
@@ -239,6 +321,34 @@
                             <td>
                                 <a href="?action=qlbooking_detail&id=<?= $b['id'] ?>" class="btn btn-view"><i class="fa fa-eye"></i></a>
                                 <a href="?action=qlbooking_edit&id=<?= $b['id'] ?>" class="btn btn-edit"><i class="fa fa-edit"></i></a>
+                                <a href="?action=qlbooking_pay&id=<?= $b['id'] ?>" class="btn btn-add"><i class="fa fa-credit-card"></i>Thanh toán</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="9">
+                                <?php
+                                $gia = $b['gia'];
+                                $tien_coc = $gia * 0.4;
+                                $da_coc = $b['tien_coc_da_tra'] ?? 0;
+                                $da_full = $b['tien_full_da_tra'] ?? 0;
+                                $tong_da_tra = $da_coc + $da_full;
+                                $con_thieu_full = max(0, $gia - $tong_da_tra);
+                                if ($tong_da_tra == 0) {
+                                    $txt_trang_thai = '<span style="color:red; font-weight:bold;">Chưa đóng đồng nào</span>';
+                                } elseif ($tong_da_tra < $gia) {
+                                    $txt_trang_thai = '<span style="color:#f1c40f; font-weight:bold;">Đã thanh toán một phần</span>';
+                                } else {
+                                    $txt_trang_thai = '<span style="color:green; font-weight:bold;">Đã thanh toán đầy đủ</span>';
+                                }
+                                ?>
+                                <div class="payment-info">
+                                    <p><strong>Tiền cọc 40%:</strong> <?= number_format($tien_coc) ?> VNĐ</p>
+                                    <p><strong>Đã cọc:</strong> <?= number_format($da_coc) ?> VNĐ</p>
+                                    <p><strong>Đã thanh toán FULL:</strong> <?= number_format($da_full) ?> VNĐ</p>
+                                    <p><strong>Tổng đã thanh toán:</strong> <?= number_format($tong_da_tra) ?> VNĐ</p>
+                                    <p><strong>Còn phải thanh toán:</strong> <?= number_format($con_thieu_full) ?> VNĐ</p>
+                                    <p><strong>Tình trạng thanh toán:</strong> <?= $txt_trang_thai ?></p>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -249,7 +359,87 @@
                 <?php endif; ?>
             </tbody>
         </table>
+
+        <!-- Form sửa booking -->
+        <?php if (isset($edit_booking) && $edit_booking): ?>
+            <div class="form-container">
+                <h2>Sửa booking</h2>
+                <form action="?action=qlbooking_edit_post" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="<?= $qlb['id'] ?>">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Tên khách</label>
+                            <textarea name="ten_khach"><?= $qlb['ten_khach'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <textarea name="so_dien_thoai"><?= $qlb['so_dien_thoai'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>CCCD</label>
+                            <textarea name="cccd"><?= $qlb['cccd'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Số người</label>
+                            <textarea name="so_nguoi"><?= $qlb['so_nguoi'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày khởi hành</label>
+                            <textarea name="ngay_khoi_hanh"><?= $qlb['ngay_khoi_hanh'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Giá</label>
+                            <textarea name="gia"><?= $qlb['gia'] ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái</label>
+                            <select name="trang_thai">
+                                <?php
+                                $statuses = ['Chưa xác nhận', 'Đã xác nhận', 'Đặt thành công', 'Đã hủy tour'];
+                                foreach ($statuses as $status): ?>
+                                    <option value="<?= $status ?>" <?= $qlb['trang_thai'] == $status ? 'selected' : '' ?>><?= $status ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tình trạng thanh toán</label>
+                            <select name="tinh_trang_thanh_toan">
+                                <?php
+                                $types = ['Đã cọc', 'Chưa cọc', 'Chưa thanh toán', 'Đã thanh toán', 'Hủy bỏ'];
+                                foreach ($types as $t): ?>
+                                    <option value="<?= $t ?>" <?= $qlb['tinh_trang_thanh_toan'] == $t ? 'selected' : '' ?>><?= $t ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group full">
+                            <label>Yêu cầu đặc biệt</label>
+                            <select name="yeu_cau_dac_biet">
+                                <?php
+                                $types = ['Ăn chay', 'Yêu cầu về dị ứng', 'Yêu cầu về bệnh lý', 'Yêu cầu về phòng nghỉ', 'Yêu cầu phương tiện di chuyển', 'Yêu cầu ăn uống', 'Khác'];
+                                foreach ($types as $t): ?>
+                                    <option value="<?= $t ?>" <?= $qlb['yeu_cau_dac_biet'] == $t ? 'selected' : '' ?>><?= $t ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit">Cập nhật booking</button>
+                    <a href="?action=qlbooking" class="back-link">Quay lại</a>
+                </form>
+            </div>
+        <?php endif; ?>
+
     </div>
+
+    <script>
+        document.querySelectorAll('.album-img').forEach(img => {
+            img.addEventListener('click', function() {
+                const main = document.createElement('img');
+                main.src = this.src;
+                main.className = 'album-main';
+                this.parentElement.insertBefore(main, this.parentElement.firstChild);
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -6,12 +6,12 @@ require_once PATH_CONTROLLER . 'HomeController.php';
 require_once PATH_CONTROLLER . 'TourController.php';
 require_once PATH_CONTROLLER . 'NhanSuController.php';
 require_once PATH_CONTROLLER . 'DanhMucTourController.php';
+require_once PATH_CONTROLLER . 'TourGuestController.php';
 require_once PATH_CONTROLLER . 'NguoiDungController.php';
 require_once PATH_CONTROLLER . 'YeuCauController.php';
-require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
-require_once PATH_CONTROLLER . 'QlBookingController.php'; // nếu có
-require_once PATH_CONTROLLER . 'GuestListController.php'; // <-- THÊM CONTROLLER M
-
+require_once PATH_CONTROLLER . 'BookingController.php';
+require_once PATH_CONTROLLER . 'QlBookingController.php';
+require_once PATH_CONTROLLER . 'GuestListController.php';
 
 $action = $_GET['action'] ?? 'home';
 $id = $_GET['id'] ?? null;
@@ -29,23 +29,26 @@ match ($action) {
     'tour_delete' => (new TourController)->delete(),
     'tour_detail' => (new TourController)->detail(),
     'detail' => (new TourController)->detail(),
+
+    // BOOKING
     'dat_tour' => (new BookingController)->create(),
     'save_booking' => (new BookingController)->save(),
 
     // QLBOOKING
     'qlbooking' => (new QlBookingController)->index(),
-    'qlbooking_edit' => (new QlbookingController)->edit(),
+    'qlbooking_edit' => (new QlBookingController)->edit(),
     'qlbooking_edit_post' => (new QlBookingController)->update(),
     'qlbooking_detail' => (new QlBookingController)->detail(),
     'qlbooking_pay' => (new QlBookingController)->pay(),
     'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
 
-
-
-    //  QUẢN LÝ DANH SÁCH KHÁCH HÀNG TẬP TRUNG (Mục Sidebar mới)
-    // 'guest_list_management' => (new GuestListController)->index(), // <-- THÊM ACTION NÀY
-    // 'guest_list_import' => (new GuestListController)->import(), // <-- THÊM ACTION NÀY
-
+    // TOUR GUEST (từ file 1)
+    'tour_guest'          => (new TourGuestController)->index(),
+    'tour_guest_add'      => (new TourGuestController)->store(),
+    'tour_guest_detail'   => (new TourGuestController)->detail(),
+    'tour_guest_checkin'  => (new TourGuestController)->updateCheckin(),
+    'tour_guest_room'     => (new TourGuestController)->updateRoom(),
+    'tour_guest_export'   => (new TourGuestController)->export(),
 
     // NHÂN SỰ
     'nhansu' => (new NhanSuController)->index(),
@@ -71,13 +74,14 @@ match ($action) {
     // ====================== YÊU CẦU ĐẶC BIỆT ======================
     'yeu_cau' => (new YeuCauController)->index(),
     'yeu_cau_create' => (new YeuCauController)->create(),
-    'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
-    // 'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
-    'yeu_cau_update' => fn() => (new YeuCauController)->update($_GET['id']),
-    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($_GET['id']),
-    'yeu_cau_show' => fn() => (new YeuCauController)->show($_GET['id']),
+    'yeu_cau_store' => (new YeuCauController)->store(),
+    'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
+    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
+    'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
 
-
+    // // GUEST LIST MANAGEMENT (Sidebar mới)
+    // 'guest_list_management' => (new GuestListController)->index(),
+    // 'guest_list_import' => (new GuestListController)->import(),
 
     // Mặc định
     default => (new HomeController)->index(),

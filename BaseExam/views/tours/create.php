@@ -241,11 +241,7 @@
                     <textarea name="ghi_chu"></textarea>
                 </div>
 
-                <!-- UPLOAD DANH SÁCH KHÁCH -->
-                <div class="full-row">
-                    <label>Danh sách khách (Excel, PDF, ảnh)</label>
-                    <input type="file" name="danh_sach" accept=".xlsx,.xls,.pdf,.jpg,.jpeg,.png">
-                </div>
+                
 
             </div>
 

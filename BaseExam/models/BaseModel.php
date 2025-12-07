@@ -50,6 +50,7 @@ class BaseModel
         return $stmt->execute([$id]);
     }
 
+    // Thêm phương thức từ file 1
     // Kiểm tra xem bảng hiện tại có cột nào không
     public function hasColumn($columnName)
     {
