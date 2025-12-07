@@ -6,37 +6,59 @@ class Tour extends BaseModel
     protected $table = 'tour';
 
     // Format số tiền
+<<<<<<< HEAD
     public static function formatVND($number)
     {
+=======
+    public static function formatVND($number) {
+>>>>>>> lebang271206-ui
         if ($number >= 100000000) {
             return round($number / 1000000) . ' triệu';
         } elseif ($number >= 1000000) {
             $million = $number / 1000000;
+<<<<<<< HEAD
             return ($million == (int)$million) ? $million . ' triệu' : round($million, 1) . ' triệu';
         } elseif ($number >= 1000) {
             $thousand = $number / 1000;
             return ($thousand == (int)$thousand) ? $thousand . ' nghìn' : round($thousand, 1) . ' nghìn';
         } else {
             return $number . ' VNĐ';
+=======
+            return ($million == (int)$million) ? $million.' triệu' : round($million,1).' triệu';
+        } elseif ($number >= 1000) {
+            $thousand = $number / 1000;
+            return ($thousand == (int)$thousand) ? $thousand.' nghìn' : round($thousand,1).' nghìn';
+        } else {
+            return $number.' VNĐ';
+>>>>>>> lebang271206-ui
         }
     }
 
     // Lấy album của tour
+<<<<<<< HEAD
     public function getAlbum($tour_id)
     {
+=======
+    public function getAlbum($tour_id) {
+>>>>>>> lebang271206-ui
         $stmt = $this->db->prepare("SELECT * FROM album_tour WHERE tour_id = ?");
         $stmt->execute([$tour_id]);
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     // Thêm album mới
+<<<<<<< HEAD
     public function insertAlbum($tour_id, $file_name)
     {
+=======
+    public function insertAlbum($tour_id, $file_name) {
+>>>>>>> lebang271206-ui
         $created_at = date('Y-m-d H:i:s'); // tự động thêm thời gian
         $stmt = $this->db->prepare("INSERT INTO album_tour (tour_id, file_name, created_at) VALUES (?, ?, ?)");
         return $stmt->execute([$tour_id, $file_name, $created_at]);
     }
 
+<<<<<<< HEAD
     // Lấy 1 ảnh theo id
     public function getAlbumById($id)
     {
@@ -130,3 +152,11 @@ class Tour extends BaseModel
     }
 }
 
+=======
+    // Xóa album
+    public function deleteAlbum($id) {
+        $stmt = $this->db->prepare("DELETE FROM album_tour WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
+}
+>>>>>>> lebang271206-ui

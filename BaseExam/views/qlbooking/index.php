@@ -19,6 +19,18 @@
         .sidebar {
             width: 250px;
             background: #1e293b;
+    <title>Danh sách Tour</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .sidebar {
+            width: 220px;
+            background: #2c3e50;
             height: 100vh;
             position: fixed;
             top: 0;
@@ -90,6 +102,35 @@
 
         .btn-add:hover {
             background: #2563eb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .sidebar a {
+            padding: 15px 20px;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar a:hover {
+            background: #34495e;
+        }
+
+        .sidebar i {
+            margin-right: 10px;
+        }
+
+        .content {
+            margin-left: 220px;
+            padding: 30px;
         }
 
         table {
@@ -157,11 +198,62 @@
             background: #b91c1c;
         }
 
+<<<<<<< HEAD
+=======
+
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #3498db;
+            color: #fff;
+        }
+
+        a.btn {
+            padding: 6px 12px;
+            background: #3498db;
+            color: #fff;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+
+        a.btn:hover {
+            background: #2980b9;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+>>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
         @media(max-width:768px) {
             .sidebar {
                 width: 100%;
                 height: auto;
                 position: relative;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .sidebar h2 {
+                display: none;
+            }
+
+            .sidebar a {
+                flex: 1;
+                justify-content: center;
             }
 
             .content {
@@ -291,7 +383,20 @@
             <h1>Quản lý Booking</h1>
         </div>
 
+<<<<<<< HEAD
         <!-- Bảng quản lý booking -->
+=======
+        <h2>Quản lý Tour</h2>
+        <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
+        <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tourr</a>
+        <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
+        <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
+        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
+        <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
+
+    </div>
+    <div class="content">
+>>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
         <table>
             <thead>
                 <tr>
@@ -299,6 +404,9 @@
                     <th>Tên khách</th>
                     <th>SĐT</th>
                     <th>Số người</th>
+                    <th>Số điện thoại</th>
+                    <th>Số người</th>
+                    <th>Ngày khởi hành</th>
                     <th>Giá</th>
                     <th>Trạng thái</th>
                     <th>Tình trạng thanh toán</th>
@@ -357,6 +465,27 @@
                         <td colspan="9" style="text-align:center; padding:20px;">Chưa có booking nào.</td>
                     </tr>
                 <?php endif; ?>
+                <?php foreach ($qlbooking as $qlb): ?>
+                    <tr>
+                       <td><?= $qlb['id'] ?></td>
+                            <td><?= htmlspecialchars($qlb['ten_khach']) ?></td>
+                            <td><?= $qlb['so_dien_thoai'] ?></td>
+                            <td><?= $qlb['so_nguoi'] ?></td>
+                            <td><?= $qlb['ngay_khoi_hanh'] ?></td>
+                            <td><?= number_format($qlb['gia'], 0, ',', '.') ?> VNĐ</td>
+                            <td><?= $qlb['trang_thai'] ?></td>
+                            <td><?= $qlb['tinh_trang_thanh_toan'] ?></td>
+                            <td><?= $qlb['yeu_cau_dac_biet'] ?></td>
+                            <td>
+                               <a href="?action=qlbooking_detail&id=<?= $qlb['id'] ?>" class="btn">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="?action=qlbooking_edit&id=<?= $qlb['id'] ?>" class="btn"><i class="fa fa-edit"></i></a>
+                            <a href="?action=qlbooking_pay&id=<?= $qlb['id'] ?>" class="btn btn-success btn-sm">  <i class="fa fa-credit-card"></i>
+</a>
+                </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
 

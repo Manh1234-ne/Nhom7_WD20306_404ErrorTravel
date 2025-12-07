@@ -1,9 +1,12 @@
+<<<<<<< HEAD
+=======
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <title>Thêm Tour</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; }
@@ -56,24 +59,69 @@
         }
         textarea { height: 110px; }
         .full-row { grid-column: span 2; }
+=======
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            padding: 30px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 600px;
+            margin: auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+>>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
 
         button {
-            margin-top: 25px;
-            padding: 12px 24px;
+            margin-top: 20px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
-            background: #3b82f6;
+            border-radius: 4px;
+            background: #3498db;
             color: #fff;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
         }
+<<<<<<< HEAD
         button:hover { background: #2563eb; }
         a.back { display: inline-block; margin-top: 18px; color: #3b82f6; font-weight: 600; text-decoration: none; }
+=======
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #3498db;
+            text-decoration: none;
+        }
+>>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
     </style>
 </head>
 
 <body>
+<<<<<<< HEAD
 
     
 
@@ -173,6 +221,40 @@
             const addDayBtn = document.getElementById('add-day');
             const hidden = document.getElementById('lich_trinh_input');
             const form = document.querySelector('form[action="?action=tour_add_post"]');
+=======
+    <h1>Thêm Tour</h1>
+    <form action="?action=tour_add_post" method="post" enctype="multipart/form-data">
+        <label>Tên Tour</label>
+        <input type="text" name="ten_tour" required>
+        <label>Loại Tour</label>
+        <select name="loai_tour">
+            <option value="Trong nước">Trong nước</option>
+            <option value="Quốc tế">Quốc tế</option>
+            <option value="Yêu cầu">Yêu cầu</option>
+        </select>
+        <label>Mô tả</label>
+        <textarea name="mo_ta"></textarea>
+        <label>Giá</label>
+        <input type="number" name="gia">
+        <label>Chính sách</label>
+        <textarea name="chinh_sach"></textarea>
+        <label>Hình ảnh</label>
+        <input type="file" name="hinh_anh">
+         <hr>
+    <h3>Nhà cung cấp</h3>
+    <textarea name="nha_cung_cap"></textarea>
+     <label>Mùa</label>
+        <select name="mua">
+            <option value="Mùa Xuân">Mùa Xuân</option>
+            <option value="Mùa Hạ">Mùa Hạ</option>
+            <option value="Mùa Thu">Mùa Thu</option>
+            <option value="Mùa Đông">Mùa Đông</option>
+        </select>
+        <button type="submit">Thêm Tourr</button>
+        <a href="?action=tours">Quay lại</a>
+    </form>
+</body>
+>>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
 
             function createSlot(slotData) {
                 const slot = document.createElement('div');
@@ -259,3 +341,4 @@
 
 </body>
 </html>
+>>>>>>> lebang271206-ui
