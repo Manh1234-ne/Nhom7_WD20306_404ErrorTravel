@@ -68,8 +68,4 @@ class YeuCauModel
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$id]);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> lebang271206-ui

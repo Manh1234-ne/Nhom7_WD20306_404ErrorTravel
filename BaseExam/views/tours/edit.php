@@ -164,11 +164,7 @@
 </head>
 
 <body>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
     <!-- =========== CONTENT =========== -->
->>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
     <div class="content">
         <h1>Sửa Tour</h1>
         <div class="container">
@@ -192,7 +188,6 @@
                 <input type="number" name="gia" value="<?= $tour['gia'] ?>">
                 <label>Chính sách</label>
                 <textarea name="chinh_sach"><?= htmlspecialchars($tour['chinh_sach']) ?></textarea>
-<<<<<<< HEAD
 
                 <!-- Lịch trình chi tiết -->
                 <label>Lịch trình chi tiết</label>
@@ -200,23 +195,10 @@
                     <div style="margin-bottom:8px;">
                         <button type="button" id="add-day"
                             style="background:#06b6d4;border:none;padding:8px 12px;color:#fff;border-radius:6px;cursor:pointer;">Thêm ngày</button>
-=======
-                <label>Lịch trình chi tiết</label>
-                <div id="itinerary-wrapper"
-                    style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid #e2e8f0;">
-                    <div style="margin-bottom:8px;">
-                        <button type="button" id="add-day"
-                            style="background:#06b6d4;border:none;padding:8px 12px;color:#fff;border-radius:6px;cursor:pointer;">Thêm
-                            ngày</button>
->>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
                     </div>
                     <div id="days-list"></div>
                 </div>
                 <input type="hidden" name="lich_trinh" id="lich_trinh_input">
-<<<<<<< HEAD
-
-=======
->>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
                 <label>Hình ảnh hiện tại</label>
                 <?php if (!empty($tour['hinh_anh'])): ?>
                     <img
@@ -244,10 +226,6 @@
                 </select>
                 <button type="submit"><i class="fa fa-save"></i> Cập nhật Tour</button>
             </form>
-<<<<<<< HEAD
-
-=======
->>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
             <!-- FORM ALBUM -->
             <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data" class="album-form">
                 <input type="hidden" name="id" value="<?= $tour['id'] ?>">
@@ -263,18 +241,8 @@
                         <tbody>
                             <?php foreach ($album as $img): ?>
                                 <tr>
-<<<<<<< HEAD
                                     <td><img src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $img->file_name) ?>"></td>
                                     <td><input type="checkbox" name="delete_album[]" value="<?= $img->id ?>"> Xóa</td>
-=======
-                                    <td>
-                                        <img
-                                            src="<?= htmlspecialchars((defined('BASE_ASSETS_UPLOADS') ? BASE_ASSETS_UPLOADS : 'assets/uploads/') . $img->file_name) ?>">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="delete_album[]" value="<?= $img->id ?>"> Xóa
-                                    </td>
->>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -291,7 +259,6 @@
             <a href="?action=tours" class="back-link"><i class="fa fa-arrow-left"></i> Quay lại</a>
         </div>
     </div>
-<<<<<<< HEAD
 
     <!-- Lịch trình JS -->
     <script>
@@ -396,44 +363,6 @@
             }
         })();
     </script>
-=======
-=======
-    <h1>Sửa Tour</h1>
-    <form action="?action=tour_edit_post" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?= $tour['id'] ?>">
-        <label>Tên Tour</label>
-        <input type="text" name="ten_tour" value="<?= htmlspecialchars($tour['ten_tour']) ?>" required>
-        <label>Loại Tour</label>
-        <select name="loai_tour">
-            <option value="Trong nước" <?= $tour['loai_tour']=='trong_nuoc'?'selected':'' ?>>Trong nước</option>
-            <option value="Quốc tế" <?= $tour['loai_tour']=='quoc_te'?'selected':'' ?>>Quốc tế</option>
-            <option value="Yêu cầu" <?= $tour['loai_tour']=='yeu_cau'?'selected':'' ?>>Yêu cầu</option>
-        </select>
-        <label>Mô tả</label>
-        <textarea name="mo_ta"><?= $tour['mo_ta'] ?></textarea>
-        <label>Giá</label>
-        <input type="number" name="gia" value="<?= $tour['gia'] ?>">
-        <label>Chính sách</label>
-        <textarea name="chinh_sach"><?= $tour['chinh_sach'] ?></textarea>
-        <label>Hình ảnh</label>
-        <input type="file" name="hinh_anh">
-        <?php if($tour['hinh_anh']): ?>
-            <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="120">
-        <?php endif; ?>
-        <label>Nhà cung cấp</label>
-        <input type="text" name="nha_cung_cap" value="<?= htmlspecialchars($tour['nha_cung_cap']) ?>">
-        <label>Mùa</label>
-        <select name="mua">
-            <option value="Mùa Xuân" <?= $tour['mua']=='mua_xuan'?'selected':'' ?>>Mùa Xuân</option>
-            <option value="Mùa Hạ" <?= $tour['mua']=='mua_ha'?'selected':'' ?>>Mùa Hạ</option>
-            <option value="Mùa Thu" <?= $tour['mua']=='mua_thu'?'selected':'' ?>>Mùa Thu</option>
-            <option value="Mùa Đông" <?= $tour['mua']=='trong_dong'?'selected':'' ?>>Mùa Đông</option>
-            </select>
-        <button type="submit">Cập nhật Tourr</button>
-        <a href="?action=tours">Quay lại</a>
-    </form>
->>>>>>> lebang271206-ui
->>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
 </body>
 
 </html>
