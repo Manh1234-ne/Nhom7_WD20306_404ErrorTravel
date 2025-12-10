@@ -120,9 +120,9 @@
         <?php if ($con_thieu_full > 0): ?>
             <a href="?action=qlbooking_pay&id=<?= $qlb['id'] ?>" 
                class="btn-back" 
-               style="background:#27ae60;">+ Thanh toán thêm</a>
+              >+ Thanh toán thêm</a>
         <?php else: ?>
-            <p style="color:green; font-weight:bold;">Đã thanh toán đủ — không thể thanh toán thêm.</p>
+            <p >Đã thanh toán đủ — không thể thanh toán thêm.</p>
         <?php endif; ?>
 
         <br><br>
