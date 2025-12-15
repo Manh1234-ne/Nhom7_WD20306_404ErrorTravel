@@ -17,47 +17,6 @@
             background: #eef2f7;
         }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 250px;
-            background: #1e293b;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            color: #fff;
-            padding-top: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .sidebar h2 {
-            font-size: 20px;
-            text-align: center;
-            margin-bottom: 25px;
-            color: #38bdf8;
-            font-weight: 600;
-        }
-
-        .sidebar a {
-            padding: 14px 20px;
-            color: #cbd5e1;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: 0.25s;
-            font-size: 15px;
-        }
-
-        .sidebar a:hover {
-            background: #334155;
-            color: #fff;
-        }
-
-        .sidebar i {
-            margin-right: 12px;
-        }
-
-        /* CONTENT */
         .content {
             margin-left: 250px;
             padding: 40px 35px;
@@ -139,18 +98,16 @@
 
 <body>
 
-    
-    <!-- CONTENT -->
     <div class="content">
         <h1>Tạo Booking</h1>
 
-        <form action="?action=save_booking" method="POST">
+        <!-- ✅ FORM DUY NHẤT + enctype -->
+        <form action="?action=save_booking" method="POST" enctype="multipart/form-data">
 
             <input type="hidden" name="tour_id" value="<?= $tour['id'] ?>">
 
             <div class="grid-2">
 
-                <!-- Cột trái -->
                 <div>
                     <label>Tên khách</label>
                     <input type="text" name="ten_khach" required>
@@ -165,7 +122,6 @@
                     <input type="number" name="cccd" required>
                 </div>
 
-                <!-- Cột phải -->
                 <div>
                     <label>Tên tour</label>
                     <input type="text" value="<?= $tour['ten_tour'] ?>" disabled>
@@ -180,23 +136,13 @@
                     <input type="number" name="gia" value="<?= $tour['gia'] ?>" required>
                 </div>
 
-                <!-- Full row -->
                 <div class="full-row">
-                    <label>Trạng thái</label>
-                    <input type="text" value="Chờ xác nhận" disabled>
                     <input type="hidden" name="trang_thai" value="Chờ xác nhận">
-                </div>
-
-                <div class="full-row">
-                    <label>Tình trạng thanh toán</label>
-                    <input type="text" value="Chờ thanh toán" disabled>
                     <input type="hidden" name="tinh_trang_thanh_toan" value="Chờ thanh toán">
                 </div>
 
-                <!-- Tiền cọc -->
                 <?php if ($tour['gia'] > 500000): ?>
                     <?php $tien_coc = $tour['gia'] * 0.4; ?>
-
                     <div class="full-row">
                         <label>Tiền cọc</label>
                         <input type="text" value="<?= number_format($tien_coc) ?> VND (40% giá tour)" disabled>
@@ -205,6 +151,11 @@
                 <?php else: ?>
                     <input type="hidden" name="tien_coc" value="0">
                 <?php endif; ?>
+
+                <div class="full-row">
+                    <label>Danh sách khách (Excel)</label>
+                    <input type="file" name="danh_sach_file" accept=".xls,.xlsx">
+                </div>
 
                 <div class="full-row">
                     <label>Yêu cầu đặc biệt</label>

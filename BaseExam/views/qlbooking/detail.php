@@ -1,6 +1,6 @@
 <?php
 // ===============================
-// TÍNH TOÁN THANH TOÁN
+// LẤY THÔNG TIN BOOKING
 // ===============================
 $gia = $qlb['gia'];
 
@@ -25,31 +25,42 @@ if ($tong_da_tra == 0) {
 // LẤY ALBUM TOUR
 // ===============================
 if (empty($album)) {
-    if (defined('PATH_MODEL') && file_exists(PATH_MODEL . 'Tour.php')) {
-        require_once PATH_MODEL . 'Tour.php';
-        try {
-            $tourModel = new Tour();
-            $tourId = $qlb['tour_id'] ?? null;
-            $album = $tourId ? $tourModel->getAlbum($tourId) : [];
-        } catch (Throwable $e) {
-            $album = [];
-        }
-    }
+    require_once PATH_MODEL . 'Tour.php';
+    $tourModel = new Tour();
+    $album = $tourModel->getAlbum($qlb['tour_id']);
 }
 
-$mainImgFilename = $mainImgFilename ?? '';
-if (empty($mainImgFilename) && !empty($album)) {
-    $first = is_object($album[0])
-        ? ($album[0]->file_name ?? '')
-        : ($album[0]['file_name'] ?? '');
+$mainImgFilename = '';
+if (!empty($album)) {
+    $first = is_object($album[0]) ? $album[0]->file_name : $album[0]['file_name'];
     $mainImgFilename = $first;
 }
 
-$baseUploads = defined('BASE_ASSETS_UPLOADS')
-    ? BASE_ASSETS_UPLOADS
-    : 'assets/uploads/';
+$baseUploads = 'assets/uploads/';
+$mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '/assets/no-image.png';
 
-$mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
+// ===============================
+// LẤY LỊCH TRÌNH
+// ===============================
+$itinerary = [];
+if (!empty($tour['lich_trinh'])) {
+    $decoded = json_decode($tour['lich_trinh'], true);
+    if (is_array($decoded)) $itinerary = $decoded;
+}
+
+// Hàm fix đường dẫn ảnh
+function realImage($filename, $folder = 'tour')
+{
+    if (!$filename) return "/assets/no-image.png";
+
+    $filename = ltrim($filename, '/');
+    $serverPath = __DIR__ . "/../../assets/uploads/$folder/$filename";
+    $webPath = "/assets/uploads/$folder/$filename";
+
+    if (file_exists($serverPath)) return $webPath;
+
+    return "/assets/no-image.png";
+}
 ?>
 
 <!DOCTYPE html>
@@ -59,8 +70,11 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
     <meta charset="UTF-8">
     <title>Chi tiết Booking</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -100,6 +114,7 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
+            margin-right: 10px;
         }
 
         .btn:hover {
@@ -130,60 +145,95 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
             border: 3px solid #3498db;
         }
 
-        /* ===== LỊCH TRÌNH ===== */
         .itinerary {
-            margin-top: 20px;
+            margin-top: 12px;
         }
 
         .itinerary-day {
-            border: 1px solid #ddd;
+            border: 1px solid #e6edf0;
             border-radius: 8px;
-            margin-bottom: 15px;
+            background: #fff;
+            margin-bottom: 14px;
             overflow: hidden;
         }
 
         .day-header {
-            background: #ecf0f1;
-            padding: 12px 15px;
-            font-weight: bold;
+            padding: 12px 16px;
+            background: #eef6fb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .day-header h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .day-header .toggle {
+            font-size: 13px;
+            color: #2563eb;
         }
 
         .day-slots {
-            padding: 15px;
+            padding: 12px 16px;
         }
 
         .itinerary-slot {
             display: flex;
-            gap: 15px;
-            border-top: 1px dashed #ddd;
-            padding: 12px 0;
+            gap: 16px;
+            padding: 10px 0;
+            border-top: 1px dashed #e8eef2;
+            align-items: center;
         }
 
         .itinerary-slot:first-child {
-            border-top: none;
+            border-top: 0;
         }
 
         .slot-time {
             width: 80px;
-            font-weight: bold;
-            color: #2c3e50;
+            color: #0f172a;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
         .slot-img img {
-            max-width: 200px;
+            max-width: 220px;
+            height: auto;
+            display: block;
             border-radius: 6px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
+        }
+
+        .slot-content {
+            flex: 1;
+            min-width: 0;
         }
 
         .slot-title {
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .slot-meta {
+            color: #475569;
+            margin-top: 8px;
+        }
+
+        .slot-desc {
+            margin-top: 8px;
+            color: #334155;
+        }
+
+        .itinerary-day.collapsed .day-slots {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-
     <div class="content">
         <h1>Chi tiết Booking</h1>
 
@@ -207,46 +257,33 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
                     <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
                 </div>
 
-                <!-- ===============================
-                     LỊCH TRÌNH TOUR ĐÃ ĐẶT
-                =============================== -->
+                <!-- LỊCH TRÌNH TOUR -->
                 <?php if (!empty($itinerary)): ?>
+                    <h3>Lịch trình tour:</h3>
                     <div class="itinerary">
-                        <h2>📍 Lịch trình tour đã đặt</h2>
-
                         <?php foreach ($itinerary as $dayIdx => $day): ?>
-                            <div class="itinerary-day">
+                            <div class="itinerary-day" data-day="<?= $dayIdx ?>">
                                 <div class="day-header">
-                                    <?= htmlspecialchars($day['title'] ?? ('Ngày ' . ($dayIdx + 1))) ?>
+                                    <h4><?= htmlspecialchars($day['title'] ?? ('Ngày ' . ($dayIdx + 1))) ?></h4>
+                                    <div class="toggle">Ẩn/Hiện</div>
                                 </div>
-
                                 <div class="day-slots">
                                     <?php if (!empty($day['slots'])): ?>
                                         <?php foreach ($day['slots'] as $slot): ?>
                                             <div class="itinerary-slot">
-                                                <div class="slot-time">
-                                                    <?= htmlspecialchars($slot['time'] ?? '') ?>
-                                                </div>
-
+                                                <div class="slot-time"><?= htmlspecialchars($slot['time'] ?? '') ?></div>
                                                 <?php if (!empty($slot['image'])): ?>
                                                     <div class="slot-img">
-                                                        <img src="<?= htmlspecialchars($slot['image']) ?>">
+                                                        <img src="<?= htmlspecialchars(realImage($slot['image'], 'tour')) ?>" alt="Ảnh lịch trình">
                                                     </div>
                                                 <?php endif; ?>
-
-                                                <div>
-                                                    <div class="slot-title">
-                                                        <?= htmlspecialchars($slot['title'] ?? '') ?>
-                                                    </div>
-
+                                                <div class="slot-content">
+                                                    <div class="slot-title"><?= htmlspecialchars($slot['title'] ?? '') ?></div>
                                                     <?php if (!empty($slot['location'])): ?>
-                                                        <div><strong>Địa điểm:</strong> <?= htmlspecialchars($slot['location']) ?></div>
+                                                        <div class="slot-meta"><strong>Địa điểm:</strong> <?= htmlspecialchars($slot['location']) ?></div>
                                                     <?php endif; ?>
-
                                                     <?php if (!empty($slot['desc'])): ?>
-                                                        <div><strong>Mô tả:</strong><br>
-                                                            <?= nl2br(htmlspecialchars($slot['desc'])) ?>
-                                                        </div>
+                                                        <div class="slot-desc"><strong>Mô tả:</strong> <?= nl2br(htmlspecialchars($slot['desc'])) ?></div>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
@@ -258,6 +295,34 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
                     </div>
                 <?php endif; ?>
 
+                <!-- DANH SÁCH KHÁCH (TẢI FILE EXCEL) -->
+<?php
+if (!empty($qlb['danh_sach_file'])):
+    $filePath = PATH_ASSETS_UPLOADS . $qlb['danh_sach_file'];
+    if (file_exists($filePath)):
+?>
+    <div style="margin-top:15px;">
+        <p style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
+            <strong>Danh sách khách:</strong><br><br>
+            <a
+   href="?action=download-booking-file&file=<?= urlencode($qlb['danh_sach_file']) ?>"
+   class="btn"
+   style="background:#16a34a">
+   📄 Tải danh sách khách (Excel)
+</a>
+        </p>
+    </div>
+<?php else: ?>
+    <div style="margin-top:15px;">
+        <p style="background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:6px;">
+            <strong>Danh sách khách:</strong><br>
+            File đã lưu trong DB nhưng chưa có trên server.
+        </p>
+    </div>
+<?php endif; endif; ?>
+
+
+
                 <br>
                 <a href="?action=qlbooking" class="btn">← Quay lại</a>
             </div>
@@ -267,7 +332,7 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
                 <h3>Ảnh Tour</h3>
 
                 <?php if ($mainSrc): ?>
-                    <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>">
+                    <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>" alt="Hình đại diện" style="max-width:220px; max-height:150px; margin-bottom:12px; border-radius:6px; object-fit:cover;">
                 <?php else: ?>
                     <p>Chưa có ảnh.</p>
                 <?php endif; ?>
@@ -278,9 +343,7 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
                         $fn = is_object($img) ? $img->file_name : $img['file_name'];
                         $src = $baseUploads . ltrim($fn, '/');
                     ?>
-                        <img class="album-img <?= $fn == $mainImgFilename ? 'selected' : '' ?>"
-                            data-src="<?= htmlspecialchars($src) ?>"
-                            src="<?= htmlspecialchars($src) ?>">
+                        <img class="album-img" data-src="<?= htmlspecialchars($src) ?>" src="<?= htmlspecialchars($src) ?>">
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -288,12 +351,20 @@ $mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '';
     </div>
 
     <script>
+        // Chọn ảnh album
         document.querySelectorAll('.album-img').forEach(img => {
             img.onclick = function() {
                 document.getElementById('main-image').src = this.dataset.src;
                 document.querySelectorAll('.album-img').forEach(i => i.classList.remove('selected'));
                 this.classList.add('selected');
             }
+        });
+
+        // Ẩn/hiện lịch trình
+        document.querySelectorAll('.itinerary-day .day-header').forEach(function(h) {
+            h.addEventListener('click', function() {
+                this.closest('.itinerary-day').classList.toggle('collapsed');
+            });
         });
     </script>
 
