@@ -85,9 +85,10 @@ match ($action) {
     'yeu_cau' => (new YeuCauController)->index(),
     'yeu_cau_create' => (new YeuCauController)->create(),
     'yeu_cau_store' => (new YeuCauController)->store(),
-    'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
-    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
-    'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
+    'yeu_cau_edit' => (new YeuCauController)->edit($id),
+    'yeu_cau_update' => (new YeuCauController)->update($id),
+    'yeu_cau_delete' => (new YeuCauController)->delete($id),
+    'yeu_cau_show' => (new YeuCauController)->show($id),
 
     // // // GUEST LIST MANAGEMENT (Sidebar mới)
     // // 'guest_list_management' => (new GuestListController)->index(),
@@ -105,22 +106,10 @@ match ($action) {
     // 'login'=> (new NguoiDungController)->login(),
     // 'logout'=> (new NguoiDungController)->logout(),
 
-      // QLBOOKING
-    'qlbooking' => (new QlBookingController)->index(),
-    'qlbooking_edit' => (new QlbookingController)->edit(),
-    'qlbooking_edit_post' => (new QlBookingController)->update(),
-    'qlbooking_detail' => (new QlBookingController)->detail(),
-    'qlbooking_pay' => (new QlBookingController)->pay(),
-    'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
 
 
-     'yeu_cau' => (new YeuCauController)->index(),
-    'yeu_cau_create' => (new YeuCauController)->create(),
-    'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
-    // 'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
-    'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
-    'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
-    'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
+
+
 
     // Mặc định
     default => (new HomeController)->index(),

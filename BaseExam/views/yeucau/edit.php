@@ -170,7 +170,7 @@
             <div class="flash-success"><?= $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?></div>
         <?php endif; ?>
 
-        <form action="index.php?action=yeu_cau_update" method="POST">
+        <form action="index.php?action=yeu_cau_update&id=<?= $yeuCau['id'] ?>" method="POST">
             <input type="hidden" name="id" value="<?= $yeuCau['id'] ?>">
 
             <label>Tên khách:</label>
@@ -178,23 +178,25 @@
 
             <label>Loại yêu cầu:</label>
             <select name="loai_yeu_cau">
-                <?php
-                $types = ['an_chay','di_ung','benh_ly','yeu_cau_phong','yeu_cau_di_chuyen','yeu_cau_an_uong','khac'];
-                foreach ($types as $t): ?>
-                    <option value="<?= $t ?>" <?= $yeuCau['loai_yeu_cau']==$t?'selected':'' ?>><?= $t ?></option>
-                <?php endforeach; ?>
+                <option value="Ăn chay" <?= $yeuCau['loai_yeu_cau']=='Ăn chay'?'selected':'' ?>>Ăn chay</option>
+                <option value="Yêu cầu về dị ứng" <?= $yeuCau['loai_yeu_cau']=='Yêu cầu về dị ứng'?'selected':'' ?>>Dị ứng</option>
+                <option value="Yêu cầu về bệnh lý" <?= $yeuCau['loai_yeu_cau']=='Yêu cầu về bệnh lý'?'selected':'' ?>>Bệnh lý</option>
+                <option value="Yêu cầu về phòng nghỉ" <?= $yeuCau['loai_yeu_cau']=='Yêu cầu về phòng nghỉ'?'selected':'' ?>>Phòng nghỉ</option>
+                <option value="Yêu cầu phương tiện di chuyển" <?= $yeuCau['loai_yeu_cau']=='Yêu cầu phương tiện di chuyển'?'selected':'' ?>>Di chuyển</option>
+                <option value="Yêu cầu về ăn uống" <?= $yeuCau['loai_yeu_cau']=='Yêu cầu về ăn uống'?'selected':'' ?>>Ăn uống</option>
+                <option value="Khác" <?= $yeuCau['loai_yeu_cau']=='Khác'?'selected':'' ?>>Khác</option>
             </select>
 
             <label>Mô tả:</label>
             <textarea name="mo_ta" rows="4"><?= htmlspecialchars($yeuCau['mo_ta']) ?></textarea>
 
             <label>Trạng thái hiện tại:</label>
-            <input type="hidden" name="trang_thai_cu" value="<?= $yeuCau['trang_thai'] ?>">
+            <input type="hidden" name="trang_thai_cu" value="<?= $yeuCau['trang_thai'] ?? 'cho_xu_ly' ?>">
             <select name="trang_thai">
-                <option value="Chờ xử lý" <?= ($yeuCau['trang_thai']=='Chờ xử lý')?'selected':'' ?>>Chờ xử lý</option>
-                <option value="Đang xử lý" <?= ($yeuCau['trang_thai']=='Đang xử lý')?'selected':'' ?>>Đang xử lý</option>
-                <option value="Đã đáp ứng" <?= ($yeuCau['trang_thai']=='Đã đáp ứng')?'selected':'' ?>>Đã đáp ứng</option>
-                <option value="Không thể đáp ứng" <?= ($yeuCau['trang_thai']=='Không thể đáp ứng')?'selected':'' ?>>Không thể đáp ứng</option>
+                <option value="cho_xu_ly" <?= ($yeuCau['trang_thai']=='cho_xu_ly')?'selected':'' ?>>Chờ xử lý</option>
+                <option value="dang_xu_ly" <?= ($yeuCau['trang_thai']=='dang_xu_ly')?'selected':'' ?>>Đang xử lý</option>
+                <option value="da_dap_ung" <?= ($yeuCau['trang_thai']=='da_dap_ung')?'selected':'' ?>>Đã đáp ứng</option>
+                <option value="khong_the_dap_ung" <?= ($yeuCau['trang_thai']=='khong_the_dap_ung')?'selected':'' ?>>Không thể đáp ứng</option>
             </select>
 
             <button type="submit"><i class="fa fa-save"></i> Cập nhật</button>
@@ -202,51 +204,51 @@
 
         <h3>Nhật ký xử lý</h3>
         <?php if(empty($logs)): ?>
-            <p>Chưa có nhật ký xử lý.</p>
+            <p>Chưa có lịch sử xử lý.</p>
         <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Thời gian</th>
-                        <th>Người xử lý</th>
-                        <th>Ghi chú</th>
-                        <th>Trạng thái cũ</th>
-                        <th>Trạng thái mới</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($logs as $l): ?>
-                        <tr>
-                            <td><?= $l['created_at'] ?></td>
-                            <td><?= htmlspecialchars($l['nguoi_xu_ly']) ?></td>
-                            <td><?= nl2br(htmlspecialchars($l['ghi_chu'])) ?></td>
-                            <td><?= htmlspecialchars($l['trang_thai_cu']) ?></td>
-                            <td><?= htmlspecialchars($l['trang_thai_moi']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <div style="border-left: 3px solid #3498db; padding-left: 20px; margin: 20px 0;">
+                <?php foreach($logs as $index => $l): ?>
+                    <div style="background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; position: relative;">
+                        <div style="position: absolute; left: -30px; top: 15px; width: 12px; height: 12px; background: #3498db; border-radius: 50%; border: 3px solid #fff;"></div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <strong style="color: #2c3e50;"><?= htmlspecialchars($l['nguoi_xu_ly']) ?></strong>
+                            <small style="color: #7f8c8d;"><?= date('d/m/Y H:i', strtotime($l['created_at'])) ?></small>
+                        </div>
+                        
+                        <p style="margin: 8px 0; color: #34495e;"><?= nl2br(htmlspecialchars($l['ghi_chu'])) ?></p>
+                        
+                        <?php if (!empty($l['trang_thai_cu']) && !empty($l['trang_thai_moi']) && $l['trang_thai_cu'] !== $l['trang_thai_moi']): ?>
+                            <?php 
+                            $trangThaiText = [
+                                'cho_xu_ly' => 'Chờ xử lý',
+                                'dang_xu_ly' => 'Đang xử lý', 
+                                'da_dap_ung' => 'Đã đáp ứng',
+                                'khong_the_dap_ung' => 'Không thể đáp ứng'
+                            ];
+                            $trangThaiColors = [
+                                'cho_xu_ly' => '#f39c12',
+                                'dang_xu_ly' => '#3498db', 
+                                'da_dap_ung' => '#27ae60',
+                                'khong_the_dap_ung' => '#e74c3c'
+                            ];
+                            ?>
+                            <div style="margin-top: 10px;">
+                                <span style="background: <?= $trangThaiColors[$l['trang_thai_cu']] ?? '#95a5a6' ?>; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px;">
+                                    <?= $trangThaiText[$l['trang_thai_cu']] ?? $l['trang_thai_cu'] ?>
+                                </span>
+                                <i class="fa fa-arrow-right" style="margin: 0 8px; color: #7f8c8d;"></i>
+                                <span style="background: <?= $trangThaiColors[$l['trang_thai_moi']] ?? '#95a5a6' ?>; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px;">
+                                    <?= $trangThaiText[$l['trang_thai_moi']] ?? $l['trang_thai_moi'] ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
 
-        <h3>Thêm nhật ký xử lý</h3>
-        <form action="index.php?action=yeu_cau_luu_nhat_ky" method="POST">
-            <input type="hidden" name="id_yeu_cau" value="<?= $yeuCau['id'] ?>">
-            <input type="hidden" name="trang_thai_cu" value="<?= $yeuCau['trang_thai'] ?>">
 
-            <label>Ghi chú:</label>
-            <textarea name="ghi_chu" rows="4" required></textarea>
-
-            <label>Trạng thái mới (nếu có):</label>
-            <select name="trang_thai_moi">
-                <option value="">(Không thay đổi)</option>
-                <option value="Chờ xử lý">Chờ xử lý</option>
-                <option value="Đang xử lý">Đang xử lý</option>
-                <option value="Đã đáp ứng">Đã đáp ứng</option>
-                <option value="Không thể đáp ứng">Không thể đáp ứng</option>
-            </select>
-
-            <button type="submit"><i class="fa fa-plus"></i> Lưu nhật ký</button>
-        </form>
     </div>
 </body>
 
