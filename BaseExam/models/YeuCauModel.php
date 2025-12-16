@@ -13,8 +13,12 @@ class YeuCauModel
 
     public function getAll($filters = [])
     {
-        // Tạm thời không dùng JOIN cho đến khi database được cập nhật
-        $sql = "SELECT * FROM yeu_cau_khach_dac_biet WHERE 1=1";
+        // Sử dụng LEFT JOIN để hiển thị cả yêu cầu có và không có liên kết
+        $sql = "SELECT y.*, t.ten_tour, d.so_dien_thoai, d.email, d.ngay_khoi_hanh 
+                FROM yeu_cau_khach_dac_biet y
+                LEFT JOIN tour t ON y.tour_id = t.id  
+                LEFT JOIN dat_tour d ON y.booking_id = d.id
+                WHERE 1=1";
         $params = [];
 
         // Tìm kiếm theo tên khách
@@ -86,8 +90,12 @@ class YeuCauModel
 
     public function find($id)
     {
-        // Tạm thời không dùng JOIN cho đến khi database được cập nhật
-        $sql = "SELECT * FROM yeu_cau_khach_dac_biet WHERE id = ?";
+        // Sử dụng LEFT JOIN để lấy thông tin đầy đủ
+        $sql = "SELECT y.*, t.ten_tour, d.so_dien_thoai, d.email, d.ngay_khoi_hanh 
+                FROM yeu_cau_khach_dac_biet y
+                LEFT JOIN tour t ON y.tour_id = t.id  
+                LEFT JOIN dat_tour d ON y.booking_id = d.id
+                WHERE y.id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

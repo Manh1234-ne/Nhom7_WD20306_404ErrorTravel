@@ -81,7 +81,28 @@ class BookingController
             'danh_sach_file'       => $danh_sach_file
         ];
 
-        $this->model->create($data);
+        $bookingId = $this->model->create($data);
+
+        // Tự động tạo yêu cầu đặc biệt nếu có
+        if (!empty($data['yeu_cau_dac_biet']) && trim($data['yeu_cau_dac_biet']) !== '') {
+            try {
+                require_once __DIR__ . '/../models/YeuCauModel.php';
+                $yeuCauModel = new YeuCauModel();
+                
+                $yeuCauData = [
+                    'booking_id' => $bookingId,
+                    'tour_id' => $data['tour_id'],
+                    'ten_khach' => $data['ten_khach'],
+                    'loai_yeu_cau' => 'Khác', // Mặc định là "Khác"
+                    'mo_ta' => $data['yeu_cau_dac_biet']
+                ];
+                
+                $yeuCauModel->createFromBooking($bookingId, $yeuCauData);
+            } catch (Exception $e) {
+                // Không dừng quá trình nếu tạo yêu cầu thất bại
+                error_log('Lỗi tạo yêu cầu đặc biệt: ' . $e->getMessage());
+            }
+        }
 
         header("Location: ?action=qlbooking");
         exit();
