@@ -233,6 +233,7 @@ $edit_booking = $edit_booking ?? null; // Booking đang edit nếu có
                     <th>Số người</th>
                     <th>Ngày khởi hành</th>
                     <th>Giá</th>
+                    <th>HDV</th>
                     <th>Trạng thái</th>
                     <th>Tình trạng thanh toán</th>
                     <th>Yêu cầu đặc biệt</th>
@@ -249,10 +250,18 @@ $edit_booking = $edit_booking ?? null; // Booking đang edit nếu có
                             <td><?= $b['so_nguoi'] ?></td>
                             <td><?= htmlspecialchars($b['ngay_khoi_hanh']) ?></td>
                             <td><?= number_format($b['gia'], 0, ',', '.') ?> VNĐ</td>
+                             <td>
+    <?php if (!empty($b['ten_hdv'])): ?>
+        <?= htmlspecialchars($b['ten_hdv']) ?>
+    <?php else: ?>
+        <span style="color:#f97316;">Chưa phân công</span>
+    <?php endif; ?>
+</td>
+
                             <td><?= htmlspecialchars($b['trang_thai']) ?></td>
                             <td><?= htmlspecialchars($b['tinh_trang_thanh_toan']) ?></td>
                             <td><?= htmlspecialchars($b['yeu_cau_dac_biet']) ?></td>
-                            <td>
+                           
                                 <a href="?action=qlbooking_detail&id=<?= $b['id'] ?>" class="btn btn-view"><i class="fa fa-eye"></i></a>
                                 <a href="?action=qlbooking_edit&id=<?= $b['id'] ?>" class="btn btn-edit"><i class="fa fa-edit"></i></a>
                                 <a href="?action=qlbooking_pay&id=<?= $b['id'] ?>" class="btn btn-pay"><i class="fa fa-credit-card"></i></a>

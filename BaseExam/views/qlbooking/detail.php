@@ -2,11 +2,11 @@
 // ===============================
 // LẤY THÔNG TIN BOOKING
 // ===============================
-$gia = $qlb['gia'];
+$gia = $b['gia'];
 
 $tien_coc = $gia * 0.4;
-$da_coc   = $qlb['tien_coc_da_tra'] ?? 0;
-$da_full  = $qlb['tien_full_da_tra'] ?? 0;
+$da_coc   = $b['tien_coc_da_tra'] ?? 0;
+$da_full  = $b['tien_full_da_tra'] ?? 0;
 
 $tong_da_tra = $da_coc + $da_full;
 $con_thieu_full = $gia - $tong_da_tra;
@@ -27,7 +27,7 @@ if ($tong_da_tra == 0) {
 if (empty($album)) {
     require_once PATH_MODEL . 'Tour.php';
     $tourModel = new Tour();
-    $album = $tourModel->getAlbum($qlb['tour_id']);
+    $album = $tourModel->getAlbum($b['tour_id']);
 }
 
 $mainImgFilename = '';
@@ -241,12 +241,12 @@ function realImage($filename, $folder = 'tour')
             <!-- LEFT -->
             <div class="left">
                 <div class="info">
-                    <p><strong>Tên khách:</strong> <?= htmlspecialchars($qlb['ten_khach']) ?></p>
-                    <p><strong>SĐT:</strong> <?= htmlspecialchars($qlb['so_dien_thoai']) ?></p>
-                    <p><strong>Email:</strong> <?= htmlspecialchars($qlb['email']) ?></p>
-                    <p><strong>CCCD:</strong> <?= htmlspecialchars($qlb['cccd']) ?></p>
-                    <p><strong>Số người:</strong> <?= $qlb['so_nguoi'] ?></p>
-                    <p><strong>Ngày khởi hành:</strong> <?= $qlb['ngay_khoi_hanh'] ?></p>
+                    <p><strong>Tên khách:</strong> <?= htmlspecialchars($b['ten_khach']) ?></p>
+                    <p><strong>SĐT:</strong> <?= htmlspecialchars($b['so_dien_thoai']) ?></p>
+                    <p><strong>Email:</strong> <?= htmlspecialchars($b['email']) ?></p>
+                    <p><strong>CCCD:</strong> <?= htmlspecialchars($b['cccd']) ?></p>
+                    <p><strong>Số người:</strong> <?= $b['so_nguoi'] ?></p>
+                    <p><strong>Ngày khởi hành:</strong> <?= $b['ngay_khoi_hanh'] ?></p>
                     <p><strong>Giá tour:</strong> <?= number_format($gia) ?> VNĐ</p>
                     <p><strong>Cọc 40%:</strong> <?= number_format($tien_coc) ?> VNĐ</p>
                     <p><strong>Đã cọc:</strong> <?= number_format($da_coc) ?> VNĐ</p>
@@ -254,7 +254,7 @@ function realImage($filename, $folder = 'tour')
                     <p><strong>Tổng đã thanh toán:</strong> <?= number_format($tong_da_tra) ?> VNĐ</p>
                     <p><strong>Còn phải thanh toán:</strong> <?= number_format($con_thieu_full) ?> VNĐ</p>
                     <p><strong>Tình trạng:</strong> <?= $txt_trang_thai ?></p>
-                    <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
+                    <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($b['yeu_cau_dac_biet']) ?></p>
                 </div>
 
                 <!-- LỊCH TRÌNH TOUR -->
@@ -297,15 +297,15 @@ function realImage($filename, $folder = 'tour')
 
                 <!-- DANH SÁCH KHÁCH (TẢI FILE EXCEL) -->
 <?php
-if (!empty($qlb['danh_sach_file'])):
-    $filePath = PATH_ASSETS_UPLOADS . $qlb['danh_sach_file'];
+if (!empty($b['danh_sach_file'])):
+    $filePath = PATH_ASSETS_UPLOADS . $b['danh_sach_file'];
     if (file_exists($filePath)):
 ?>
     <div style="margin-top:15px;">
         <p style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
             <strong>Danh sách khách:</strong><br><br>
             <a
-   href="?action=download-booking-file&file=<?= urlencode($qlb['danh_sach_file']) ?>"
+   href="?action=download-booking-file&file=<?= urlencode($b['danh_sach_file']) ?>"
    class="btn"
    style="background:#16a34a">
    📄 Tải danh sách khách (Excel)
@@ -321,6 +321,73 @@ if (!empty($qlb['danh_sach_file'])):
     </div>
 <?php endif; endif; ?>
 
+<?php if ($phan_cong): ?>
+
+    <!-- ĐÃ PHÂN CÔNG -->
+    <div style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
+        <p>
+            <strong>Hướng dẫn viên hiện tại:</strong>
+            <?= htmlspecialchars($phan_cong['ten_hdv']) ?>
+        </p>
+
+        <button
+            type="button"
+            class="btn"
+            style="background:#f59e0b"
+            onclick="document.getElementById('doi-hdv-form').style.display='block'">
+            🔄 Đổi HDV
+        </button>
+    </div>
+
+    <form
+        method="post"
+        action="?action=booking_doi_hdv"
+        id="doi-hdv-form"
+        style="display:none;margin-top:12px;"
+    >
+        <input type="hidden" name="booking_id" value="<?= $qlb['id'] ?>">
+
+        <div style="margin-bottom:10px;">
+            <label><strong>Chọn HDV mới:</strong></label>
+            <select name="huong_dan_vien_id" required style="width:100%;padding:8px;">
+                <option value="">-- Chọn HDV --</option>
+                <?php foreach ($ds_hdv as $h): ?>
+                    <option value="<?= $h['id'] ?>">
+                        <?= htmlspecialchars($h['ho_ten']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <button class="btn" style="background:#16a34a">
+            ✅ Cập nhật HDV
+        </button>
+    </form>
+
+<?php else: ?>
+
+    <!-- CHƯA PHÂN CÔNG -->
+    <form method="post" action="?action=booking_phan_cong">
+        <input type="hidden" name="booking_id" value="<?= $qlb['id'] ?>">
+
+        <div style="margin-bottom:10px;">
+            <label><strong>Chọn HDV:</strong></label>
+            <select name="huong_dan_vien_id" required style="width:100%;padding:8px;">
+                <option value="">-- Chọn HDV --</option>
+                <?php foreach ($ds_hdv as $h): ?>
+                    <option value="<?= $h['id'] ?>">
+                        <?= htmlspecialchars($h['ho_ten']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <button class="btn" style="background:#16a34a">
+            ✅ Phân công HDV
+        </button>
+    </form>
+
+<?php endif; ?>
 
 
                 <br>
@@ -368,51 +435,7 @@ if (!empty($qlb['danh_sach_file'])):
         });
     </script>
 
-<hr>
-<h3>Phân công Hướng dẫn viên</h3>
 
-<?php if ($tong_da_tra >= $tien_coc): ?>
-    <?php if ($phan_cong): ?>
-        <!-- ĐÃ PHÂN CÔNG -->
-        <p style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
-            <strong>HDV phụ trách:</strong>
-            <?= htmlspecialchars($phan_cong['ten_nhan_su']) ?><br>
-            <strong>Ghi chú:</strong>
-            <?= htmlspecialchars($phan_cong['ghi_chu']) ?>
-        </p>
-    <?php else: ?>
-        <!-- FORM PHÂN CÔNG -->
-        <form method="post" action="?action=phanCongHDV">
-            <input type="hidden" name="booking_id" value="<?= $qlb['id'] ?>">
-
-            <div style="margin-bottom:10px;">
-                <label><strong>Chọn HDV:</strong></label>
-                <select name="huong_dan_vien_id" required style="width:100%;padding:8px;">
-                    <option value="">-- Chọn HDV --</option>
-                    <?php foreach ($ds_hdv as $h): ?>
-                        <option value="<?= $h['id'] ?>">
-                            <?= htmlspecialchars($h['ten_nhan_su']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div style="margin-bottom:10px;">
-                <label><strong>Ghi chú:</strong></label>
-                <textarea name="ghi_chu" style="width:100%;padding:8px;"></textarea>
-            </div>
-
-            <button class="btn" style="background:#16a34a">
-                ✅ Phân công HDV
-            </button>
-        </form>
-    <?php endif; ?>
-<?php else: ?>
-    <!-- CHƯA ĐƯỢC PHÂN CÔNG -->
-    <p style="background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:6px;">
-        Booking chưa đóng cọc → <strong>chưa thể phân công HDV</strong>.
-    </p>
-<?php endif; ?>
 </body>
 
 </html>

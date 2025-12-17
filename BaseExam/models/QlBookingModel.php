@@ -4,7 +4,7 @@ require_once 'BaseModel.php';
 class qlb extends BaseModel
 {
     protected $table = 'dat_tour';
-
+    
     // ===============================
     // FORMAT TIỀN
     // ===============================
@@ -22,77 +22,108 @@ class qlb extends BaseModel
             return $number . ' VNĐ';
         }
     }
+    
+    // ===============================
+    // DANH SÁCH BOOKING + HDV
+    // ===============================
+    public function getAllWithHDV()
+{
+    $sql = "
+        SELECT 
+            dt.*,
+            t.ten_tour,
+            nd.ho_ten AS ten_hdv
+        FROM dat_tour dt
+        JOIN tour t ON dt.tour_id = t.id
+        LEFT JOIN phan_cong_tour pct ON pct.tour_id = t.id
+        LEFT JOIN huong_dan_vien hdv ON pct.huong_dan_vien_id = hdv.id
+        LEFT JOIN nguoi_dung nd ON hdv.nguoi_dung_id = nd.id
+        ORDER BY dt.id DESC
+    ";
 
+    return $this->db->query($sql)->fetchAll();
+}
     // ===============================
-    // KHÁCH CÙNG TOUR
-    // ===============================
-    public function getCustomersByTour($tour_id)
-    {
-        $sql = "
-            SELECT *,
-                (IFNULL(tien_coc_da_tra,0) + IFNULL(tien_full_da_tra,0)) AS tong_da_tra
-            FROM dat_tour
-            WHERE tour_id = ?
-            ORDER BY id DESC
-        ";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$tour_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // ===============================
-    // KIỂM TRA ĐÃ CỌC CHƯA
+    // KIỂM TRA ĐÃ CỌC
     // ===============================
     public function daTraCoc($booking_id)
     {
         $stmt = $this->db->prepare("
             SELECT COUNT(*) FROM dat_tour
             WHERE id = ?
-            AND tinh_trang_thanh_toan IN ('Đã cọc','Đã thanh toán')
+            AND (tien_coc_da_tra > 0)
         ");
         $stmt->execute([$booking_id]);
         return $stmt->fetchColumn() > 0;
     }
 
     // ===============================
-    // KIỂM TRA ĐÃ PHÂN CÔNG HDV CHƯA
+    // KIỂM TRA TOUR ĐÃ CÓ HDV
     // ===============================
-    public function daPhanCongHDV($lich_khoi_hanh_id)
+    public function daPhanCongHDV($tour_id)
     {
         $stmt = $this->db->prepare("
             SELECT COUNT(*) FROM phan_cong_tour
-            WHERE lich_khoi_hanh_id = ?
+            WHERE tour_id = ?
         ");
-        $stmt->execute([$lich_khoi_hanh_id]);
+        $stmt->execute([$tour_id]);
         return $stmt->fetchColumn() > 0;
-    }
-
-    // ===============================
-    // LẤY PHÂN CÔNG HDV
-    // ===============================
-    public function getPhanCongHDV($lich_khoi_hanh_id)
-    {
-        $stmt = $this->db->prepare("
-            SELECT pc.*, ns.ten_nhan_su
-            FROM phan_cong_tour pc
-            JOIN nhan_su ns ON pc.hdv_id = ns.id
-            WHERE pc.lich_khoi_hanh_id = ?
-            LIMIT 1
-        ");
-        $stmt->execute([$lich_khoi_hanh_id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // ===============================
     // PHÂN CÔNG HDV
     // ===============================
-    public function phanCongHDV($lich_khoi_hanh_id, $hdv_id)
+    public function phanCongHDV($tour_id, $hdv_id, $ghi_chu)
     {
         $stmt = $this->db->prepare("
             INSERT INTO phan_cong_tour
-            (lich_khoi_hanh_id, hdv_id, phuong_tien, ghi_chu)
-            VALUES (?, ?, 'Xe du lịch', 'Phân công sau khi booking đã cọc')
+            (tour_id, lich_khoi_hanh_id, huong_dan_vien_id, phuong_tien, ghi_chu)
+            // VALUES (?,?, ?, 'Xe du lịch', ?)
         ");
-        return $stmt->execute([$lich_khoi_hanh_id, $hdv_id]);
+        return $stmt->execute([$tour_id, $hdv_id, $ghi_chu]);
     }
+
+    // ===============================
+    // LẤY PHÂN CÔNG HDV
+    // ===============================
+    public function getPhanCongByTour($tour_id)
+    {
+        $stmt = $this->db->prepare("
+            SELECT 
+                pc.*,
+                nd.ho_ten AS ten_hdv
+            FROM phan_cong_tour pc
+            JOIN huong_dan_vien hdv ON hdv.id = pc.huong_dan_vien_id
+            JOIN nguoi_dung nd ON nd.id = hdv.nguoi_dung_id
+            WHERE pc.tour_id = ?
+            LIMIT 1
+        ");
+        $stmt->execute([$tour_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // ===============================
+    // DANH SÁCH HDV
+    // ===============================
+    public function getDanhSachHDV()
+    {
+        return $this->db->query("
+            SELECT 
+                hdv.id,
+                nd.ho_ten
+            FROM huong_dan_vien hdv
+            JOIN nguoi_dung nd ON nd.id = hdv.nguoi_dung_id
+        ")->fetchAll(PDO::FETCH_ASSOC);
+    }
+public function doiHDV($tour_id, $hdv_id)
+{
+    $stmt = $this->db->prepare("
+        UPDATE phan_cong_tour
+        SET huong_dan_vien_id = ?
+        WHERE tour_id = ?
+    ");
+    return $stmt->execute([$hdv_id, $tour_id]);
 }
+ }
+
+

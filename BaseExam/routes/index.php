@@ -12,9 +12,9 @@ require_once PATH_CONTROLLER . 'YeuCauController.php';
 require_once PATH_CONTROLLER . 'BookingController.php';
 require_once PATH_CONTROLLER . 'QlBookingController.php';
 // require_once PATH_CONTROLLER . 'GuestListController.php';
-require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
-require_once PATH_CONTROLLER . 'QlBookingController.php';
-require_once PATH_CONTROLLER . 'YeuCauController.php';
+// require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
+// require_once PATH_CONTROLLER . 'QlBookingController.php';
+// require_once PATH_CONTROLLER . 'YeuCauController.php';
 
 $action = $_GET['action'] ?? 'home';
 $id = $_GET['id'] ?? null;
@@ -44,13 +44,15 @@ match ($action) {
 
 
   // QLBOOKING
-  'qlbooking' => (new QlBookingController)->index(),
-  'qlbooking_edit' => (new QlBookingController)->edit(),
-  'qlbooking_edit_post' => (new QlBookingController)->update(),
-  'qlbooking_detail' => (new QlBookingController)->detail(),
-  'qlbooking_pay' => (new QlBookingController)->pay(),
-  'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
-  'qlbooking_phan_cong' => (new QlBookingController)->phanCongHDV(),
+  // QLBOOKING
+'qlbooking'              => (new QlBookingController)->index(),
+'qlbooking_edit'         => (new QlBookingController)->edit(),
+'qlbooking_edit_post'    => (new QlBookingController)->update(),
+'qlbooking_detail'       => (new QlBookingController)->detail(),
+'qlbooking_pay'          => (new QlBookingController)->pay(),
+'qlbooking_pay_post'     => (new QlBookingController)->paySubmit(),
+'qlbooking_phan_cong'    => (new QlBookingController)->phanCongHDV(),
+'booking_doi_hdv'        => (new QlBookingController)->doiHDV(),
 
   // TOUR GUEST (từ file 1)
   'tour_guest'          => (new TourGuestController)->index(),

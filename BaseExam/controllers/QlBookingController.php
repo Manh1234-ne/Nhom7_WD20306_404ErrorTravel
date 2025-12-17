@@ -17,7 +17,7 @@ class QlBookingController
     // ===============================
     public function index()
     {
-        $qlbooking = $this->model->all();
+        $qlbooking = $this->model->getAllWithHDV();
         require PATH_VIEW . 'qlbooking/index.php';
     }
 
@@ -87,131 +87,59 @@ class QlBookingController
                 }
             }
         }
- $phan_cong = null;
-    if (!empty($qlb['lich_khoi_hanh_id'])) {
-        $phan_cong = $this->model->getPhanCongHDV(
-            $qlb['lich_khoi_hanh_id']
-        );
+        $phan_cong = $this->model->getPhanCongByTour($qlb['tour_id']);
+    $ds_hdv = $this->model->getDanhSachHDV();
+$b = $qlb;
+    require PATH_VIEW . 'qlbooking/detail.php';
     }
+    public function phanCongHDV()
+{
+    $booking_id = $_POST['booking_id'] ?? null;
+    $hdv_id     = $_POST['huong_dan_vien_id'] ?? null;
+    $ghi_chu    = $_POST['ghi_chu'] ?? '';
+
+    if (!$booking_id || !$hdv_id) die("Thiếu dữ liệu");
+
+    $booking = $this->model->find($booking_id);
+    if (!$booking) die("Booking không tồn tại");
+
+    if (!$this->model->daTraCoc($booking_id)) {
+        $_SESSION['error'] = 'Booking chưa cọc';
         require PATH_VIEW . 'qlbooking/detail.php';
+        exit;
     }
 
-    // ===============================
-    // 👉 DANH SÁCH KHÁCH CÙNG TOUR (THÊM MỚI)
-    // ===============================
-    public function customersSameTour()
-    {
-        $id = $_GET['id'] ?? null;
-        if (!$id) die("Thiếu booking ID");
-
-        $booking = $this->model->find($id);
-        if (!$booking) die("Không tìm thấy booking");
-
-        $customers = $this->model->getCustomersByTour($booking['tour_id']);
-
-        require PATH_VIEW . 'qlbooking/customers_same_tour.php';
+    if ($this->model->daPhanCongHDV($booking['tour_id'])) {
+        $_SESSION['error'] = 'Tour đã có HDV';
+         require PATH_VIEW . 'qlbooking/detail.php';
+        exit;
     }
 
-    // ===============================
-    // Trang thanh toán
-    // ===============================
-    public function pay()
-    {
-        $id = $_GET['id'] ?? null;
-        if (!$id) die("Không tìm thấy booking");
+    $this->model->phanCongHDV(
+        $booking['tour_id'],
+        $hdv_id,
+        $ghi_chu
+    );
 
-        $qlb = $this->model->find($id);
-        require PATH_VIEW . 'qlbooking/pay.php';
-    }
-
-    // ===============================
-    // XỬ LÝ THANH TOÁN
-    // ===============================
-    public function paySubmit()
-    {
-        $id = $_POST['id'] ?? null;
-        if (!$id) die("Không tìm thấy booking");
-
-        $so_tien = (int)($_POST['so_tien'] ?? 0);
-        $type = $_POST['type'] ?? 'coc';
-
-        $qlb = $this->model->find($id);
-        if (!$qlb) die("Không tìm thấy booking");
-
-        $gia_tour = (int)$qlb['gia'];
-        $da_tra_coc = (int)($qlb['tien_coc_da_tra'] ?? 0);
-        $da_tra_full = (int)($qlb['tien_full_da_tra'] ?? 0);
-
-        // THANH TOÁN CỌC
-        if ($type === "coc") {
-            $tien_coc_40 = $gia_tour * 0.4;
-            if ($da_tra_coc >= $tien_coc_40) {
-                header("Location: ?action=qlbooking");
-                exit;
-            }
-
-            $this->model->update($id, [
-                'tien_coc_da_tra' => $da_tra_coc + $so_tien,
-                'trang_thai' => 'Đã xác nhận',
-                'tinh_trang_thanh_toan' => 'Đã cọc'
-            ]);
-
-            (new PaymentHistory())->create($id, $so_tien);
-            header("Location: ?action=qlbooking");
-            exit;
-        }
-
-        // THANH TOÁN FULL
-        if ($type === "full") {
-            $this->model->update($id, [
-                'tien_full_da_tra' => $da_tra_full + $so_tien,
-                'trang_thai' => 'Đặt thành công',
-                'tinh_trang_thanh_toan' => 'Đã thanh toán'
-            ]);
-
-            (new PaymentHistory())->create($id, $so_tien);
-            header("Location: ?action=qlbooking");
-            exit;
-        }
-    }
-  // ===============================
-// PHÂN CÔNG HDV CHO BOOKING
-// ===============================
-public function phanCongHDV()
+    $_SESSION['success'] = 'Phân công HDV thành công';
+      require PATH_VIEW . 'qlbooking/detail.php';
+    exit;
+}
+public function doiHDV()
 {
     $booking_id = $_POST['booking_id'] ?? null;
     $hdv_id     = $_POST['huong_dan_vien_id'] ?? null;
 
-    if (!$booking_id || !$hdv_id) {
-        die("Thiếu dữ liệu phân công");
-    }
+    if (!$booking_id || !$hdv_id) die("Thiếu dữ liệu");
 
     $booking = $this->model->find($booking_id);
-    if (!$booking) {
-        die("Booking không tồn tại");
-    }
+    if (!$booking) die("Booking không tồn tại");
 
-    // ❌ Chưa cọc → không cho phân công
-    if (!$this->model->daTraCoc($booking_id)) {
-        $_SESSION['error'] = 'Booking chưa thanh toán cọc';
-        header("Location: ?action=qlbooking");
-        exit;
-    }
+    $this->model->doiHDV($booking['tour_id'], $hdv_id);
 
-    $lich_khoi_hanh_id = $booking['lich_khoi_hanh_id'];
-
-    // ❌ Đã phân công
-    if ($this->model->daPhanCongHDV($lich_khoi_hanh_id)) {
-        $_SESSION['error'] = 'Lịch khởi hành đã được phân công HDV';
-        header("Location: ?action=qlbooking");
-        exit;
-    }
-
-    // ✅ Phân công
-    $this->model->phanCongHDV($lich_khoi_hanh_id, $hdv_id);
-
-    $_SESSION['success'] = 'Phân công HDV thành công';
-    header("Location: ?action=qlbooking");
+    $_SESSION['success'] = 'Đổi HDV thành công';
+    header('Location: ?action=qlbooking');
     exit;
 }
+
 }
