@@ -5,142 +5,351 @@
     <meta charset="UTF-8">
     <title>Chi tiết Tour</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef2f7;
         }
 
         .sidebar {
-            width: 220px;
-            background: #2c3e50;
+            width: 250px;
+            background: #1e293b;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
             color: #fff;
-            display: flex;
-            flex-direction: column;
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar h2 {
+            font-size: 20px;
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #34495e;
+            margin-bottom: 25px;
+            color: #38bdf8;
+            font-weight: 600;
         }
 
         .sidebar a {
-            padding: 15px 20px;
-            color: #fff;
+            padding: 14px 20px;
+            color: #cbd5e1;
             text-decoration: none;
             display: flex;
             align-items: center;
+            transition: 0.25s;
+            font-size: 15px;
         }
 
         .sidebar a:hover {
-            background: #34495e;
+            background: #334155;
+            color: #fff;
         }
 
         .sidebar i {
-            margin-right: 10px;
+            margin-right: 12px;
+            font-size: 17px;
         }
 
         .content {
-            margin-left: 220px;
-            padding: 30px;
+            margin-left: 250px;
+            padding: 40px 35px;
         }
 
-        .card {
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 0;
+        }
+
+        .section {
             background: #fff;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            font-size: 22px;
+            color: #1e293b;
+        }
+
+        .section p {
+            font-size: 15px;
+            color: #334155;
+            margin: 8px 0;
+        }
+
+        img {
+            border-radius: 6px;
+            border: 1px solid #ddd;
         }
 
         .album-img {
             border-radius: 8px;
             margin: 8px;
-            transition: 0.2s;
+            transition: 0.25s;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            width: 140px;
+            height: 90px;
+            object-fit: cover;
         }
 
         .album-img:hover {
-            transform: scale(1.1);
+            transform: scale(1.06);
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            color: white;
         }
 
         .btn-back {
-            margin-top: 20px;
-            display: inline-block;
-            padding: 10px 15px;
-            background: #3498db;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
+            background: #64748b;
         }
 
         .btn-back:hover {
-            background: #2980b9;
+            opacity: .85;
         }
 
-        img {
+        .btn-book {
+            background: #10b981;
+        }
+
+        .btn-book:hover {
+            opacity: .85;
+        }
+
+        .itinerary {
+            margin-top: 12px;
+        }
+
+        .itinerary-day {
+            border: 1px solid #e6edf0;
+            border-radius: 8px;
+            background: #fff;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            padding: 12px 16px;
+            background: #eef6fb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .day-header h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .day-header .toggle {
+            font-size: 13px;
+            color: #2563eb;
+        }
+
+        .day-slots {
+            padding: 12px 16px;
+        }
+
+        .itinerary-slot {
+            display: flex;
+            gap: 16px;
+            padding: 10px 0;
+            border-top: 1px dashed #e8eef2;
+            align-items: center;
+        }
+
+        .itinerary-slot:first-child {
+            border-top: 0;
+        }
+
+        .slot-time {
+            width: 80px;
+            color: #0f172a;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .slot-img img {
+            max-width: 220px;
+            height: auto;
+            display: block;
             border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .slot-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .slot-title {
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .slot-meta {
+            color: #475569;
+            margin-top: 8px;
+        }
+
+        .slot-desc {
+            margin-top: 8px;
+            color: #334155;
+        }
+
+        .itinerary-day.collapsed .day-slots {
+            display: none;
         }
     </style>
 </head>
 
 <body>
 
+    <?php
+    // Hàm fix đường dẫn server + web
+    function realImage($filename, $folder = 'tour')
+    {
+        $serverPath = __DIR__ . "/../../assets/uploads/$folder/$filename";
+        $webPath = "/assets/uploads/$folder/$filename";
+        if (file_exists($serverPath)) return $webPath;
+
+        // fallback
+        $serverPath2 = __DIR__ . "/../../assets/upload/$folder/$filename";
+        $webPath2 = "/assets/upload/$folder/$filename";
+        if (file_exists($serverPath2)) return $webPath2;
+
+        // fallback chung
+        return "/assets/no-image.png"; // hình mặc định nếu không có
+    }
+
+    $avatarWeb = !empty($tour['hinh_anh']) ? realImage($tour['hinh_anh'], 'tour') : "/assets/no-image.png";
+    $albumBase = 'tour/album';
+    ?>
+
     <div class="sidebar">
-        <h2>Quản lý Tour</h2>
+        <h2>404 Error Travel</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
-        <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
-        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
+        <a href="?action=danhmuc"><i class="fa fa-th"></i>Danh mục tour</a>
+        <a href="?action=qlbooking"><i class="fa fa-ticket"></i>Quản lý booking</a>
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
     </div>
 
     <div class="content">
-        <h1>Chi tiết Tour</h1>
+        <h1>Chi tiết Tour: <?= htmlspecialchars($tour["ten_tour"]) ?></h1>
 
-        <div class="card">
+        <div class="section">
+            <h2>Thông tin cơ bản</h2>
 
-            <h2><?= htmlspecialchars($tour['ten_tour']) ?></h2>
+            <img id="previewImage" src="<?= htmlspecialchars($avatarWeb) ?>" alt="Hình đại diện" style="max-width:360px; margin-bottom:12px;">
 
-            <p><strong>Loại tour:</strong> <?= $tour['loai_tour'] ?></p>
-            <p><strong>Mô tả:</strong> <?= nl2br($tour['mo_ta']) ?></p>
-            <p><strong>Giá:</strong> <?= number_format($tour['gia']) ?> VNĐ</p>
-            <p><strong>Chính sách:</strong> <?= nl2br($tour['chinh_sach']) ?></p>
-            <p><strong>Nhà cung cấp:</strong> <?= $tour['nha_cung_cap'] ?></p>
-            <p><strong>Mùa:</strong> <?= $tour['mua'] ?></p>
-
-            <h3>Ảnh đại diện:</h3>
-            <?php if (!empty($tour['hinh_anh'])): ?>
-                <img src="assets/uploads/<?= $tour['hinh_anh'] ?>" width="350">
-            <?php else: ?>
-                <p>Chưa có ảnh đại diện.</p>
+            <?php if (!empty($album) && is_array($album)): ?>
+                <h2>Album ảnh</h2>
+                <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <?php foreach ($album as $a):
+                        $src = realImage($a->file_name, $albumBase);
+                    ?>
+                        <img src="<?= htmlspecialchars($src) ?>" alt="Album" class="album-img" onclick="changePreview('<?= htmlspecialchars($src) ?>')">
+                    <?php endforeach; ?>
+                </div>
             <?php endif; ?>
 
-            <h3>Album ảnh:</h3>
-            <?php if (!empty($album)): ?>
-                <?php foreach ($album as $img): ?>
-                    <img class="album-img" src="assets/uploads/tour/album/<?= $img->file_name ?>" width="150">
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Chưa có ảnh album.</p>
+            <p><strong>Tên tour:</strong> <?= htmlspecialchars($tour["ten_tour"]) ?></p>
+            <p><strong>Mô tả:</strong> <?= nl2br(htmlspecialchars($tour["mo_ta"])) ?></p>
+            <p><strong>Chính sách:</strong> <?= nl2br(htmlspecialchars($tour["chinh_sach"])) ?></p>
+            <p><strong>Nhà cung cấp:</strong> <?= htmlspecialchars($tour["nha_cung_cap"]) ?></p>
+            <p><strong>Giá:</strong> <?= number_format($tour["gia"], 0, ',', '.') ?> VND</p>
+
+            <?php
+            $itinerary = [];
+            if (!empty($tour['lich_trinh'])) {
+                $decoded = json_decode($tour['lich_trinh'], true);
+                if (is_array($decoded)) $itinerary = $decoded;
+            }
+            ?>
+
+            <?php if (!empty($itinerary)): ?>
+                <h3>Lịch trình chi tiết:</h3>
+                <div class="itinerary">
+                    <?php foreach ($itinerary as $dayIdx => $day): ?>
+                        <div class="itinerary-day" data-day="<?= $dayIdx ?>">
+                            <div class="day-header">
+                                <h4><?= htmlspecialchars($day['title'] ?? ('Ngày ' . ($dayIdx + 1))) ?></h4>
+                                <div class="toggle">Ẩn/Hiện</div>
+                            </div>
+                            <div class="day-slots">
+                                <?php if (!empty($day['slots'])): ?>
+                                    <?php foreach ($day['slots'] as $slot): ?>
+                                        <div class="itinerary-slot">
+                                            <div class="slot-time"><?= htmlspecialchars($slot['time'] ?? '') ?></div>
+
+                                            <?php if (!empty($slot['image'])): ?>
+                                                <div class="slot-img">
+                                                    <img src="<?= htmlspecialchars(realImage($slot['image'], 'tour')) ?>">
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <div class="slot-content">
+                                                <div class="slot-title"><?= htmlspecialchars($slot['title'] ?? '') ?></div>
+                                                <?php if (!empty($slot['location'])): ?>
+                                                    <div class="slot-meta"><strong>Địa điểm:</strong> <?= htmlspecialchars($slot['location']) ?></div>
+                                                <?php endif; ?>
+                                                <?php if (!empty($slot['desc'])): ?>
+                                                    <div class="slot-desc"><strong>Mô tả:</strong> <?= nl2br(htmlspecialchars($slot['desc'])) ?></div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             <?php endif; ?>
 
-            <a href="?action=tours" class="btn-back">← Quay lại</a>
-            <a href="?action=dat_tour&id=<?= $tour['id'] ?>" 
-   class="btn-back" 
-   style="background:#27ae60; margin-left:10px;">
-    Đặt tour →
-</a>
-
-
+            <a href="?action=tours" class="btn btn-back">← Quay lại</a>
+            <a href="?action=dat_tour&id=<?= $tour['id'] ?>" class="btn btn-book">Đặt tour →</a>
         </div>
     </div>
+
+    <script>
+        function changePreview(src) {
+            const img = document.getElementById("previewImage");
+            img.src = src;
+            img.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+        document.querySelectorAll('.itinerary-day .day-header').forEach(function(h) {
+            h.addEventListener('click', function() {
+                this.closest('.itinerary-day').classList.toggle('collapsed');
+            });
+        });
+    </script>
 
 </body>
 

@@ -11,17 +11,20 @@ class YeuCauController
         $this->modelYeuCau = new YeuCauModel();
     }
 
+    // Danh sách yêu cầu
     public function index()
     {
-        $danhSach = $this->modelYeuCau->getAll();  // ID tăng dần
+        $danhSach = $this->modelYeuCau->getAll(); // ID tăng dần
         include __DIR__ . '/../views/yeucau/index.php';
     }
 
+    // Form tạo mới
     public function create()
     {
         include __DIR__ . '/../views/yeucau/create.php';
     }
 
+    // Xử lý lưu yêu cầu mới
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -40,23 +43,22 @@ class YeuCauController
 
         try {
             $newId = $this->modelYeuCau->create($data);
-
-            // Chuyển về trang danh sách sau khi tạo
             header("Location: index.php?action=yeu_cau");
             exit;
-
         } catch (PDOException $e) {
             echo "<h3>LỖI SQL:</h3>";
             echo htmlspecialchars($e->getMessage());
         }
     }
 
+    // Form chỉnh sửa
     public function edit($id)
     {
         $yeuCau = $this->modelYeuCau->find($id);
         include __DIR__ . '/../views/yeucau/edit.php';
     }
 
+    // Xử lý cập nhật
     public function update($id)
     {
         $old = $this->modelYeuCau->find($id);
@@ -75,17 +77,25 @@ class YeuCauController
         exit;
     }
 
+    // Xóa yêu cầu
     public function delete($id)
     {
         $yeuCau = $this->modelYeuCau->find($id);
         if (!$yeuCau) die('Yêu cầu không tồn tại.');
 
-        $this->modelYeuCau->delete($id);
-
-        header("Location: index.php?action=yeu_cau");
-        exit;
+        try {
+            $this->modelYeuCau->delete($id);
+            header("Location: index.php?action=yeu_cau");
+            exit;
+        } catch (PDOException $e) {
+            echo "<pre>Lỗi SQL DELETE:\n";
+            echo htmlspecialchars($e->getMessage());
+            echo "</pre>";
+            exit;
+        }
     }
 
+    // Xem chi tiết yêu cầu
     public function show($id)
     {
         $yeuCau = $this->modelYeuCau->find($id);

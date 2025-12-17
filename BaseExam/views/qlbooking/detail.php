@@ -1,25 +1,66 @@
 <?php
-    $gia = $qlb['gia'];
+// ===============================
+// LẤY THÔNG TIN BOOKING
+// ===============================
+$gia = $qlb['gia'];
 
-    // Tính các khoản thanh toán
-    $tien_coc = $gia * 0.4;
-    $da_coc = $qlb['tien_coc_da_tra'] ?? 0;
-    $da_full = $qlb['tien_full_da_tra'] ?? 0;
+$tien_coc = $gia * 0.4;
+$da_coc   = $qlb['tien_coc_da_tra'] ?? 0;
+$da_full  = $qlb['tien_full_da_tra'] ?? 0;
 
-    $tong_da_tra = $da_coc + $da_full;
+$tong_da_tra = $da_coc + $da_full;
+$con_thieu_full = $gia - $tong_da_tra;
+if ($con_thieu_full < 0) $con_thieu_full = 0;
 
-    // số tiền còn phải thanh toán tổng
-    $con_thieu_full = $gia - $tong_da_tra;
-    if ($con_thieu_full < 0) $con_thieu_full = 0;
+// Trạng thái thanh toán
+if ($tong_da_tra == 0) {
+    $txt_trang_thai = '<span style="color:red;font-weight:bold;">Chưa đóng đồng nào</span>';
+} elseif ($tong_da_tra < $gia) {
+    $txt_trang_thai = '<span style="color:#f1c40f;font-weight:bold;">Đã thanh toán một phần</span>';
+} else {
+    $txt_trang_thai = '<span style="color:green;font-weight:bold;">Đã thanh toán đầy đủ</span>';
+}
 
-    // Xác định trạng thái thanh toán
-    if ($tong_da_tra == 0) {
-        $txt_trang_thai = '<span style="color:red; font-weight:bold;">Chưa đóng đồng nào</span>';
-    } elseif ($tong_da_tra < $gia) {
-        $txt_trang_thai = '<span style="color:#f1c40f; font-weight:bold;">Đã thanh toán một phần</span>';
-    } else {
-        $txt_trang_thai = '<span style="color:green; font-weight:bold;">Đã thanh toán đầy đủ</span>';
-    }
+// ===============================
+// LẤY ALBUM TOUR
+// ===============================
+if (empty($album)) {
+    require_once PATH_MODEL . 'Tour.php';
+    $tourModel = new Tour();
+    $album = $tourModel->getAlbum($qlb['tour_id']);
+}
+
+$mainImgFilename = '';
+if (!empty($album)) {
+    $first = is_object($album[0]) ? $album[0]->file_name : $album[0]['file_name'];
+    $mainImgFilename = $first;
+}
+
+$baseUploads = 'assets/uploads/';
+$mainSrc = $mainImgFilename ? $baseUploads . ltrim($mainImgFilename, '/') : '/assets/no-image.png';
+
+// ===============================
+// LẤY LỊCH TRÌNH
+// ===============================
+$itinerary = [];
+if (!empty($tour['lich_trinh'])) {
+    $decoded = json_decode($tour['lich_trinh'], true);
+    if (is_array($decoded)) $itinerary = $decoded;
+}
+
+// Hàm fix đường dẫn ảnh
+function realImage($filename, $folder = 'tour')
+{
+    if (!$filename) return "/assets/no-image.png";
+
+    $filename = ltrim($filename, '/');
+    $serverPath = __DIR__ . "/../../assets/uploads/$folder/$filename";
+    $webPath = "/assets/uploads/$folder/$filename";
+
+    if (file_exists($serverPath)) return $webPath;
+
+    return "/assets/no-image.png";
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,112 +68,351 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Chi tiết Tour</title>
+    <title>Chi tiết Booking</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #f5f5f5; }
-        .sidebar { width: 220px; background: #2c3e50; height: 100vh; position: fixed; top: 0; left: 0; color: #fff; display: flex; flex-direction: column; }
-        .sidebar h2 { text-align: center; padding: 20px 0; border-bottom: 1px solid #34495e; }
-        .sidebar a { padding: 15px 20px; color: #fff; text-decoration: none; display: flex; align-items: center; }
-        .sidebar a:hover { background: #34495e; }
-        .content { margin-left: 220px; padding: 30px; }
-        .card { background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.12); }
-        .album-img { border-radius: 8px; margin: 8px; transition: 0.2s; }
-        .album-img:hover { transform: scale(1.1); }
-        .btn-back { margin-top: 20px; display: inline-block; padding: 10px 15px; background: #3498db; color: #fff; text-decoration: none; border-radius: 5px; }
-        .btn-back:hover { background: #2980b9; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, .12);
+            display: flex;
+            gap: 30px;
+        }
+
+        .left,
+        .right {
+            flex: 1;
+        }
+
+        .info p {
+            margin: 8px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .album-main {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .thumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .album-img {
+            width: 110px;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .album-img.selected {
+            border: 3px solid #3498db;
+        }
+
+        .itinerary {
+            margin-top: 12px;
+        }
+
+        .itinerary-day {
+            border: 1px solid #e6edf0;
+            border-radius: 8px;
+            background: #fff;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            padding: 12px 16px;
+            background: #eef6fb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .day-header h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .day-header .toggle {
+            font-size: 13px;
+            color: #2563eb;
+        }
+
+        .day-slots {
+            padding: 12px 16px;
+        }
+
+        .itinerary-slot {
+            display: flex;
+            gap: 16px;
+            padding: 10px 0;
+            border-top: 1px dashed #e8eef2;
+            align-items: center;
+        }
+
+        .itinerary-slot:first-child {
+            border-top: 0;
+        }
+
+        .slot-time {
+            width: 80px;
+            color: #0f172a;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .slot-img img {
+            max-width: 220px;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .slot-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .slot-title {
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .slot-meta {
+            color: #475569;
+            margin-top: 8px;
+        }
+
+        .slot-desc {
+            margin-top: 8px;
+            color: #334155;
+        }
+
+        .itinerary-day.collapsed .day-slots {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
+    <div class="content">
+        <h1>Chi tiết Booking</h1>
 
-<div class="sidebar">
-    <h2>Quản lý Tour</h2>
-    <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
-    <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
-    <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
-    <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
-    <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
-    <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
-</div>
+        <div class="card">
+            <!-- LEFT -->
+            <div class="left">
+                <div class="info">
+                    <p><strong>Tên khách:</strong> <?= htmlspecialchars($qlb['ten_khach']) ?></p>
+                    <p><strong>SĐT:</strong> <?= htmlspecialchars($qlb['so_dien_thoai']) ?></p>
+                    <p><strong>Email:</strong> <?= htmlspecialchars($qlb['email']) ?></p>
+                    <p><strong>CCCD:</strong> <?= htmlspecialchars($qlb['cccd']) ?></p>
+                    <p><strong>Số người:</strong> <?= $qlb['so_nguoi'] ?></p>
+                    <p><strong>Ngày khởi hành:</strong> <?= $qlb['ngay_khoi_hanh'] ?></p>
+                    <p><strong>Giá tour:</strong> <?= number_format($gia) ?> VNĐ</p>
+                    <p><strong>Cọc 40%:</strong> <?= number_format($tien_coc) ?> VNĐ</p>
+                    <p><strong>Đã cọc:</strong> <?= number_format($da_coc) ?> VNĐ</p>
+                    <p><strong>Đã thanh toán FULL:</strong> <?= number_format($da_full) ?> VNĐ</p>
+                    <p><strong>Tổng đã thanh toán:</strong> <?= number_format($tong_da_tra) ?> VNĐ</p>
+                    <p><strong>Còn phải thanh toán:</strong> <?= number_format($con_thieu_full) ?> VNĐ</p>
+                    <p><strong>Tình trạng:</strong> <?= $txt_trang_thai ?></p>
+                    <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
+                </div>
 
-<div class="content">
-    <h1>Chi tiết Booking</h1>
+                <!-- LỊCH TRÌNH TOUR -->
+                <?php if (!empty($itinerary)): ?>
+                    <h3>Lịch trình tour:</h3>
+                    <div class="itinerary">
+                        <?php foreach ($itinerary as $dayIdx => $day): ?>
+                            <div class="itinerary-day" data-day="<?= $dayIdx ?>">
+                                <div class="day-header">
+                                    <h4><?= htmlspecialchars($day['title'] ?? ('Ngày ' . ($dayIdx + 1))) ?></h4>
+                                    <div class="toggle">Ẩn/Hiện</div>
+                                </div>
+                                <div class="day-slots">
+                                    <?php if (!empty($day['slots'])): ?>
+                                        <?php foreach ($day['slots'] as $slot): ?>
+                                            <div class="itinerary-slot">
+                                                <div class="slot-time"><?= htmlspecialchars($slot['time'] ?? '') ?></div>
+                                                <?php if (!empty($slot['image'])): ?>
+                                                    <div class="slot-img">
+                                                        <img src="<?= htmlspecialchars(realImage($slot['image'], 'tour')) ?>" alt="Ảnh lịch trình">
+                                                    </div>
+                                                <?php endif; ?>
+                                                <div class="slot-content">
+                                                    <div class="slot-title"><?= htmlspecialchars($slot['title'] ?? '') ?></div>
+                                                    <?php if (!empty($slot['location'])): ?>
+                                                        <div class="slot-meta"><strong>Địa điểm:</strong> <?= htmlspecialchars($slot['location']) ?></div>
+                                                    <?php endif; ?>
+                                                    <?php if (!empty($slot['desc'])): ?>
+                                                        <div class="slot-desc"><strong>Mô tả:</strong> <?= nl2br(htmlspecialchars($slot['desc'])) ?></div>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
 
-    <div class="card">
-
-        <p><strong>Tên khách:</strong> <?= $qlb['ten_khach'] ?></p>
-        <p><strong>Số điện thoại:</strong> <?= $qlb['so_dien_thoai'] ?></p>
-        <p><strong>Email:</strong> <?= $qlb['email'] ?></p>
-        <p><strong>CCCD:</strong> <?= $qlb['cccd'] ?></p>
-        <p><strong>Số người:</strong> <?= $qlb['so_nguoi'] ?></p>
-        <p><strong>Ngày khởi hành:</strong> <?= $qlb['ngay_khoi_hanh'] ?></p>
-
-        <h3>Album ảnh:</h3>
-        <?php if (!empty($album)): ?>
-            <?php foreach ($album as $img): ?>
-                <img class="album-img" src="assets/uploads/tour/album/<?= $img->file_name ?>" width="150">
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>Chưa có ảnh album.</p>
-        <?php endif; ?>
-
-        <p><strong>Giá tour:</strong> <?= number_format($gia) ?> VNĐ</p>
-
-        <h3>Thông tin thanh toán</h3>
-
-        <p><strong>Cọc 40%:</strong> <?= number_format($tien_coc) ?> VNĐ</p>
-        <p><strong>Đã cọc:</strong> <?= number_format($da_coc) ?> VNĐ</p>
-        <p><strong>Đã thanh toán FULL:</strong> <?= number_format($da_full) ?> VNĐ</p>
-
-        <p><strong>Tổng đã thanh toán:</strong> <span style="color:#2980b9; font-weight:bold;"><?= number_format($tong_da_tra) ?> VNĐ</span></p>
-
-        <p><strong>Còn phải thanh toán:</strong> 
-            <span style="color:red; font-weight:bold;">
-                <?= number_format($con_thieu_full) ?> VNĐ
-            </span>
+                <!-- DANH SÁCH KHÁCH (TẢI FILE EXCEL) -->
+<?php
+if (!empty($qlb['danh_sach_file'])):
+    $filePath = PATH_ASSETS_UPLOADS . $qlb['danh_sach_file'];
+    if (file_exists($filePath)):
+?>
+    <div style="margin-top:15px;">
+        <p style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
+            <strong>Danh sách khách:</strong><br><br>
+            <a
+   href="?action=download-booking-file&file=<?= urlencode($qlb['danh_sach_file']) ?>"
+   class="btn"
+   style="background:#16a34a">
+   📄 Tải danh sách khách (Excel)
+</a>
         </p>
-
-        <p><strong>Tình trạng thanh toán:</strong> <?= $txt_trang_thai ?></p>
-
-        <h3>Lịch sử thanh toán</h3>
-
-        <?php if (empty($lich_su)): ?>
-            <p>Chưa có lịch sử thanh toán.</p>
-        <?php else: ?>
-            <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 10px;">
-                <tr style="background: #eee;">
-                    <th>Số tiền</th>
-                    <th>Ngày thanh toán</th>
-                </tr>
-
-                <?php foreach ($lich_su as $ls): ?>
-                <tr>
-                    <td><?= number_format($ls['so_tien']) ?> VNĐ</td>
-                    <td><?= $ls['ngay_thanh_toan'] ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php endif; ?>
-
-        <br>
-
-        <?php if ($con_thieu_full > 0): ?>
-            <a href="?action=qlbooking_pay&id=<?= $qlb['id'] ?>" 
-               class="btn-back" 
-              >+ Thanh toán thêm</a>
-        <?php else: ?>
-            <p >Đã thanh toán đủ — không thể thanh toán thêm.</p>
-        <?php endif; ?>
-
-        <br><br>
-
-        <p><strong>Yêu cầu đặc biệt:</strong> <?= $qlb['yeu_cau_dac_biet'] ?></p>
-
-        <a href="?action=qlbooking" class="btn-back">← Quay lại</a>
-
     </div>
-</div>
+<?php else: ?>
+    <div style="margin-top:15px;">
+        <p style="background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:6px;">
+            <strong>Danh sách khách:</strong><br>
+            File đã lưu trong DB nhưng chưa có trên server.
+        </p>
+    </div>
+<?php endif; endif; ?>
 
+
+
+                <br>
+                <a href="?action=qlbooking" class="btn">← Quay lại</a>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="right">
+                <h3>Ảnh Tour</h3>
+
+                <?php if ($mainSrc): ?>
+                    <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>" alt="Hình đại diện" style="max-width:220px; max-height:150px; margin-bottom:12px; border-radius:6px; object-fit:cover;">
+                <?php else: ?>
+                    <p>Chưa có ảnh.</p>
+                <?php endif; ?>
+
+                <h3>Album ảnh</h3>
+                <div class="thumbs">
+                    <?php foreach ($album as $img):
+                        $fn = is_object($img) ? $img->file_name : $img['file_name'];
+                        $src = $baseUploads . ltrim($fn, '/');
+                    ?>
+                        <img class="album-img" data-src="<?= htmlspecialchars($src) ?>" src="<?= htmlspecialchars($src) ?>">
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chọn ảnh album
+        document.querySelectorAll('.album-img').forEach(img => {
+            img.onclick = function() {
+                document.getElementById('main-image').src = this.dataset.src;
+                document.querySelectorAll('.album-img').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+            }
+        });
+
+        // Ẩn/hiện lịch trình
+        document.querySelectorAll('.itinerary-day .day-header').forEach(function(h) {
+            h.addEventListener('click', function() {
+                this.closest('.itinerary-day').classList.toggle('collapsed');
+            });
+        });
+    </script>
+
+<hr>
+<h3>Phân công Hướng dẫn viên</h3>
+
+<?php if ($tong_da_tra >= $tien_coc): ?>
+    <?php if ($phan_cong): ?>
+        <!-- ĐÃ PHÂN CÔNG -->
+        <p style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
+            <strong>HDV phụ trách:</strong>
+            <?= htmlspecialchars($phan_cong['ten_nhan_su']) ?><br>
+            <strong>Ghi chú:</strong>
+            <?= htmlspecialchars($phan_cong['ghi_chu']) ?>
+        </p>
+    <?php else: ?>
+        <!-- FORM PHÂN CÔNG -->
+        <form method="post" action="?action=phanCongHDV">
+            <input type="hidden" name="booking_id" value="<?= $qlb['id'] ?>">
+
+            <div style="margin-bottom:10px;">
+                <label><strong>Chọn HDV:</strong></label>
+                <select name="huong_dan_vien_id" required style="width:100%;padding:8px;">
+                    <option value="">-- Chọn HDV --</option>
+                    <?php foreach ($ds_hdv as $h): ?>
+                        <option value="<?= $h['id'] ?>">
+                            <?= htmlspecialchars($h['ten_nhan_su']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <label><strong>Ghi chú:</strong></label>
+                <textarea name="ghi_chu" style="width:100%;padding:8px;"></textarea>
+            </div>
+
+            <button class="btn" style="background:#16a34a">
+                ✅ Phân công HDV
+            </button>
+        </form>
+    <?php endif; ?>
+<?php else: ?>
+    <!-- CHƯA ĐƯỢC PHÂN CÔNG -->
+    <p style="background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:6px;">
+        Booking chưa đóng cọc → <strong>chưa thể phân công HDV</strong>.
+    </p>
+<?php endif; ?>
 </body>
+
 </html>

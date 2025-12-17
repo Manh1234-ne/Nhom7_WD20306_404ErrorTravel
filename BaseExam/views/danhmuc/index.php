@@ -3,113 +3,158 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách Tour</title>
+    <title>Danh mục Tour</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+        * {
+            box-sizing: border-box;
         }
 
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef2f7;
+        }
+
+        /* SIDEBAR */
         .sidebar {
-            width: 220px;
-            background: #2c3e50;
+            width: 250px;
+            background: #1e293b;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
             color: #fff;
-            display: flex;
-            flex-direction: column;
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar h2 {
+            font-size: 20px;
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #34495e;
+            margin-bottom: 25px;
+            color: #38bdf8;
+            font-weight: 600;
         }
 
         .sidebar a {
-            padding: 15px 20px;
-            color: #fff;
+            padding: 14px 20px;
+            color: #cbd5e1;
             text-decoration: none;
             display: flex;
             align-items: center;
+            transition: 0.25s;
+            font-size: 15px;
         }
 
         .sidebar a:hover {
-            background: #34495e;
+            background: #334155;
+            color: #fff;
         }
 
         .sidebar i {
-            margin-right: 10px;
+            margin-right: 12px;
+            font-size: 17px;
         }
 
+        /* MAIN CONTENT */
         .content {
-            margin-left: 220px;
-            padding: 30px;
+            margin-left: 250px;
+            padding: 40px 35px;
         }
 
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* TOP BAR */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .btn-add {
+            background: #3b82f6;
+            padding: 10px 16px;
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-add:hover {
+            background: #2563eb;
+        }
+
+        /* TABLE STYLE */
         table {
             width: 100%;
             border-collapse: collapse;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         th {
-            background: #3498db;
-            color: #fff;
+            background: #3b82f6;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 15px;
         }
 
-        a.btn {
-            padding: 6px 12px;
-            background: #3498db;
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: #f1f5f9;
+        }
+
+        /* BUTTON ACTION */
+        .btn {
+            padding: 7px 10px;
+            border-radius: 5px;
+            background: #64748b;
             color: #fff;
-            border-radius: 4px;
             text-decoration: none;
-            margin-right: 5px;
+            margin-right: 4px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.2s;
         }
 
-        a.btn:hover {
-            background: #2980b9;
+        .btn:hover {
+            opacity: 0.85;
         }
 
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+        .btn-edit {
+            background: #f59e0b;
         }
 
-        img {
-            border-radius: 4px;
+        .btn-delete {
+            background: #ef4444;
         }
 
-        @media(max-width:768px) {
+        @media(max-width: 768px) {
             .sidebar {
                 width: 100%;
                 height: auto;
-                flex-direction: row;
-                overflow-x: auto;
-            }
-
-            .sidebar h2 {
-                display: none;
-            }
-
-            .sidebar a {
-                flex: 1;
-                justify-content: center;
+                position: relative;
             }
 
             .content {
@@ -121,44 +166,59 @@
 </head>
 
 <body>
+
+    <!-- SIDEBAR -->
     <div class="sidebar">
-        <h2>Quản lý Tour</h2>
+        <h2>404 Error Travel</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
-        <a href="?action=danhmuc"><i class="nav-icon fas fa-th"></i>Quản lý danh mục</a>
-        <a href="?action=qlbooking"><i class="fa fa-suitcase"></i>Quản lý booking</a>
+        <a href="?action=danhmuc"><i class="fa fa-th"></i>Quản lý danh mục</a>
+        <a href="?action=qlbooking"><i class="fa fa-ticket"></i>Quản lý booking</a>
         <a href="?action=yeu_cau"><i class="fa fa-star"></i>Ghi chú đặc biệt</a>
     </div>
+
+    <!-- MAIN CONTENT -->
     <div class="content">
         <div class="top-bar">
             <h1>Danh mục Tour</h1>
-            <a href="?action=danhmuc_add" class="btn"><i class="fa fa-plus"></i> Thêm Tour</a>
+            <a href="?action=danhmuc_add" class="btn-add">
+                <i class="fa fa-plus"></i> Thêm Danh mục
+            </a>
         </div>
+
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Danh mục TOUR</th>
+                    <th>Tên danh mục</th>
                     <th>Mô tả</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($tours as $tour): ?>
+                <?php if (!empty($tours)): ?>
+                    <?php foreach ($tours as $tour): ?>
+                        <tr>
+                            <td><?= $tour['id'] ?></td>
+                            <td><?= htmlspecialchars($tour['ten_tour']) ?></td>
+                            <td><?= htmlspecialchars($tour['mo_ta']) ?></td>
+                            <td>
+                                <a href="?action=danhmuc_edit&id=<?= $tour['id'] ?>" class="btn btn-edit"><i class="fa fa-edit"></i></a>
+                                <a href="?action=danhmuc_delete&id=<?= $tour['id'] ?>" class="btn btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <tr>
-                        <td><?= $tour['id'] ?></td>
-                        <td><?= htmlspecialchars($tour['ten_tour']) ?></td>
-                        <td><?= htmlspecialchars($tour['mo_ta']) ?></td>
-                        <td>
-                            <a href="?action=danhmuc_edit&id=<?= $tour['id'] ?>" class="btn"><i class="fa fa-edit"></i> Sửa</a>
-                            <a href="?action=danhmuc_delete&id=<?= $tour['id'] ?>" class="btn" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"><i class="fa fa-trash"></i> Xóa</a>
-                        </td>
+                        <td colspan="4" style="text-align:center; padding:20px;">Không có dữ liệu</td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
+
     </div>
+
 </body>
 
 </html>
