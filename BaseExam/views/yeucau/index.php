@@ -320,6 +320,21 @@
                             </td>
                             <td><?= htmlspecialchars($r['loai_yeu_cau']) ?></td>
                             <td><?= nl2br(htmlspecialchars($r['mo_ta'])) ?></td>
+<<<<<<< HEAD
+=======
+                            <td>
+                                <?php 
+                                $trangThai = $r['trang_thai'] ?? 'cho_xu_ly';
+                                switch($trangThai) {
+                                    case 'cho_xu_ly': echo '<span style="color: #f39c12; font-weight: bold;">Chờ xử lý</span>'; break;
+                                    case 'dang_xu_ly': echo '<span style="color: #3498db; font-weight: bold;">Đang xử lý</span>'; break;
+                                    case 'da_dap_ung': echo '<span style="color: #27ae60; font-weight: bold;">Đã đáp ứng</span>'; break;
+                                    case 'khong_the_dap_ung': echo '<span style="color: #e74c3c; font-weight: bold;">Không thể đáp ứng</span>'; break;
+                                    default: echo htmlspecialchars($trangThai);
+                                }
+                                ?>
+                            </td>
+>>>>>>> LZC-06a
                             <td>
                                 <?php 
                                 $trangThai = $r['trang_thai'] ?? 'cho_xu_ly';

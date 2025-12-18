@@ -77,7 +77,23 @@ class QlBookingController
         // ⚠️ TẠM QUY ƯỚC booking_id = lich_khoi_hanh_id
         $phan_cong = $this->model->getPhanCongHDV($id);
 
-        require PATH_VIEW . 'qlbooking/detail.php';
+    // ===============================
+    // LẤY THÔNG TIN TOUR + LỊCH TRÌNH
+    // ===============================
+    $tour = null;
+    $itinerary = [];
+
+    if (!empty($qlb['tour_id'])) {
+        require_once PATH_MODEL . 'Tour.php';
+        $tourModel = new Tour();
+        $tour = $tourModel->find($qlb['tour_id']);
+
+        if (!empty($tour['lich_trinh'])) {
+            $decoded = json_decode($tour['lich_trinh'], true);
+            if (is_array($decoded)) {
+                $itinerary = $decoded;
+            }
+        }
     }
 
     public function pay()

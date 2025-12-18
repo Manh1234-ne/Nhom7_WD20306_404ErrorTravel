@@ -132,6 +132,10 @@ $ds_hdv = $nhanSuModel->getAllHDVForAssign();
             background: #2980b9;
         }
 
+        .btn:hover {
+            background: #2980b9;
+        }
+
         .album-main {
             width: 100%;
             border-radius: 8px;
@@ -245,6 +249,10 @@ $ds_hdv = $nhanSuModel->getAllHDVForAssign();
 </head>
 
 <body>
+<<<<<<< HEAD
+=======
+
+>>>>>>> LZC-06a
     <div class="content">
         <h1>Chi tiết Booking</h1>
         <div class="card">
@@ -445,6 +453,7 @@ $ds_hdv = $nhanSuModel->getAllHDVForAssign();
             <!-- RIGHT -->
             <div class="right">
                 <h3>Ảnh Tour</h3>
+
                 <?php if ($mainSrc): ?>
                     <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>" alt="Hình đại diện" style="max-width:220px; max-height:150px; margin-bottom:12px; border-radius:6px; object-fit:cover;">
                 <?php else: ?>
@@ -481,6 +490,7 @@ $ds_hdv = $nhanSuModel->getAllHDVForAssign();
             });
         });
     </script>
+
 </body>
 
 </html>

@@ -88,7 +88,9 @@ class YeuCauController
         $id = $id ?? $_POST['id'] ?? null;
 
         $old = $this->modelYeuCau->find($id);
-        if (!$old) die('Yêu cầu không tồn tại.');
+        if (!$old) {
+            die('Yêu cầu không tồn tại.');
+        }
 
         $data = [
             'ten_khach'    => trim($_POST['ten_khach']),
@@ -195,4 +197,8 @@ class YeuCauController
             echo htmlspecialchars($e->getMessage());
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> LZC-06a

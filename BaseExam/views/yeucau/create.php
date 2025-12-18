@@ -248,7 +248,6 @@
             const selectedOption = this.options[this.selectedIndex];
             const tenKhachInput = document.getElementById('ten_khach');
             const bookingInfoInput = document.getElementById('booking_info');
-
             if (this.value) {
                 // Điền thông tin từ booking đã chọn
                 tenKhachInput.value = selectedOption.dataset.name;
