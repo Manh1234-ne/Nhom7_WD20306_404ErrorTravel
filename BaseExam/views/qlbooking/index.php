@@ -210,7 +210,7 @@ $edit_booking = $edit_booking ?? null; // Booking đang edit nếu có
 
 <body>
     <div class="sidebar">
-        <h2>404 Error Travel</h2>
+        <h2>Quản lý tour</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
@@ -230,7 +230,6 @@ $edit_booking = $edit_booking ?? null; // Booking đang edit nếu có
                     <th>ID</th>
                     <th>Tên khách</th>
                     <th>Số điện thoại</th>
-                    <th>Số người</th>
                     <th>Ngày khởi hành</th>
                     <th>Giá</th>
                     <th>Trạng thái</th>
@@ -246,7 +245,6 @@ $edit_booking = $edit_booking ?? null; // Booking đang edit nếu có
                             <td><?= $b['id'] ?></td>
                             <td><?= htmlspecialchars($b['ten_khach']) ?></td>
                             <td><?= htmlspecialchars($b['so_dien_thoai']) ?></td>
-                            <td><?= $b['so_nguoi'] ?></td>
                             <td><?= htmlspecialchars($b['ngay_khoi_hanh']) ?></td>
                             <td><?= number_format($b['gia'], 0, ',', '.') ?> VNĐ</td>
                             <td><?= htmlspecialchars($b['trang_thai']) ?></td>

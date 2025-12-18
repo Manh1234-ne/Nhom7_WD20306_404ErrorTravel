@@ -194,14 +194,12 @@
                 <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">Danh mục</a></li>
                 <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">Booking</a></li>
                 <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">Ghi chú</a></li>
-                <li><a href="#" onclick="alert('Bạn chưa đăng nhập!'); return false;">Chi tiết tour</a></li>
             <?php else: ?>
                 <li><a href="?action=tours">Quản lý Tour</a></li>
                 <li><a href="?action=nhansu">Nhân sự</a></li>
                 <li><a href="?action=danhmuc">Danh mục</a></li>
                 <li><a href="?action=qlbooking">Booking</a></li>
                 <li><a href="?action=yeu_cau">Ghi chú</a></li>
-                <li><a href="?action=tour_guest">Chi tiết tour</a></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -245,23 +243,11 @@
                 <p>Lưu các yêu cầu riêng của khách cho từng tour.</p>
             </a>
 
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Báo cáo & thống kê</h3>
-                <p>Theo dõi doanh thu, thống kê hiệu suất công việc.</p>
-            </div>
+            
 
-            <a href="?action=tour_guest" class="feature-card">
-                <div class="feature-icon">📑</div>
-                <h3>Chi tiết Tour</h3>
-                <p>Xem đầy đủ thông tin của từng khách trong tour.</p>
-            </a>
+           
         </div>
     </main>
 
 </body>
-<<<<<<< HEAD
-
-=======
->>>>>>> 75f56cf82ca89db6fc4daec0ea1c3efaf034d277
 </html>

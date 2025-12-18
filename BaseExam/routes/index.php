@@ -11,10 +11,7 @@ require_once PATH_CONTROLLER . 'NguoiDungController.php';
 require_once PATH_CONTROLLER . 'YeuCauController.php';
 require_once PATH_CONTROLLER . 'BookingController.php';
 require_once PATH_CONTROLLER . 'QlBookingController.php';
-require_once PATH_CONTROLLER . 'GuestListController.php';
-require_once PATH_CONTROLLER . 'BookingController.php'; // nếu có
-require_once PATH_CONTROLLER . 'QlBookingController.php';
-require_once PATH_CONTROLLER . 'YeuCauController.php';
+
 
 $action = $_GET['action'] ?? 'home';
 $id = $_GET['id'] ?? null;
@@ -44,12 +41,18 @@ match ($action) {
 
 
   // QLBOOKING
-  'qlbooking' => (new QlBookingController)->index(),
-  'qlbooking_edit' => (new QlBookingController)->edit(),
-  'qlbooking_edit_post' => (new QlBookingController)->update(),
-  'qlbooking_detail' => (new QlBookingController)->detail(),
-  'qlbooking_pay' => (new QlBookingController)->pay(),
-  'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
+'qlbooking' => (new QlBookingController)->index(),
+'qlbooking_edit' => (new QlBookingController)->edit(),
+'qlbooking_edit_post' => (new QlBookingController)->update(),
+'qlbooking_detail' => (new QlBookingController)->detail(),
+'qlbooking_pay' => (new QlBookingController)->pay(),
+'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
+'qlbooking_phan_cong' => (new QlBookingController)->phanCongHDV(),
+'booking_doi_hdv' => (new QlBookingController)->doiHDV(),
+
+  // DOWNLOAD FILE BOOKING (EXCEL)
+  'download-booking-file' => (new BookingController)->download(),
+
 
   // TOUR GUEST (từ file 1)
   'tour_guest'          => (new TourGuestController)->index(),
@@ -85,46 +88,20 @@ match ($action) {
   'yeu_cau' => (new YeuCauController)->index(),
   'yeu_cau_create' => (new YeuCauController)->create(),
   'yeu_cau_store' => (new YeuCauController)->store(),
-  'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
-  'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
-  'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
+  'yeu_cau_delete' => (new YeuCauController)->delete($id),
+  'yeu_cau_update' => (new YeuCauController)->update($id),
+  'yeu_cau_show'   => (new YeuCauController)->show($id),
 
-  // // // GUEST LIST MANAGEMENT (Sidebar mới)
-  // // 'guest_list_management' => (new GuestListController)->index(),
-  // // 'guest_list_import' => (new GuestListController)->import(),
-  // // Quản lý khách theo tour
-  // "tour_guest" => (new TourGuestController)->index(),
-  // "tour_guest_store" => (new TourGuestController)->store(),
-  // "guest_detail" => (new TourGuestController)->detail(),
-  // "tour_guest_checkin" => (new TourGuestController)->updateCheckin(),
-  // "tour_guest_room" => (new TourGuestController)->updateRoom(),
-  // "tour_guest_export" => (new TourGuestController)->export(),
-  // // 'registerForm'=> (new NguoiDungController)->registerForm(),
-  // // 'register'=> (new NguoiDungController)->register(),
-  // 'loginForm'=> (new NguoiDungController)->loginForm(),
-  // 'login'=> (new NguoiDungController)->login(),
-  // 'logout'=> (new NguoiDungController)->logout(),
 
-  // QLBOOKING
-  'qlbooking' => (new QlBookingController)->index(),
-  'qlbooking_edit' => (new QlbookingController)->edit(),
-  'qlbooking_edit_post' => (new QlBookingController)->update(),
-  'qlbooking_detail' => (new QlBookingController)->detail(),
-  'qlbooking_pay' => (new QlBookingController)->pay(),
-  'qlbooking_pay_post' => (new QlBookingController)->paySubmit(),
+
+  
   // DOWNLOAD FILE BOOKING (EXCEL)
   'download-booking-file' => (new BookingController)->download(),
 
 
 
 
-  'yeu_cau' => (new YeuCauController)->index(),
-  'yeu_cau_create' => (new YeuCauController)->create(),
-  'yeu_cau_store' => (new YeuCauController)->store(),          // Lưu yêu cầu mới
-  // 'yeu_cau_edit' => fn() => (new YeuCauController)->edit($id),
-  'yeu_cau_update' => fn() => (new YeuCauController)->update($id),
-  'yeu_cau_delete' => fn() => (new YeuCauController)->delete($id),
-  'yeu_cau_show' => fn() => (new YeuCauController)->show($id),
+
 
   // Mặc định
   default => (new HomeController)->index(),

@@ -169,7 +169,7 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <h2>404 Error Travel</h2>
+        <h2>Quản lý tour</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>

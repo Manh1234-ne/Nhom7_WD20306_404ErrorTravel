@@ -6,39 +6,108 @@ class qlb extends BaseModel
     protected $table = 'dat_tour';
 
     // ===============================
-    // FORMAT TIỀN
+    // LẤY TẤT CẢ BOOKING
     // ===============================
-    public static function formatVND($number)
+    public function all()
     {
-        if ($number >= 100000000) {
-            return round($number / 1000000) . ' triệu';
-        } elseif ($number >= 1000000) {
-            $million = $number / 1000000;
-            return ($million == (int)$million) ? $million . ' triệu' : round($million, 1) . ' triệu';
-        } elseif ($number >= 1000) {
-            $thousand = $number / 1000;
-            return ($thousand == (int)$thousand) ? $thousand . ' nghìn' : round($thousand, 1) . ' nghìn';
-        } else {
-            return $number . ' VNĐ';
-        }
+        return $this->db
+            ->query("SELECT * FROM dat_tour ORDER BY id ASC")
+            ->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // ===============================
-    // 👉 DANH SÁCH KHÁCH CÙNG TOUR (THÊM)
+    // KIỂM TRA ĐÃ TRẢ CỌC CHƯA
     // ===============================
-    public function getCustomersByTour($tour_id)
+    public function daTraCoc($booking_id)
     {
-        $sql = "
-            SELECT 
-                *,
-                (IFNULL(tien_coc_da_tra,0) + IFNULL(tien_full_da_tra,0)) AS tong_da_tra
+        $stmt = $this->db->prepare("
+            SELECT COUNT(*) 
             FROM dat_tour
-            WHERE tour_id = ?
-            ORDER BY id DESC
-        ";
+            WHERE id = ?
+              AND tinh_trang_thanh_toan IN ('Đã cọc', 'Đã thanh toán')
+        ");
+        $stmt->execute([$booking_id]);
+        return $stmt->fetchColumn() > 0;
+    }
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$tour_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // ===============================
+    // KIỂM TRA ĐÃ PHÂN CÔNG HDV CHƯA
+    // ===============================
+    public function daPhanCongHDV($lich_khoi_hanh_id)
+    {
+        $stmt = $this->db->prepare("
+            SELECT COUNT(*) 
+            FROM phan_cong_tour
+            WHERE lich_khoi_hanh_id = ?
+        ");
+        $stmt->execute([$lich_khoi_hanh_id]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    // ===============================
+    // PHÂN CÔNG HDV
+    // ===============================
+    public function phanCongHDV($lich_khoi_hanh_id, $hdv_id, $ghi_chu = '')
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO phan_cong_tour
+                (lich_khoi_hanh_id, huong_dan_vien_id, phuong_tien, ghi_chu)
+            VALUES (?, ?, 'Xe du lịch', ?)
+        ");
+
+        return $stmt->execute([
+            $lich_khoi_hanh_id,
+            $hdv_id,
+            $ghi_chu
+        ]);
+    }
+
+    // ===============================
+    // ĐỔI HDV
+    // ===============================
+    public function doiHDV($lich_khoi_hanh_id, $hdv_id)
+    {
+        $stmt = $this->db->prepare("
+            UPDATE phan_cong_tour
+            SET huong_dan_vien_id = ?
+            WHERE lich_khoi_hanh_id = ?
+        ");
+
+        return $stmt->execute([
+            $hdv_id,
+            $lich_khoi_hanh_id
+        ]);
+    }
+
+    // ===============================
+    // LẤY THÔNG TIN HDV ĐÃ PHÂN CÔNG
+    // ===============================
+    public function getPhanCongHDV($lich_khoi_hanh_id)
+    {
+        $stmt = $this->db->prepare("
+            SELECT 
+                pc.*,
+                nd.ho_ten AS ten_hdv
+            FROM phan_cong_tour pc
+            JOIN huong_dan_vien hdv ON hdv.id = pc.huong_dan_vien_id
+            JOIN nguoi_dung nd ON nd.id = hdv.nguoi_dung_id
+            WHERE pc.lich_khoi_hanh_id = ?
+            LIMIT 1
+        ");
+
+        $stmt->execute([$lich_khoi_hanh_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // ===============================
+    // DANH SÁCH HDV
+    // ===============================
+    public function getDanhSachHDV()
+    {
+        return $this->db->query("
+            SELECT hdv.id, nd.ho_ten
+            FROM huong_dan_vien hdv
+            JOIN nguoi_dung nd ON nd.id = hdv.nguoi_dung_id
+        ")->fetchAll(PDO::FETCH_ASSOC);
     }
 }

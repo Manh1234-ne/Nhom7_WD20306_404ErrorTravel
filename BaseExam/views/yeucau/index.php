@@ -196,7 +196,7 @@
 
 <body>
     <div class="sidebar">
-        <h2>404 Error Travel</h2>
+        <h2>Quản lý tour</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
@@ -211,11 +211,86 @@
             <a href="?action=yeu_cau_create" class="btn-add"><i class="fa fa-plus"></i> Thêm yêu cầu</a>
         </div>
 
+        <!-- Thống kê tổng quan -->
+        <?php
+        $tongSo = count($danhSach);
+        $choXuLy = count(array_filter($danhSach, fn($item) => $item['trang_thai'] == 'cho_xu_ly'));
+        $dangXuLy = count(array_filter($danhSach, fn($item) => $item['trang_thai'] == 'dang_xu_ly'));
+        $daDapUng = count(array_filter($danhSach, fn($item) => $item['trang_thai'] == 'da_dap_ung'));
+        $khongTheDapUng = count(array_filter($danhSach, fn($item) => $item['trang_thai'] == 'khong_the_dap_ung'));
+        ?>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6;">
+                <h3 style="margin: 0; color: #3b82f6;">Tổng số yêu cầu</h3>
+                <p style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;"><?= $tongSo ?></p>
+            </div>
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #f39c12;">
+                <h3 style="margin: 0; color: #f39c12;">Chờ xử lý</h3>
+                <p style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;"><?= $choXuLy ?></p>
+            </div>
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #3498db;">
+                <h3 style="margin: 0; color: #3498db;">Đang xử lý</h3>
+                <p style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;"><?= $dangXuLy ?></p>
+            </div>
+            <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #27ae60;">
+                <h3 style="margin: 0; color: #27ae60;">Đã đáp ứng</h3>
+                <p style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;"><?= $daDapUng ?></p>
+            </div>
+        </div>
+
+        <!-- Bộ lọc tìm kiếm -->
+        <div style="background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <form method="GET" style="display: flex; gap: 15px; align-items: end;">
+                <input type="hidden" name="action" value="yeu_cau">
+                
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Tìm theo tên khách:</label>
+                    <input type="text" name="search" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" 
+                           placeholder="Nhập tên khách..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Lọc theo loại:</label>
+                    <select name="loai" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="">-- Tất cả --</option>
+                        <option value="Ăn chay" <?= ($_GET['loai'] ?? '') == 'Ăn chay' ? 'selected' : '' ?>>Ăn chay</option>
+                        <option value="Yêu cầu về dị ứng" <?= ($_GET['loai'] ?? '') == 'Yêu cầu về dị ứng' ? 'selected' : '' ?>>Dị ứng</option>
+                        <option value="Yêu cầu về bệnh lý" <?= ($_GET['loai'] ?? '') == 'Yêu cầu về bệnh lý' ? 'selected' : '' ?>>Bệnh lý</option>
+                        <option value="Yêu cầu về phòng nghỉ" <?= ($_GET['loai'] ?? '') == 'Yêu cầu về phòng nghỉ' ? 'selected' : '' ?>>Phòng nghỉ</option>
+                        <option value="Yêu cầu phương tiện di chuyển" <?= ($_GET['loai'] ?? '') == 'Yêu cầu phương tiện di chuyển' ? 'selected' : '' ?>>Di chuyển</option>
+                        <option value="Yêu cầu về ăn uống" <?= ($_GET['loai'] ?? '') == 'Yêu cầu về ăn uống' ? 'selected' : '' ?>>Ăn uống</option>
+                        <option value="Khác" <?= ($_GET['loai'] ?? '') == 'Khác' ? 'selected' : '' ?>>Khác</option>
+                    </select>
+                </div>
+                
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Lọc theo trạng thái:</label>
+                    <select name="trang_thai" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                        <option value="">-- Tất cả --</option>
+                        <option value="cho_xu_ly" <?= ($_GET['trang_thai'] ?? '') == 'cho_xu_ly' ? 'selected' : '' ?>>Chờ xử lý</option>
+                        <option value="dang_xu_ly" <?= ($_GET['trang_thai'] ?? '') == 'dang_xu_ly' ? 'selected' : '' ?>>Đang xử lý</option>
+                        <option value="da_dap_ung" <?= ($_GET['trang_thai'] ?? '') == 'da_dap_ung' ? 'selected' : '' ?>>Đã đáp ứng</option>
+                        <option value="khong_the_dap_ung" <?= ($_GET['trang_thai'] ?? '') == 'khong_the_dap_ung' ? 'selected' : '' ?>>Không thể đáp ứng</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <button type="submit" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        <i class="fa fa-search"></i> Tìm kiếm
+                    </button>
+                    <a href="?action=yeu_cau" style="padding: 8px 16px; background: #6b7280; color: white; text-decoration: none; border-radius: 5px; margin-left: 5px;">
+                        <i class="fa fa-refresh"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Tên khách</th>
+                    <th>Tour</th>
                     <th>Loại yêu cầu</th>
                     <th>Mô tả</th>
                     <th>Trạng thái</th>
@@ -227,12 +302,38 @@
                     <?php foreach ($danhSach as $r): ?>
                         <tr>
                             <td><?= $r['id'] ?></td>
-                            <td><?= htmlspecialchars($r['ten_khach']) ?></td>
+                            <td>
+                                <?= htmlspecialchars($r['ten_khach']) ?>
+                                <?php if (!empty($r['so_dien_thoai'])): ?>
+                                    <br><small style="color: #666;"><?= htmlspecialchars($r['so_dien_thoai']) ?></small>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if (!empty($r['ten_tour'])): ?>
+                                    <strong><?= htmlspecialchars($r['ten_tour']) ?></strong>
+                                    <?php if (!empty($r['ngay_khoi_hanh'])): ?>
+                                        <br><small style="color: #666;"><?= date('d/m/Y', strtotime($r['ngay_khoi_hanh'])) ?></small>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <em style="color: #999;">Chưa liên kết</em>
+                                <?php endif; ?>
+                            </td>
                             <td><?= htmlspecialchars($r['loai_yeu_cau']) ?></td>
                             <td><?= nl2br(htmlspecialchars($r['mo_ta'])) ?></td>
-                            <td><?= htmlspecialchars($r['trang_thai'] ?? 'Chờ xử lý') ?></td>
                             <td>
-                                <a href="?action=yeu_cau_edit&id=<?= $r['id'] ?>" class="btn btn-edit"><i class="fa fa-edit"></i></a>
+                                <?php 
+                                $trangThai = $r['trang_thai'] ?? 'cho_xu_ly';
+                                switch($trangThai) {
+                                    case 'cho_xu_ly': echo '<span style="color: #f39c12; font-weight: bold;">Chờ xử lý</span>'; break;
+                                    case 'dang_xu_ly': echo '<span style="color: #3498db; font-weight: bold;">Đang xử lý</span>'; break;
+                                    case 'da_dap_ung': echo '<span style="color: #27ae60; font-weight: bold;">Đã đáp ứng</span>'; break;
+                                    case 'khong_the_dap_ung': echo '<span style="color: #e74c3c; font-weight: bold;">Không thể đáp ứng</span>'; break;
+                                    default: echo htmlspecialchars($trangThai);
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <a href="?action=yeu_cau_update&id=<?= $r['id'] ?>" class="btn btn-edit"><i class="fa fa-edit"></i></a>
                                 <a href="?action=yeu_cau_show&id=<?= $r['id'] ?>" class="btn btn-view"><i class="fa fa-eye"></i></a>
                                 <a href="?action=yeu_cau_delete&id=<?= $r['id'] ?>" class="btn btn-delete" onclick="return confirm('Xác nhận xóa?')"><i class="fa fa-trash"></i></a>
                             </td>

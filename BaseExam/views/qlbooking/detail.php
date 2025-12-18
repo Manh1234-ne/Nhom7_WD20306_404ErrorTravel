@@ -2,7 +2,7 @@
 // ===============================
 // LẤY THÔNG TIN BOOKING
 // ===============================
-$gia = $qlb['gia'];
+$gia = $qlb['gia'] ?? 0;
 
 $tien_coc = $gia * 0.4;
 $da_coc   = $qlb['tien_coc_da_tra'] ?? 0;
@@ -48,7 +48,9 @@ if (!empty($tour['lich_trinh'])) {
     if (is_array($decoded)) $itinerary = $decoded;
 }
 
-// Hàm fix đường dẫn ảnh
+// ===============================
+// HÀM FIX ĐƯỜNG DẪN ẢNH
+// ===============================
 function realImage($filename, $folder = 'tour')
 {
     if (!$filename) return "/assets/no-image.png";
@@ -61,6 +63,13 @@ function realImage($filename, $folder = 'tour')
 
     return "/assets/no-image.png";
 }
+
+// ===============================
+// LẤY DANH SÁCH HDV CHO FORM
+// ===============================
+require_once PATH_MODEL . 'NhanSu.php';
+$nhanSuModel = new NhanSu();
+$ds_hdv = $nhanSuModel->getAllHDVForAssign();
 ?>
 
 <!DOCTYPE html>
@@ -115,6 +124,8 @@ function realImage($filename, $folder = 'tour')
             text-decoration: none;
             border-radius: 5px;
             margin-right: 10px;
+            cursor: pointer;
+            border: none;
         }
 
         .btn:hover {
@@ -236,7 +247,6 @@ function realImage($filename, $folder = 'tour')
 <body>
     <div class="content">
         <h1>Chi tiết Booking</h1>
-
         <div class="card">
             <!-- LEFT -->
             <div class="left">
@@ -257,7 +267,7 @@ function realImage($filename, $folder = 'tour')
                     <p><strong>Yêu cầu đặc biệt:</strong> <?= htmlspecialchars($qlb['yeu_cau_dac_biet']) ?></p>
                 </div>
 
-                <!-- LỊCH TRÌNH TOUR -->
+                <!-- Lịch trình tour -->
                 <?php if (!empty($itinerary)): ?>
                     <h3>Lịch trình tour:</h3>
                     <div class="itinerary">
@@ -272,11 +282,6 @@ function realImage($filename, $folder = 'tour')
                                         <?php foreach ($day['slots'] as $slot): ?>
                                             <div class="itinerary-slot">
                                                 <div class="slot-time"><?= htmlspecialchars($slot['time'] ?? '') ?></div>
-                                                <?php if (!empty($slot['image'])): ?>
-                                                    <div class="slot-img">
-                                                        <img src="<?= htmlspecialchars(realImage($slot['image'], 'tour')) ?>" alt="Ảnh lịch trình">
-                                                    </div>
-                                                <?php endif; ?>
                                                 <div class="slot-content">
                                                     <div class="slot-title"><?= htmlspecialchars($slot['title'] ?? '') ?></div>
                                                     <?php if (!empty($slot['location'])): ?>
@@ -295,33 +300,143 @@ function realImage($filename, $folder = 'tour')
                     </div>
                 <?php endif; ?>
 
-                <!-- DANH SÁCH KHÁCH (TẢI FILE EXCEL) -->
-<?php
-if (!empty($qlb['danh_sach_file'])):
-    $filePath = PATH_ASSETS_UPLOADS . $qlb['danh_sach_file'];
-    if (file_exists($filePath)):
-?>
-    <div style="margin-top:15px;">
-        <p style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
-            <strong>Danh sách khách:</strong><br><br>
-            <a
-   href="?action=download-booking-file&file=<?= urlencode($qlb['danh_sach_file']) ?>"
-   class="btn"
-   style="background:#16a34a">
-   📄 Tải danh sách khách (Excel)
-</a>
-        </p>
-    </div>
+                <!-- Danh sách khách -->
+                <?php
+                if (!empty($qlb['danh_sach_file'])):
+                    $filePath = PATH_ASSETS_UPLOADS . $qlb['danh_sach_file'];
+                    if (file_exists($filePath)):
+                ?>
+                        <div style="margin-top:15px;">
+                            <p style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
+                                <strong>Danh sách khách:</strong><br><br>
+                                <a href="?action=download-booking-file&file=<?= urlencode($qlb['danh_sach_file']) ?>" class="btn" style="background:#16a34a">📄 Tải danh sách khách (Excel)</a>
+                            </p>
+                        </div>
+                    <?php else: ?>
+                        <div style="margin-top:15px;">
+                            <p style="background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:6px;">
+                                <strong>Danh sách khách:</strong><br>File đã lưu trong DB nhưng chưa có trên server.
+                            </p>
+                        </div>
+                <?php endif;
+                endif; ?>
+
+                <!-- Phân công HDV -->
+<hr>
+<h3>Phân công Hướng dẫn viên</h3>
+
+<?php if ($tong_da_tra < $tien_coc): ?>
+    <p style="background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:6px;">
+        Booking chưa đóng cọc → <strong>chưa thể phân công Hướng dẫn viên</strong>
+    </p>
+
 <?php else: ?>
-    <div style="margin-top:15px;">
-        <p style="background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:6px;">
-            <strong>Danh sách khách:</strong><br>
-            File đã lưu trong DB nhưng chưa có trên server.
-        </p>
-    </div>
-<?php endif; endif; ?>
 
+    <?php if (!empty($phan_cong)): ?>
+        <!-- ĐÃ PHÂN CÔNG -->
+        <div style="background:#ecfeff;border-left:4px solid #06b6d4;padding:12px;border-radius:6px;">
+            <p>
+                <strong>HDV hiện tại:</strong> <?= htmlspecialchars($phan_cong['ten_hdv']) ?><br>
+                <?php if (!empty($phan_cong['phuong_tien'])): ?>
+                    <strong>Phương tiện:</strong> <?= htmlspecialchars($phan_cong['phuong_tien']) ?><br>
+                <?php endif; ?>
+                <?php if (!empty($phan_cong['ghi_chu'])): ?>
+                    <strong>Ghi chú:</strong><br>
+                    <?= nl2br(htmlspecialchars($phan_cong['ghi_chu'])) ?>
+                <?php endif; ?>
+            </p>
 
+            <button
+                type="button"
+                class="btn"
+                style="background:#f59e0b"
+                onclick="document.getElementById('form-hdv').style.display='block'">
+                🔄 Đổi HDV
+            </button>
+        </div>
+    <?php endif; ?>
+
+    <!-- FORM PHÂN CÔNG / ĐỔI HDV -->
+    <form
+        method="post"
+        action="?action=<?= empty($phan_cong) ? 'qlbooking_phan_cong' : 'booking_doi_hdv' ?>"
+
+        id="form-hdv"
+        style="<?= !empty($phan_cong) ? 'display:none;' : '' ?>margin-top:15px;"
+    >
+        <input type="hidden" name="booking_id" value="<?= $qlb['id'] ?>">
+
+        <div style="margin-bottom:10px;">
+            <label><strong>Chọn Hướng dẫn viên:</strong></label><br>
+            <select name="huong_dan_vien_id" required style="width:320px;padding:8px;">
+                <option value="">-- Chọn HDV --</option>
+                <?php foreach ($ds_hdv as $hdv): ?>
+                    <option
+                        value="<?= $hdv['hdv_id'] ?>"
+                        <?= (!empty($phan_cong) && $phan_cong['huong_dan_vien_id'] == $hdv['hdv_id']) ? 'selected' : '' ?>
+                    >
+                        <?= htmlspecialchars($hdv['ho_ten']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div style="margin-bottom:10px;">
+            <label><strong>Ghi chú:</strong></label><br>
+            <textarea
+                name="ghi_chu"
+                style="width:320px;padding:8px;"
+                placeholder="Ghi chú phân công / đổi HDV"
+            ><?= !empty($phan_cong['ghi_chu']) ? htmlspecialchars($phan_cong['ghi_chu']) : '' ?></textarea>
+        </div>
+
+        <button type="submit" class="btn" style="background:#16a34a">
+            ✅ <?= empty($phan_cong) ? 'Phân công HDV' : 'Cập nhật HDV' ?>
+        </button>
+    </form>
+
+<?php endif; ?>
+
+                <!-- Nhật ký tour -->
+                <hr>
+                <h3>Nhật ký tour</h3>
+                <?php if (!empty($nhat_ky)): ?>
+                    <div>
+                        <?php foreach ($nhat_ky as $log): ?>
+                            <div style="margin-bottom:10px; padding:12px; border-left:4px solid 
+                            <?php
+                            switch ($log['loai_hanh_dong']) {
+                                case 'Thanh toán cọc':
+                                    echo '#facc15';
+                                    break;
+                                case 'Thanh toán full':
+                                    echo '#16a34a';
+                                    break;
+                                case 'Phân công HDV':
+                                    echo '#06b6d4';
+                                    break;
+                                case 'Tạo booking':
+                                    echo '#2563eb';
+                                    break;
+                                case 'Yêu cầu đặc biệt':
+                                    echo '#f97316';
+                                    break;
+                                default:
+                                    echo '#9ca3af';
+                            }
+                            ?>; background:#f8f8f8; border-radius:6px;">
+                                <strong>Loại hành động:</strong> <?= htmlspecialchars($log['loai_hanh_dong']) ?><br>
+                                <strong>Ngày ghi:</strong> <?= htmlspecialchars($log['ngay_ghi']) ?><br>
+                                <strong>Nội dung:</strong> <?= nl2br(htmlspecialchars($log['noi_dung'])) ?>
+                                <?php if (!empty($log['huong_dan_vien_id'])): ?>
+                                    <br><strong>HDV ID:</strong> <?= htmlspecialchars($log['huong_dan_vien_id']) ?>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p style="color:#6b7280;">Chưa có nhật ký nào.</p>
+                <?php endif; ?>
 
                 <br>
                 <a href="?action=qlbooking" class="btn">← Quay lại</a>
@@ -330,7 +445,6 @@ if (!empty($qlb['danh_sach_file'])):
             <!-- RIGHT -->
             <div class="right">
                 <h3>Ảnh Tour</h3>
-
                 <?php if ($mainSrc): ?>
                     <img id="main-image" class="album-main" src="<?= htmlspecialchars($mainSrc) ?>" alt="Hình đại diện" style="max-width:220px; max-height:150px; margin-bottom:12px; border-radius:6px; object-fit:cover;">
                 <?php else: ?>
@@ -361,13 +475,12 @@ if (!empty($qlb['danh_sach_file'])):
         });
 
         // Ẩn/hiện lịch trình
-        document.querySelectorAll('.itinerary-day .day-header').forEach(function(h) {
+        document.querySelectorAll('.itinerary-day .day-header').forEach(h => {
             h.addEventListener('click', function() {
                 this.closest('.itinerary-day').classList.toggle('collapsed');
             });
         });
     </script>
-
 </body>
 
 </html>

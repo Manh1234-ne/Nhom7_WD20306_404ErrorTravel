@@ -11,9 +11,7 @@ class NhanSuController {
 
     public function index() {
         $nhansu = $this->model->getAllWithNguoiDung();
-        if (!is_array($nhansu)) {
-            $nhansu = []; 
-        }
+        if (!is_array($nhansu)) $nhansu = [];
         require PATH_VIEW . 'nhansu/index.php';
     }
 
@@ -29,7 +27,7 @@ class NhanSuController {
             'ngon_ngu' => $_POST['ngon_ngu'] ?? '',
             'kinh_nghiem' => $_POST['kinh_nghiem'] ?? '',
             'danh_gia' => $_POST['danh_gia'] ?? 0,
-            'vai_tro' => $_POST['vai_tro'] ?? 'huong_dan_vien'
+            'vai_tro' => $_POST['vai_tro'] ?? 'Hướng dẫn viên'
         ];
 
         $this->model->createNhanSu($data);
@@ -39,26 +37,17 @@ class NhanSuController {
 
     public function edit() {
         $id = $_GET['id'] ?? null;
-        if (!$id) {
-            header('Location: ?action=nhansu');
-            exit;
-        }
+        if (!$id) { header('Location: ?action=nhansu'); exit; }
 
         $nhansu = $this->model->findWithNguoiDung($id);
-        if (!$nhansu) {
-            echo "Không tìm thấy nhân sự!";
-            return;
-        }
+        if (!$nhansu) { echo "Không tìm thấy nhân sự!"; return; }
 
         require PATH_VIEW . 'nhansu/edit.php';
     }
 
     public function update() {
         $id = $_GET['id'] ?? null;
-        if (!$id) { 
-            header('Location: ?action=nhansu'); 
-            exit; 
-        }
+        if (!$id) { header('Location: ?action=nhansu'); exit; }
 
         $data = [
             'ho_ten' => $_POST['ho_ten'] ?? '',
@@ -69,7 +58,6 @@ class NhanSuController {
             'danh_gia' => $_POST['danh_gia'] ?? 0
         ];
 
-        // Nếu user hiện tại là admin, mới update vai trò
         if ($_SESSION['user']['vai_tro'] === 'admin' && isset($_POST['vai_tro'])) {
             $data['vai_tro'] = $_POST['vai_tro'];
         }
