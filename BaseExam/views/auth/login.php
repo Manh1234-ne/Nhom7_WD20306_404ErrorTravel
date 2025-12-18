@@ -11,7 +11,7 @@ if ($flash) unset($_SESSION['flash_success']);
 
 <head>
     <meta charset="UTF-8">
-    <title>Đăng nhập</title>
+    <title>Đăng nhập - 404 Error Travel</title>
     <style>
         * {
             margin: 0;
@@ -181,7 +181,7 @@ if ($flash) unset($_SESSION['flash_success']);
 
     <nav>
         <a href="index.php?action=home"><strong>Home</strong></a>
-        <div class="logo"></div>
+        <div class="logo">404 Error Travel</div>
     </nav>
 
     <div class="container">

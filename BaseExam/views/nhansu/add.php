@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <title>Thêm Nhân Sự</title>
+
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             background: #eef2f7;
             margin: 0;
             padding: 40px 0;
@@ -18,7 +18,7 @@
             background: #fff;
             border-radius: 12px;
             padding: 30px 40px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
         h2 {
@@ -42,6 +42,7 @@
 
         .group label {
             font-weight: bold;
+            font-size: 14px;
             display: block;
             margin-bottom: 6px;
         }
@@ -54,6 +55,12 @@
             border: 1px solid #cfd6e1;
             border-radius: 6px;
             font-size: 14px;
+            background: #fff;
+            box-sizing: border-box;
+        }
+
+        .group textarea {
+            resize: vertical;
         }
 
         .btn {
@@ -86,15 +93,8 @@
             text-decoration: underline;
         }
     </style>
-    <script>
-        function toggleHdvFields() {
-            const role = document.querySelector('select[name="vai_tro"]').value;
-            const hdvFields = document.querySelectorAll('.hdv-field');
-            hdvFields.forEach(el => el.style.display = (role === 'Hướng dẫn viên') ? 'block' : 'none');
-        }
-    </script>
-</head>
 
+</head>
 <body>
 
     <div class="container">
@@ -110,17 +110,38 @@
                         <label>Họ tên</label>
                         <input type="text" name="ho_ten" required>
                     </div>
+
                     <div class="group">
                         <label>Email</label>
                         <input type="email" name="email" required>
                     </div>
+
                     <div class="group">
                         <label>Số điện thoại</label>
                         <input type="text" name="so_dien_thoai" required>
                     </div>
+
+                    <div class="group">
+                        <label>Ngôn ngữ</label>
+                        <input type="text" name="ngon_ngu" required>
+                    </div>
+                </div>
+
+                <!-- CỘT PHẢI -->
+                <div class="col">
+                    <div class="group">
+                        <label>Kinh nghiệm</label>
+                        <textarea name="kinh_nghiem" rows="5"></textarea>
+                    </div>
+
+                    <div class="group">
+                        <label>Đánh giá</label>
+                        <input type="number" name="danh_gia" min="0" max="5" step="0.1" value="0">
+                    </div>
+
                     <div class="group">
                         <label>Vai trò</label>
-                        <select name="vai_tro" onchange="toggleHdvFields()" required>
+                        <select name="vai_tro" required>
                             <option value="Hướng dẫn viên">Hướng dẫn viên</option>
                             <option value="Admin">Admin</option>
                             <option value="Khách hàng">Khách hàng</option>
@@ -128,35 +149,17 @@
                     </div>
                 </div>
 
-                <!-- CỘT PHẢI -->
-                <div class="col">
-                    <div class="group hdv-field">
-                        <label>Ngôn ngữ</label>
-                        <input type="text" name="ngon_ngu">
-                    </div>
-                    <div class="group hdv-field">
-                        <label>Kinh nghiệm</label>
-                        <textarea name="kinh_nghiem" rows="5"></textarea>
-                    </div>
-                    <div class="group hdv-field">
-                        <label>Đánh giá</label>
-                        <input type="number" name="danh_gia" min="0" max="5" step="0.1" value="0">
-                    </div>
-                </div>
-
             </div>
 
             <button class="btn" type="submit">Thêm mới</button>
+
         </form>
 
         <div class="back">
             <a href="?action=nhansu">Quay lại danh sách</a>
         </div>
+
     </div>
 
-    <script>
-        toggleHdvFields();
-    </script>
 </body>
-
 </html>

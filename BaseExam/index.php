@@ -3,7 +3,7 @@
 session_start();
 
 // Danh sách các action KHÔNG cần đăng nhập
-$allow_guest = ['loginForm', 'login', 'home', 'yeu_cau', 'yeu_cau_create', 'yeu_cau_edit', 'yeu_cau_show', 'yeu_cau_update', 'yeu_cau_delete', 'yeu_cau_store', 'yeu_cau_luu_nhat_ky']; // Tạm thời cho phép tất cả để test
+$allow_guest = ['loginForm', 'login', 'home'];
 
 $action = $_GET['action'] ?? 'home';
 

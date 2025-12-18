@@ -5,10 +5,9 @@
     <meta charset="UTF-8">
     <title>Danh sách Nhân sự</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -26,7 +25,7 @@
             left: 0;
             color: #fff;
             padding-top: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
         }
 
         .sidebar h2 {
@@ -52,9 +51,7 @@
             color: #fff;
         }
 
-        .sidebar i {
-            margin-right: 12px;
-        }
+        .sidebar i { margin-right: 12px; }
 
         /* CONTENT */
         .content {
@@ -90,9 +87,7 @@
             transition: 0.2s;
         }
 
-        .btn-add:hover {
-            background: #2563eb;
-        }
+        .btn-add:hover { background: #2563eb; }
 
         /* TABLE */
         table {
@@ -101,7 +96,7 @@
             background: #fff;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         th {
@@ -116,9 +111,7 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
-        tr:hover td {
-            background: #f1f5f9;
-        }
+        tr:hover td { background: #f1f5f9; }
 
         /* BUTTONS */
         .btn {
@@ -133,21 +126,11 @@
             transition: 0.2s;
         }
 
-        .btn-view {
-            background: #0ea5e9;
-        }
+        .btn-view { background: #0ea5e9; }
+        .btn-edit { background: #f59e0b; }
+        .btn-delete { background: #ef4444; }
 
-        .btn-edit {
-            background: #f59e0b;
-        }
-
-        .btn-delete {
-            background: #ef4444;
-        }
-
-        .btn:hover {
-            opacity: 0.85;
-        }
+        .btn:hover { opacity: 0.85; }
     </style>
 </head>
 
@@ -155,7 +138,7 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <h2>Quản lý tour</h2>
+        <h2>404 Error Travel</h2>
         <a href="?action=home"><i class="fa fa-home"></i>Trang chủ</a>
         <a href="?action=tours"><i class="fa fa-suitcase"></i>Quản lý tour</a>
         <a href="?action=nhansu"><i class="fa fa-user-tie"></i>Quản lý nhân sự</a>
@@ -168,7 +151,9 @@
     <div class="content">
         <div class="top-bar">
             <h1>Danh sách Nhân sự</h1>
-            <a href="?action=nhansu_add" class="btn-add"><i class="fa fa-plus"></i> Thêm Nhân sự</a>
+            <a href="?action=nhansu_add" class="btn-add">
+                <i class="fa fa-plus"></i> Thêm Nhân sự
+            </a>
         </div>
 
         <table>
@@ -185,42 +170,41 @@
                     <th>Hành động</th>
                 </tr>
             </thead>
+
             <tbody>
                 <?php if (!empty($nhansu)): ?>
                     <?php foreach ($nhansu as $ns): ?>
                         <tr>
                             <td><?= $ns['nguoi_dung_id'] ?></td>
                             <td><?= htmlspecialchars($ns['ho_ten']) ?></td>
-                            <td><?= htmlspecialchars($ns['email']) ?></td>
-                            <td><?= htmlspecialchars($ns['so_dien_thoai']) ?></td>
-
-                            <?php if ($ns['vai_tro'] === 'Hướng dẫn viên'): ?>
-                                <td><?= htmlspecialchars($ns['ngon_ngu']) ?></td>
-                                <td><?= htmlspecialchars($ns['kinh_nghiem']) ?></td>
-                                <td><?= htmlspecialchars($ns['danh_gia']) ?></td>
-                            <?php else: ?>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            <?php endif; ?>
-
+                            <td><?= $ns['email'] ?></td>
+                            <td><?= $ns['so_dien_thoai'] ?></td>
+                            <td><?= $ns['ngon_ngu'] ?></td>
+                            <td><?= $ns['kinh_nghiem'] ?></td>
+                            <td><?= $ns['danh_gia'] ?></td>
                             <td><?= htmlspecialchars($ns['vai_tro']) ?></td>
+
                             <td>
-                                <a href="?action=nhansu_edit&id=<?= $ns['nguoi_dung_id'] ?>" class="btn btn-edit"><i class="fa fa-edit"></i></a>
-                                <a href="?action=nhansu_delete&id=<?= $ns['nguoi_dung_id'] ?>" class="btn btn-delete" onclick="return confirm('Bạn có chắc muốn xóa?')"><i class="fa fa-trash"></i></a>
+                                <a href="?action=nhansu_edit&id=<?= $ns['id'] ?>" class="btn btn-edit">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
+                                <a href="?action=nhansu_delete&id=<?= $ns['id'] ?>" 
+                                   class="btn btn-delete"
+                                   onclick="return confirm('Bạn có chắc muốn xóa?')">
+                                    <i class="fa fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr>
-                        <td colspan="9" style="text-align:center;">Không có dữ liệu</td>
-                    </tr>
+                    <tr><td colspan="9" style="text-align:center;">Không có dữ liệu</td></tr>
                 <?php endif; ?>
             </tbody>
+
         </table>
 
     </div>
 
 </body>
-
 </html>

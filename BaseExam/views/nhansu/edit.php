@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <title>Sửa Nhân sự</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
             background: #fff;
             border-radius: 12px;
             padding: 30px 40px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
         h2 {
@@ -94,80 +94,89 @@
         }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h2>Sửa Nhân sự</h2>
+    <h2>Sửa Nhân sự</h2>
 
-        <form action="?action=nhansu_edit_post&id=<?= $nhansu['nguoi_dung_id'] ?>" method="post">
+    <form action="?action=nhansu_edit_post&id=<?= $nhansu['id'] ?>" method="post">
 
-            <div class="form-2col">
+        <div class="form-2col">
 
-                <!-- Cột trái -->
-                <div class="col">
-                    <div class="group">
-                        <label>Họ tên:</label>
-                        <input type="text" name="ho_ten" value="<?= htmlspecialchars($nhansu['ho_ten']) ?>" required>
-                    </div>
+            <!-- CỘT TRÁI -->
+            <div class="col">
 
-                    <div class="group">
-                        <label>Email:</label>
-                        <input type="email" name="email" value="<?= htmlspecialchars($nhansu['email']) ?>" required>
-                    </div>
-
-                    <div class="group">
-                        <label>Số điện thoại:</label>
-                        <input type="text" name="so_dien_thoai" value="<?= htmlspecialchars($nhansu['so_dien_thoai']) ?>" required>
-                    </div>
-
-                    <?php if ($nhansu['vai_tro'] === 'Hướng dẫn viên'): ?>
-                        <div class="group">
-                            <label>Ngôn ngữ:</label>
-                            <input type="text" name="ngon_ngu" value="<?= htmlspecialchars($nhansu['ngon_ngu']) ?>">
-                        </div>
-                    <?php endif; ?>
+                <div class="group">
+                    <label>Họ tên:</label>
+                    <input type="text" name="ho_ten" 
+                        value="<?= htmlspecialchars($nhansu['ho_ten']) ?>" required>
                 </div>
 
-                <!-- Cột phải -->
-                <div class="col">
-                    <?php if ($nhansu['vai_tro'] === 'Hướng dẫn viên'): ?>
-                        <div class="group">
-                            <label>Kinh nghiệm:</label>
-                            <textarea name="kinh_nghiem" rows="5"><?= htmlspecialchars($nhansu['kinh_nghiem']) ?></textarea>
-                        </div>
-
-                        <div class="group">
-                            <label>Đánh giá:</label>
-                            <input type="number" name="danh_gia" min="0" max="5" step="0.1" value="<?= htmlspecialchars($nhansu['danh_gia']) ?>">
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="group">
-                        <label>Vai trò:</label>
-                        <?php if ($_SESSION['user']['vai_tro'] === 'admin'): ?>
-                            <select name="vai_tro">
-                                <option value="Hướng dẫn viên" <?= $nhansu['vai_tro'] == 'Hướng dẫn viên' ? 'selected' : '' ?>>Hướng dẫn viên</option>
-                                <option value="Admin" <?= $nhansu['vai_tro'] == 'Admin' ? 'selected' : '' ?>>Admin</option>
-                                <option value="Khách hàng" <?= $nhansu['vai_tro'] == 'Khách hàng' ? 'selected' : '' ?>>Khách hàng</option>
-                            </select>
-                        <?php else: ?>
-                            <input type="text" value="<?= htmlspecialchars($nhansu['vai_tro']) ?>" disabled>
-                        <?php endif; ?>
-                    </div>
+                <div class="group">
+                    <label>Email:</label>
+                    <input type="email" name="email" 
+                        value="<?= htmlspecialchars($nhansu['email']) ?>" required>
                 </div>
+
+                <div class="group">
+                    <label>Số điện thoại:</label>
+                    <input type="text" name="so_dien_thoai" 
+                        value="<?= htmlspecialchars($nhansu['so_dien_thoai']) ?>" required>
+                </div>
+
+                <div class="group">
+                    <label>Ngôn ngữ:</label>
+                    <input type="text" name="ngon_ngu" 
+                        value="<?= htmlspecialchars($nhansu['ngon_ngu']) ?>" required>
+                </div>
+
             </div>
 
-            <button class="btn" type="submit">Cập nhật</button>
-        </form>
+            <!-- CỘT PHẢI -->
+            <div class="col">
 
-        <div class="back">
-            <a href="?action=nhansu">Quay lại danh sách</a>
+                <div class="group">
+                    <label>Kinh nghiệm:</label>
+                    <textarea name="kinh_nghiem" rows="5"><?= htmlspecialchars($nhansu['kinh_nghiem']) ?></textarea>
+                </div>
+
+                <div class="group">
+                    <label>Đánh giá:</label>
+                    <input type="number" name="danh_gia" min="0" max="5" step="0.1"
+                        value="<?= htmlspecialchars($nhansu['danh_gia']) ?>">
+                </div>
+
+                <div class="group">
+                    <label>Vai trò:</label>
+
+                    <?php if ($nhansu['vai_tro'] == 'admin'): ?>
+                        <!-- Admin được đổi vai trò -->
+                        <select name="vai_tro">
+                            <option value="Hướng dẫn viên" <?= $nhansu['vai_tro']=='Hướng dẫn viên'?'selected':'' ?>>Hướng dẫn viên</option>
+                            <option value="Admin" <?= $nhansu['vai_tro']=='Admin'?'selected':'' ?>>Admin</option>
+                            <option value="Khách hàng" <?= $nhansu['vai_tro']=='Khách hàng'?'selected':'' ?>>Khách hàng</option>
+                        </select>
+                    <?php else: ?>
+                        <!-- Không phải admin thì khóa -->
+                        <input type="text" value="<?= htmlspecialchars($nhansu['vai_tro']) ?>" disabled>
+                    <?php endif; ?>
+
+                </div>
+
+            </div>
+
         </div>
 
+        <button class="btn" type="submit">Cập nhật</button>
+
+    </form>
+
+    <div class="back">
+        <a href="?action=nhansu">Quay lại danh sách</a>
     </div>
 
-</body>
+</div>
 
+</body>
 </html>

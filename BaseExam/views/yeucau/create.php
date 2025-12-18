@@ -186,32 +186,10 @@
 
                 <div class="form-row">
                     <div>
-                        <label>Chọn từ Booking có sẵn (tùy chọn)</label>
-                        <select name="booking_id" id="booking_select">
-                            <option value="">-- Tạo mới --</option>
-                            <?php
-                            require_once __DIR__ . '/../../models/YeuCauModel.php';
-                            $yeuCauModel = new YeuCauModel();
-                            $bookings = $yeuCauModel->getAllBookings();
-                            foreach ($bookings as $booking): ?>
-                                <option value="<?= $booking['id'] ?>"
-                                    data-name="<?= htmlspecialchars($booking['ten_khach']) ?>"
-                                    data-phone="<?= htmlspecialchars($booking['so_dien_thoai']) ?>"
-                                    data-tour="<?= htmlspecialchars($booking['ten_tour']) ?>">
-                                    <?= htmlspecialchars($booking['ten_khach']) ?> - <?= htmlspecialchars($booking['ten_tour']) ?>
-                                    (<?= date('d/m/Y', strtotime($booking['ngay_khoi_hanh'])) ?>)
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div>
                         <label>Tên khách</label>
-                        <input type="text" name="ten_khach" id="ten_khach" required>
+                        <input type="text" name="ten_khach" required>
                     </div>
-                </div>
 
-                <div class="form-row">
                     <div>
                         <label>Loại yêu cầu</label>
                         <select name="loai_yeu_cau" required>
@@ -225,11 +203,6 @@
                             <option value="Khác">Khác</option>
                         </select>
                     </div>
-
-                    <div>
-                        <label>Thông tin liên kết</label>
-                        <input type="text" id="booking_info" readonly placeholder="Sẽ hiển thị khi chọn booking">
-                    </div>
                 </div>
 
                 <label>Mô tả chi tiết</label>
@@ -241,26 +214,6 @@
         </div>
 
     </div>
-
-    <script>
-        // Tự động điền thông tin khi chọn booking
-        document.getElementById('booking_select').addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            const tenKhachInput = document.getElementById('ten_khach');
-            const bookingInfoInput = document.getElementById('booking_info');
-            if (this.value) {
-                // Điền thông tin từ booking đã chọn
-                tenKhachInput.value = selectedOption.dataset.name;
-                tenKhachInput.readOnly = true;
-                bookingInfoInput.value = `${selectedOption.dataset.tour} - ${selectedOption.dataset.phone}`;
-            } else {
-                // Reset về chế độ tạo mới
-                tenKhachInput.value = '';
-                tenKhachInput.readOnly = false;
-                bookingInfoInput.value = '';
-            }
-        });
-    </script>
 
 </body>
 
